@@ -2,5 +2,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MariaDB;DATABASE_TO_LOWER=TRUE
+    url: jdbc:mariadb://localhost:13306/studypro
+    username: root
+    password: password
