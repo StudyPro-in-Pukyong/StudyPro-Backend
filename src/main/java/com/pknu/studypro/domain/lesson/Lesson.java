@@ -1,4 +1,4 @@
-package com.pknu.studypro.lesson.domain;
+package com.pknu.studypro.domain.lesson;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

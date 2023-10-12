@@ -1,4 +1,4 @@
-package com.pknu.studypro.member.domain;
+package com.pknu.studypro.domain.member;
 
 public enum LoginType {
     LOCAL, KAKAO

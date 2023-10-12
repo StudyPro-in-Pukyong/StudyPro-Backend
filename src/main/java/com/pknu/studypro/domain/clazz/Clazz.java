@@ -1,6 +1,6 @@
-package com.pknu.studypro.clazz.domain;
+package com.pknu.studypro.domain.clazz;
 
-import com.pknu.studypro.member.domain.Member;
+import com.pknu.studypro.domain.member.Member;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

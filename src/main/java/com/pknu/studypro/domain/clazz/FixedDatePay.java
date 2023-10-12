@@ -1,19 +1,22 @@
-package com.pknu.studypro.clazz.domain;
+package com.pknu.studypro.domain.clazz;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class RoundPay extends Pay {
+public class FixedDatePay extends Pay {
 
     @Column(nullable = false)
-    private int round;
+    private LocalDate date;
 
-    public RoundPay(final int amount, final int round) {
+    public FixedDatePay(final int amount, final LocalDate date) {
         super(amount);
-        this.round = round;
+        this.date = date;
     }
 }
+

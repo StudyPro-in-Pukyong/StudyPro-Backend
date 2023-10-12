@@ -1,4 +1,4 @@
-package com.pknu.studypro.clazz.domain;
+package com.pknu.studypro.domain.clazz;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
