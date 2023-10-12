@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql
+    restart: always
+    ports:
+      - 30000:3306
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: studypro
+      DEFAULT_CHARACTER_SET: utf8mb4
+      CHARACTER_SET_SERVER: utf8mb4
+      COLLATION_SERVER: utf8mb4_general_ci
+      TZ: Asia/Seoul
+
+volumes:
+  db-data:
