@@ -21,8 +21,8 @@ public abstract class Pay {
     private Long id;
 
     @Column(nullable = false)
-    protected int amount;
-    protected int currentRound;
+    protected int amount; // 1회당 금액
+    protected int currentRound; // 현재 수업 횟수
 
     protected Pay(final int amount) {
         this.amount = amount;
