@@ -14,6 +14,10 @@ import com.pknu.studypro.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +31,7 @@ public class LessonService {
     public Lesson createLesson(Lesson lesson) {
         // --------------------------------------------------------------------------
         // classId 증명하는 코드 추가하기
+        clazzRepository.findById(lesson.getClassId());
         // --------------------------------------------------------------------------
 
         return lessonRepository.save(lesson);
@@ -35,6 +40,24 @@ public class LessonService {
     // READ
     public Lesson readLesson(long lessonId) {
         return verifiedLesson(lessonId);
+    }
+
+    // 레슨 목록 조회(선생님)
+    // 레슨 목록 조회(부모님)
+    // 레슨 목록 조회(학생)
+    public List<Lesson> readLessons(LocalDate localDate, long classId) {
+        // --------------------------------------------------------------------------
+        // classId 증명하는 코드 추가하기
+        Clazz clazz = clazzRepository.findById(classId).get();
+        // --------------------------------------------------------------------------
+
+        // 시작일
+        LocalDateTime start = localDate.withDayOfMonth(1).atTime(LocalTime.MIN);
+
+        // 마지막일
+        LocalDateTime finish = localDate.withDayOfMonth(localDate.lengthOfMonth()).atTime(LocalTime.MAX);
+
+        return lessonRepository.findByStartTimeBetween(start, finish);
     }
 
     // UPDATE

@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @Validated
 @AllArgsConstructor
@@ -31,11 +34,24 @@ public class LessonController {
 
     // READ
     @GetMapping("/lesson/{lessonId}")
-    public ResponseEntity putIsDoneLesson(@Positive @PathVariable("lessonId") long lessonId) {
+    public ResponseEntity getLesson(@Positive @PathVariable("lessonId") long lessonId) {
         Lesson lesson = lessonService.readLesson(lessonId);
         LessonResponseDto.Response response = lessonMapper.lessonToLessonResponseDto(lesson);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 레슨 목록 조회(선생님)
+    // 레슨 목록 조회(부모님)
+    // 레슨 목록 조회(학생)
+    @GetMapping("/lessons/teacher")
+    public ResponseEntity getLessons(@RequestParam("year") int year,
+                                     @RequestParam("month") int month,
+                                     @RequestParam("classId") long classId) {
+        List<Lesson> lessons = lessonService.readLessons(LocalDate.of(year, month, 1), classId);
+        List<LessonResponseDto.Response> responses = lessonMapper.lessonsToLessonResponseDtos(lessons);
+
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     // UPDATE
