@@ -9,12 +9,13 @@ import java.time.LocalDate;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class FixedDatePay extends Pay {
+public class FixedDatePay extends Pay { // 지정일
 
-    @Column(nullable = false)
-    private LocalDate date;
+//    @Column(nullable = false)
+    @Column
+    private int date; // 월급 지정일
 
-    public FixedDatePay(final int amount, final LocalDate date) {
+    public FixedDatePay(final int amount, final int date) {
         super(amount);
         this.date = date;
     }

@@ -22,9 +22,19 @@ public abstract class Pay {
 
     @Column(nullable = false)
     protected int amount; // 1회당 금액
-    protected int currentRound; // 현재 수업 횟수
+
+    @Column(nullable = false)
+    protected int currentRound = 0; // 현재 수업 횟수
 
     protected Pay(final int amount) {
         this.amount = amount;
+    }
+
+    public void setPlusCurrentRound() {
+        currentRound++;
+    }
+
+    public void setMinusCurrentRound() {
+        currentRound--;
     }
 }

@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class RoundPay extends Pay {
+public class RoundPay extends Pay { // 회차
 
-    @Column(nullable = false)
-    private int round;
+//    @Column(nullable = false)
+    @Column
+    private int round; // 회차
 
     public RoundPay(final int amount, final int round) {
         super(amount);

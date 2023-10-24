@@ -41,13 +41,16 @@ public class Lesson {
     @ElementCollection(fetch = FetchType.EAGER)
     private final List<String> homeworks = new ArrayList<>(); // 숙제
 
-    public Lesson(Long id, Long classId, LocalDateTime startTime, int minutes, Type type, boolean isDone, String progress) {
-        this.id = id;
+    public Lesson(final Long id, final Long classId, final LocalDateTime startTime, final int minutes, final Type type, final boolean isDone, final String progress) {
         this.classId = classId;
         this.startTime = startTime;
         this.minutes = minutes;
         this.type = type;
         this.isDone = isDone;
         this.progress = progress;
+    }
+
+    public void setIsDone(boolean isDone) {
+        this.isDone = isDone;
     }
 }

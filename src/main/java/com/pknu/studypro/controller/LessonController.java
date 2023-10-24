@@ -30,6 +30,13 @@ public class LessonController {
     }
 
     // READ
+    @GetMapping("/lesson/{lessonId}")
+    public ResponseEntity putIsDoneLesson(@Positive @PathVariable("lessonId") long lessonId) {
+        Lesson lesson = lessonService.readLesson(lessonId);
+        LessonResponseDto.Response response = lessonMapper.lessonToLessonResponseDto(lesson);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     // UPDATE
     @PutMapping("/lesson")
@@ -38,6 +45,16 @@ public class LessonController {
         LessonResponseDto.Response response = lessonMapper.lessonToLessonResponseDto(lesson);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/lesson/{lessonId}")
+    public ResponseEntity putIsDoneLesson(@Positive @PathVariable("lessonId") long lessonId,
+                                          @RequestParam("isDone") boolean isDone) {
+        Lesson lesson = lessonService.updateIsDoneLesson(lessonId, isDone);
+        LessonResponseDto.Response response = lessonMapper.lessonToLessonResponseDto(lesson);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
     // DELETE
