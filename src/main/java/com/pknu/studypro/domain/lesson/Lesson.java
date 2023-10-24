@@ -1,15 +1,13 @@
 package com.pknu.studypro.domain.lesson;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -30,16 +28,26 @@ public class Lesson {
     private int minutes; // 수업시간(분 단위)
 
     @Column(nullable = false)
-    private boolean isDone; // 수업 여부
+    @Enumerated(value = EnumType.STRING)
+    private Type type; // 수업 유형
 
     @Column(nullable = false)
-    private String memo; // 메모
+    private boolean isDone; // 수업 여부
 
-    public Lesson(final Long classId, final LocalDateTime startTime, final int minutes, final boolean isDone, final String memo) {
+    @Column
+    private String progress; // 진도
+
+    @Column
+    @ElementCollection(fetch = FetchType.EAGER)
+    private final List<String> homeworks = new ArrayList<>(); // 숙제
+
+    public Lesson(Long id, Long classId, LocalDateTime startTime, int minutes, Type type, boolean isDone, String progress) {
+        this.id = id;
         this.classId = classId;
         this.startTime = startTime;
         this.minutes = minutes;
+        this.type = type;
         this.isDone = isDone;
-        this.memo = memo;
+        this.progress = progress;
     }
 }
