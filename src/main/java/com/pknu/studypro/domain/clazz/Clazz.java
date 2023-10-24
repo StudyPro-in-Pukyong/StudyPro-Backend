@@ -25,7 +25,10 @@ public class Clazz {
     private Pay pay;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
+
+    @Column(nullable = false)
+    private String subject;
 
     @OneToOne(optional = false)
     private Member teacher;
@@ -34,9 +37,10 @@ public class Clazz {
     @OneToOne
     private Member student;
 
-    public Clazz(final Pay pay, final String name, final Member teacher, final Member parent, final Member student) {
+    public Clazz(final Pay pay, final String title, final String subject, final Member teacher, final Member parent, final Member student) {
         this.pay = pay;
-        this.name = name;
+        this.title = title;
+        this.subject = subject;
         this.teacher = teacher;
         this.parent = parent;
         this.student = student;
