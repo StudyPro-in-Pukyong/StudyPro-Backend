@@ -32,7 +32,13 @@ public class LessonController {
     // READ
 
     // UPDATE
+    @PutMapping("/lesson")
+    public ResponseEntity putLesson(@Valid @RequestBody LessonRequestDto.Put put) {
+        Lesson lesson = lessonService.updateLesson(lessonMapper.lessonPutDtoToLesson(put));
+        LessonResponseDto.Response response = lessonMapper.lessonToLessonResponseDto(lesson);
 
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     // DELETE
     @DeleteMapping("/lesson/{lessonId}")
