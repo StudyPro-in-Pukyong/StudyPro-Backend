@@ -32,7 +32,7 @@ public class Lesson {
     private Type type; // 수업 유형
 
     @Column(nullable = false)
-    private boolean isDone; // 수업 여부
+    private Boolean isDone; // 수업 여부
 
     @Column
     private String progress; // 진도

@@ -77,7 +77,7 @@ public class LessonService {
         // --------------------------------------------------------------------------------------------
 
         Lesson lesson = verifiedLesson(lessonId);
-        if(lesson.isDone() != isDone) { // isDone의 값 변경발생
+        if(lesson.getIsDone() != isDone) { // isDone의 값 변경발생
             lesson.setIsDone(isDone);
 
             // --------------------------------------------------------------------------
