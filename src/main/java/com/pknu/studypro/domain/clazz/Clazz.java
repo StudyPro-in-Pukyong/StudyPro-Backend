@@ -46,6 +46,10 @@ public class Clazz {
         this.student = student;
     }
 
+    public void setTeacher(final Member teacher) {
+        this.teacher = teacher;
+    }
+
     public void setParent(final Member parent) {
         this.parent = parent;
     }

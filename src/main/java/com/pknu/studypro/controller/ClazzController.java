@@ -23,7 +23,10 @@ public class ClazzController {
 
     @PostMapping("/class")
     public ResponseEntity createClazz(@Valid @RequestBody ClazzRequestDto.Post post){
-        Clazz clazz = clazzService.createClazz(clazzMapper.ClazzPostDtoToClazz(post, clazzMapper.FIXED_DATE_PAY(post.getPostPay())), post.getIds());
+        Clazz clazz = null;
+        if(post.isFixedDatePay()) clazz = clazzMapper.clazzPostDtoToClazz(post, clazzMapper.FIXED_DATE_PAY(post.getPostPay()));
+        else if(post.isRoundPay()) clazz = clazzMapper.clazzPostDtoToClazz(post, clazzMapper.ROUND_PAY(post.getPostPay()));
+        clazz = clazzService.createClazz(clazz, post.getIds());
 
         return new ResponseEntity<>(clazz, HttpStatus.OK);
     }

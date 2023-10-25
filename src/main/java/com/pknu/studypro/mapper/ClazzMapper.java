@@ -9,8 +9,8 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ClazzMapper {
-    Clazz ClazzPostDtoToClazz(ClazzRequestDto.Post post, Pay pay);
-    FixedDatePay FIXED_DATE_PAY(ClazzRequestDto.Pay pay);
-    RoundPay ROUND_PAY(ClazzRequestDto.Pay pay);
+    Clazz clazzPostDtoToClazz(ClazzRequestDto.Post post, Pay pay);
+    FixedDatePay FIXED_DATE_PAY(ClazzRequestDto.PostPay pay);
+    RoundPay ROUND_PAY(ClazzRequestDto.PostPay pay);
 
 }

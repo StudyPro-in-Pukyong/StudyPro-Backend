@@ -24,7 +24,7 @@ public abstract class Pay {
     protected int amount; // 1회당 금액 or 월급
 
     @Column(nullable = false)
-    protected int totalTime; //총 수업 시간
+    protected int totalTime = 0; //총 수업 시간
 
     @Column(nullable = false)
     protected int currentRound = 0; // 현재 수업 횟수
