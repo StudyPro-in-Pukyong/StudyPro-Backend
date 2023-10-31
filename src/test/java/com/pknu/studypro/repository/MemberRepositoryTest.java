@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @DataJpaTest
@@ -37,6 +38,29 @@ class MemberRepositoryTest {
     private Member saveMember(final String username) {
         return memberRepository.save(
                 new Member(Role.PARENT, LoginType.KAKAO, username, null, "nickname"));
+    }
+
+    @Test
+    @DisplayName("회원의 username으로 Role을 조회할 수 있다")
+    void findRole() {
+        //given
+        final Member member = saveMember("연어");
+
+        //when
+        final Role role = memberRepository.findRoleByUsername("연어");
+
+        //then
+        assertThat(role).isEqualTo(member.getRole());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 username으로 Role을 조회하면 null을 리턴한다")
+    void findRole_fail() {
+        //when
+        final Role role = memberRepository.findRoleByUsername("연어");
+
+        //then
+        assertThat(role).isNull();
     }
 
 }
