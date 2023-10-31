@@ -1,0 +1,68 @@
+openapi: 3.0.1
+info:
+  title: Study Pro
+  description: 과외 어플 서비스입니다.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+tags: []
+paths:
+  /auth/login:
+    post:
+      tags:
+      - auth
+      operationId: 로그인
+      parameters:
+      - name: token
+        in: query
+        description: 카카오 토큰
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth-refresh-1185521025'
+              examples:
+                로그인:
+                  value: "{\"access\":\"access.token.test\",\"refresh\":\"refresh.token.test\"\
+                    }"
+  /auth/refresh:
+    post:
+      tags:
+      - auth
+      operationId: 토큰 갱신
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth-refresh-1185521025'
+            examples:
+              토큰 갱신:
+                value: "{\"access\":\"access.token.test\",\"refresh\":\"refresh.token.test\"\
+                  }"
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth-refresh-1185521025'
+              examples:
+                토큰 갱신:
+                  value: "{\"access\":\"access.token.test\",\"refresh\":\"refresh.token.test\"\
+                    }"
+components:
+  schemas:
+    auth-refresh-1185521025:
+      type: object
+      properties:
+        access:
+          type: string
+          description: 액세스 토큰
+        refresh:
+          type: string
+          description: 리프레시 토큰
