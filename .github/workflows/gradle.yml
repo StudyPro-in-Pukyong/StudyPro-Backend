@@ -34,3 +34,12 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           source: "./build/libs/*.jar,./src/main/resources/static/swagger/*"
           target: "/home/ubuntu/server"
+
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.HOST }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          script_stop: true
+          script: sudo /home/ubuntu/run_server.sh
