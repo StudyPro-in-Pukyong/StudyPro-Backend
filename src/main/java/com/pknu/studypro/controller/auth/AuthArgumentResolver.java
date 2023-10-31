@@ -13,6 +13,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.naming.AuthenticationException;
 
+import static io.jsonwebtoken.lang.Objects.nullSafeEquals;
 import static java.util.Objects.isNull;
 
 @Component
@@ -44,7 +45,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         final String username = jwtTokenProvider.getUsername(token);
         final Role role = memberRepository.findRoleByUsername(username);
 
-        validate(token, role);
+        validate(token, role, parameter.getParameterAnnotation(Auth.class));
         return new LoginUser(username, role);
     }
 
@@ -57,9 +58,9 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         return authorization.replace(BEARER, "");
     }
 
-    private void validate(final String token, final Role role) {
+    private void validate(final String token, final Role role, final Auth auth) {
         jwtTokenProvider.validate(token);
-        if (isNull(role)) {
+        if (!nullSafeEquals(role, auth.role())) {
             throw new IllegalArgumentException();
         }
     }
