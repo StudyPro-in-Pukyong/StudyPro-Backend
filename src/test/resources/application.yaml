@@ -8,3 +8,9 @@ spring:
       ddl-auto: update
   datasource:
     url: jdbc:h2:mem:testdb;MODE=MariaDB;DATABASE_TO_LOWER=TRUE
+
+  auth:
+    key: testestestseteststestsetestsetsetsetsetestsetestsetess
+    accessTokenExpired: 13221
+    refreshTokenExpired: 21321
+    url: https://test.com

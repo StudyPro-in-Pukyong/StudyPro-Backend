@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
@@ -10,3 +10,9 @@ spring:
     url: jdbc:mysql://localhost:30000/studypro
     username: root
     password: password
+
+  auth:
+    key: dfsdsfdfsafseafesfaflsefjlijfilsjfilaesjfilejflajfiljile
+    accessTokenExpired: 13221
+    refreshTokenExpired: 21321
+    url: https://kapi.kakao.com/v2/user/me
