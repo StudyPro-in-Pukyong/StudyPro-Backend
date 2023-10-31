@@ -1,6 +1,8 @@
 package com.pknu.studypro.controller.auth;
 
 import com.pknu.studypro.dto.auth.KakaoUser;
+import com.pknu.studypro.dto.auth.LoginUser;
+import com.pknu.studypro.dto.auth.RoleRequest;
 import com.pknu.studypro.dto.auth.Tokens;
 import com.pknu.studypro.service.auth.AuthService;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/auth")
 @Controller
-public class LoginController {
+public class AuthController {
 
     private final AuthService authService;
 
-    public LoginController(final AuthService authService) {
+    public AuthController(final AuthService authService) {
         this.authService = authService;
     }
 
@@ -30,5 +32,12 @@ public class LoginController {
     public ResponseEntity<Tokens> refresh(@RequestBody final Tokens tokens) {
         final Tokens refreshed = authService.refresh(tokens);
         return ResponseEntity.ok(refreshed);
+    }
+
+    @PostMapping("/role")
+    public ResponseEntity<Void> changeRole(@Auth final LoginUser loginUser,
+                                           @RequestBody final RoleRequest request) {
+        authService.changeRole(loginUser, request);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,6 +1,9 @@
 package com.pknu.studypro.service.auth;
 
+import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.auth.KakaoUser;
+import com.pknu.studypro.dto.auth.LoginUser;
+import com.pknu.studypro.dto.auth.RoleRequest;
 import com.pknu.studypro.dto.auth.Tokens;
 import com.pknu.studypro.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @SpringBootTest
@@ -64,5 +68,16 @@ class AuthServiceTest {
         final String memberId = jwtTokenProvider.getUsername(tokens.access());
         final String memberIdRefreshed = jwtTokenProvider.getUsername(refresh.access());
         assertThat(memberIdRefreshed).isEqualTo(memberId);
+    }
+
+    @Test
+    @DisplayName("유저의 권한을 변경할 때 존재하지 않는 유저라면 예외가 발생한다")
+    void changeRole() {
+        //given
+        final LoginUser notExistUser = new LoginUser("nothing", Role.ANONYMOUS);
+
+        //when, then
+        assertThatThrownBy(() -> authService.changeRole(notExistUser, new RoleRequest(Role.PARENT)))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

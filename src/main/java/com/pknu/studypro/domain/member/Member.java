@@ -42,4 +42,12 @@ public class Member {
         this.password = password;
         this.nickname = nickname;
     }
+
+    public void changeRole(final Role role) {
+        if (this.role != Role.ANONYMOUS) {
+            throw new IllegalArgumentException("ANONYMOUS 상태에서만 권한을 수정할 수 있습니다.");
+        }
+
+        this.role = role;
+    }
 }

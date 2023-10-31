@@ -61,14 +61,14 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         jwtTokenProvider.validate(token);
 
         if (isNull(role) || isNull(auth)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("존재하지 않는 유저입니다.");
         }
         if (auth.role() == Role.ANONYMOUS) {
             return;
         }
 
         if (role != auth.role()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("권한이 없습니다.");
         }
     }
 }
