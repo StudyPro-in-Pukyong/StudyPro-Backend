@@ -13,7 +13,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.naming.AuthenticationException;
 
-import static io.jsonwebtoken.lang.Objects.nullSafeEquals;
 import static java.util.Objects.isNull;
 
 @Component
@@ -60,7 +59,15 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
     private void validate(final String token, final Role role, final Auth auth) {
         jwtTokenProvider.validate(token);
-        if (!nullSafeEquals(role, auth.role())) {
+
+        if (isNull(role) || isNull(auth)) {
+            throw new IllegalArgumentException();
+        }
+        if (auth.role() == Role.ANONYMOUS) {
+            return;
+        }
+
+        if (role != auth.role()) {
             throw new IllegalArgumentException();
         }
     }

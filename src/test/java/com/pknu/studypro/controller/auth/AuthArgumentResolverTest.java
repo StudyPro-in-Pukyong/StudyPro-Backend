@@ -6,6 +6,8 @@ import com.pknu.studypro.repository.MemberRepository;
 import com.pknu.studypro.service.auth.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,6 +19,7 @@ import java.lang.annotation.Annotation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 
@@ -86,6 +89,24 @@ class AuthArgumentResolverTest {
         //when, then
         assertThatThrownBy(() -> resolver.resolveArgument(methodParameter, null, nativeWebRequest, null))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @ParameterizedTest
+    @EnumSource(Role.class)
+    @DisplayName("ANONYMOUS 권한으로 검증하면 모든 유저의 권한이 다 통과한다")
+    void resolveArgument2(final Role role) {
+        //given
+        given(nativeWebRequest.getHeader("Authorization"))
+                .willReturn("access.token.test");
+        given(jwtTokenProvider.getUsername("access.token.test"))
+                .willReturn("참치");
+        given(memberRepository.findRoleByUsername("참치"))
+                .willReturn(role);
+        given(methodParameter.getParameterAnnotation(Auth.class))
+                .willReturn(new TestAuth(Role.ANONYMOUS));
+
+        //when, then
+        assertDoesNotThrow(() -> resolver.resolveArgument(methodParameter, null, nativeWebRequest, null));
     }
 
     private class TestAuth implements Auth {
