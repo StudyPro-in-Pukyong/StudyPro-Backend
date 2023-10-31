@@ -47,7 +47,7 @@ public class JwtTokenProvider {
         return builder(refreshTokenExpired).compact();
     }
 
-    public String getMemberId(final String token) {
+    public String getUsername(final String token) {
         return toClaims(token).getSubject();
     }
 
@@ -67,7 +67,7 @@ public class JwtTokenProvider {
 
     public String refreshAccessToken(final String access, final String refresh) {
         validate(refresh);
-        return createAccessFrom(getMemberId(access));
+        return createAccessFrom(getUsername(access));
     }
 
     public void validate(final String token) {

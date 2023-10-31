@@ -50,7 +50,7 @@ class JwtTokenProviderTest {
         final String token = jwtTokenProvider.createAccessFrom("참치");
 
         //when
-        final String memberId = jwtTokenProvider.getMemberId(token);
+        final String memberId = jwtTokenProvider.getUsername(token);
 
         //then
         assertThat(memberId).isEqualTo("참치");
@@ -67,7 +67,7 @@ class JwtTokenProviderTest {
         final String refreshed = jwtTokenProvider.refreshAccessToken(access, refresh);
 
         //then
-        assertThat(jwtTokenProvider.getMemberId(refreshed)).isEqualTo("참치");
+        assertThat(jwtTokenProvider.getUsername(refreshed)).isEqualTo("참치");
     }
 
     @Test

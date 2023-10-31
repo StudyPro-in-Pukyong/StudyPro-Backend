@@ -61,8 +61,8 @@ class AuthServiceTest {
         final Tokens refresh = authService.refresh(tokens);
 
         //then
-        final String memberId = jwtTokenProvider.getMemberId(tokens.access());
-        final String memberIdRefreshed = jwtTokenProvider.getMemberId(refresh.access());
+        final String memberId = jwtTokenProvider.getUsername(tokens.access());
+        final String memberIdRefreshed = jwtTokenProvider.getUsername(refresh.access());
         assertThat(memberIdRefreshed).isEqualTo(memberId);
     }
 }
