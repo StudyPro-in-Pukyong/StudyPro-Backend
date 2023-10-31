@@ -28,4 +28,11 @@ public class AuthService {
         final String refresh = jwtTokenProvider.createRefresh();
         return new Tokens(accessToken, refresh);
     }
+
+    public Tokens refresh(final Tokens tokens) {
+        final String access = jwtTokenProvider.refreshAccessToken(tokens.access(), tokens.refresh());
+        final String refresh = jwtTokenProvider.createRefresh();
+
+        return new Tokens(access, refresh);
+    }
 }

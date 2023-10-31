@@ -18,6 +18,8 @@ class AuthServiceTest {
     private AuthService authService;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Test
     @DisplayName("첫 로그인이면 회원가입이 된다")
@@ -46,5 +48,21 @@ class AuthServiceTest {
             assertThat(tokens.access()).contains(".", ".");
             assertThat(tokens.refresh()).contains(".", ".");
         });
+    }
+
+    @Test
+    @DisplayName("리프레시할 수 있다")
+    void refresh() {
+        //given
+        final KakaoUser kakaoUser = KakaoUser.of("회원 아이디", "닉네임");
+        final Tokens tokens = authService.login(kakaoUser);
+
+        //when
+        final Tokens refresh = authService.refresh(tokens);
+
+        //then
+        final String memberId = jwtTokenProvider.getMemberId(tokens.access());
+        final String memberIdRefreshed = jwtTokenProvider.getMemberId(refresh.access());
+        assertThat(memberIdRefreshed).isEqualTo(memberId);
     }
 }
