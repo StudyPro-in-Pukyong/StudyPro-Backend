@@ -29,13 +29,13 @@ public class Member {
 
     @Column(nullable = false)
     private String username;
-
     private String password;
 
     @Column(nullable = false)
     private String nickname;
 
-    public Member(final Role role, final LoginType loginType, final String username, final String password, final String nickname) {
+    public Member(final Role role, final LoginType loginType, final String username,
+                  final String password, final String nickname) {
         this.role = role;
         this.loginType = loginType;
         this.username = username;
