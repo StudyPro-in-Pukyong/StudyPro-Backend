@@ -2,14 +2,20 @@ package com.pknu.studypro.service;
 
 import com.pknu.studypro.domain.clazz.Clazz;
 import com.pknu.studypro.domain.clazz.Pay;
+import com.pknu.studypro.domain.lesson.Lesson;
 import com.pknu.studypro.domain.member.LoginType;
 import com.pknu.studypro.domain.member.Member;
 import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.ClazzRequestDto;
+import com.pknu.studypro.exception.BusinessLogicException;
+import com.pknu.studypro.exception.ExceptionCode;
 import com.pknu.studypro.repository.ClazzRepository;
 import com.pknu.studypro.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -19,8 +25,8 @@ public class ClazzService {
     private final MemberRepository memberRepository;
 
     public Clazz createClazz(Clazz clazz, ClazzRequestDto.Ids ids) {
-//        Member teacher = new Member(Role.TEACHER, LoginType.KAKAO, "선생님", null, "닉네임1");
-//        memberRepository.save(teacher);
+        Member teacher = new Member(Role.TEACHER, LoginType.KAKAO, "선생님", null, "닉네임1");
+        memberRepository.save(teacher);
 
         // ------------------------------------------------------
         // memberId 식별하는 코드 작성하기
@@ -49,5 +55,29 @@ public class ClazzService {
         // ------------------------------------------------------
 
         return clazzRepository.save(clazz);
+    }
+
+    public void deleteClazz(long clazzId) {
+        //class가 있는지 없는지 검증하기
+        Clazz clazz = verifiedClazz(clazzId);
+        clazzRepository.delete(clazz);
+    }
+
+    public Clazz verifiedClazz(long clazzId) {
+        Optional<Clazz> clazz = clazzRepository.findById(clazzId);
+        return clazz.orElseThrow(() -> new BusinessLogicException(ExceptionCode.CLASS_NOT_FOUND));
+    }
+
+    public Clazz updateClazz(Clazz clazz, ClazzRequestDto.Ids ids, long clazzId) {
+        clazz.setTeacher(memberRepository.findById(ids.getTeacherId()).get());
+        if (ids.getParentId() != null) clazz.setTeacher(memberRepository.findById(ids.getParentId()).get());
+        if (ids.getStudentId() != null) clazz.setTeacher(memberRepository.findById(ids.getStudentId()).get());
+        clazz.setClassId(clazzId);
+        return clazzRepository.save(clazz);
+    }
+
+    public List<Clazz> getClazz(long teacherId){
+        List<Clazz> clazz = clazzRepository.findByTeacherId(teacherId);
+        return clazz;
     }
 }

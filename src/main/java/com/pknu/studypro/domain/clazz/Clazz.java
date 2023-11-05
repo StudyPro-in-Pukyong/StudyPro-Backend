@@ -57,4 +57,6 @@ public class Clazz {
     public void setStudent(final Member student) {
         this.student = student;
     }
+
+    public void setClassId(final long id) {this.id = id;}
 }
