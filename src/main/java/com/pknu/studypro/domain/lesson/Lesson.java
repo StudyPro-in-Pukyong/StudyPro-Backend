@@ -42,6 +42,7 @@ public class Lesson {
     private final List<String> homeworks = new ArrayList<>(); // 숙제
 
     public Lesson(final Long id, final Long classId, final LocalDateTime startTime, final int minutes, final Type type, final boolean isDone, final String progress) {
+        this.id = id;
         this.classId = classId;
         this.startTime = startTime;
         this.minutes = minutes;
