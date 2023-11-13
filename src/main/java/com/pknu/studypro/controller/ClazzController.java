@@ -1,11 +1,9 @@
 package com.pknu.studypro.controller;
 
 import com.pknu.studypro.domain.clazz.Clazz;
-import com.pknu.studypro.domain.lesson.Lesson;
 import com.pknu.studypro.dto.ClazzRequestDto;
-import com.pknu.studypro.dto.LessonResponseDto;
+import com.pknu.studypro.dto.ClazzResponseDto;
 import com.pknu.studypro.mapper.ClazzMapper;
-import com.pknu.studypro.repository.ClazzRepository;
 import com.pknu.studypro.service.ClazzService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -15,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,12 +25,11 @@ public class ClazzController {
 
     @PostMapping("/class")
     public ResponseEntity createClazz(@Valid @RequestBody ClazzRequestDto.Post post){
-        Clazz clazz = null;
-        if(post.isFixedDatePay())  clazz = clazzMapper.clazzPostDtoToClazz(post, clazzMapper.FIXED_DATE_PAY(post.getPostPay()));
-        else if(post.isRoundPay())  clazz = clazzMapper.clazzPostDtoToClazz(post, clazzMapper.ROUND_PAY(post.getPostPay()));
+        Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
         clazz = clazzService.createClazz(clazz, post.getIds());
+        ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
-        return new ResponseEntity<>(clazz, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/class/{classId}")
@@ -47,20 +42,20 @@ public class ClazzController {
     @PutMapping("/class/{classId}")
     public ResponseEntity putClazz(@Valid @RequestBody ClazzRequestDto.Post post,
                                    @Positive @PathVariable("classId") long clazzId) {
-        Clazz clazz = null;
-        if(post.isFixedDatePay()) clazz = clazzMapper.clazzPostDtoToClazz(post, clazzMapper.FIXED_DATE_PAY(post.getPostPay()));
-        else if(post.isRoundPay()) clazz = clazzMapper.clazzPostDtoToClazz(post, clazzMapper.ROUND_PAY(post.getPostPay()));
+        Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
         clazz = clazzService.updateClazz(clazz, post.getIds(), clazzId);
+        ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
-        return new ResponseEntity<>(clazz, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //클래스 조회 선생님, 학부모, 학생
     //URL을 나눴기 때문에 추가적으로 검증할 필요 없음
     @GetMapping("/class/teacher")
     public ResponseEntity getClass(@RequestParam("memberId") long memberId) {
-        List<Clazz> clazz = clazzService.getClazz(memberId);
+        List<Clazz> clazzes = clazzService.getClazz(memberId);
+        List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
 
-        return new ResponseEntity<>(clazz, HttpStatus.OK);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 }

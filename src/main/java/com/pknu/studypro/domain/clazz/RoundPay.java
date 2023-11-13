@@ -4,10 +4,12 @@ import com.pknu.studypro.domain.clazz.Pay;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Getter
 public class RoundPay extends Pay { // 회차
 
 //    @Column(nullable = false)

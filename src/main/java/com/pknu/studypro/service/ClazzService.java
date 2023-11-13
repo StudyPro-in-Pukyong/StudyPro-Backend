@@ -1,6 +1,7 @@
 package com.pknu.studypro.service;
 
 import com.pknu.studypro.domain.clazz.Clazz;
+import com.pknu.studypro.domain.clazz.FixedDatePay;
 import com.pknu.studypro.domain.clazz.Pay;
 import com.pknu.studypro.domain.lesson.Lesson;
 import com.pknu.studypro.domain.member.LoginType;
@@ -14,6 +15,7 @@ import com.pknu.studypro.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +36,10 @@ public class ClazzService {
         clazz.setTeacher(memberRepository.findById(ids.getTeacherId()).get());
         if (ids.getParentId() != null) clazz.setTeacher(memberRepository.findById(ids.getParentId()).get());
         if (ids.getStudentId() != null) clazz.setTeacher(memberRepository.findById(ids.getStudentId()).get());
+
+        clazz.getPay();
+        FixedDatePay fixedDatePay = new FixedDatePay(1, LocalDate.now());
+//        fixedDatePay.get
 
         // request body example
         /*

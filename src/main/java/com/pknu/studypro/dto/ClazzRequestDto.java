@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 
 public class ClazzRequestDto {
     @AllArgsConstructor
@@ -29,7 +31,7 @@ public class ClazzRequestDto {
     @Getter
     public static class PostPay {
         private int amount;
-        private Integer date;
+        private LocalDate date;
         private Integer round;
 
         // default 값이 있어서 필요 없음
