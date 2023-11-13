@@ -113,6 +113,8 @@ class AuthControllerTest {
     @DisplayName("유저 권한 변경")
     void changeRole() throws Exception {
         //given
+        given(authArgumentResolver.supportsParameter(any()))
+                .willReturn(true);
         given(authArgumentResolver.resolveArgument(any(), any(), any(), any()))
                 .willReturn(new LoginUser("id", Role.ANONYMOUS));
         final String role = objectMapper.writeValueAsString(new RoleRequest(Role.STUDENT));
@@ -133,9 +135,10 @@ class AuthControllerTest {
     @DisplayName("유저 권한 조회")
     void getRole() throws Exception {
         //given
-        final LoginUser loginUser = new LoginUser("id", Role.STUDENT);
+        given(authArgumentResolver.supportsParameter(any()))
+                .willReturn(true);
         given(authArgumentResolver.resolveArgument(any(), any(), any(), any()))
-                .willReturn(loginUser);
+                .willReturn(new LoginUser("id", Role.STUDENT));
 
         //when, then
         mockMvc.perform(get("/auth/role")
