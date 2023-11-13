@@ -7,6 +7,7 @@ import com.pknu.studypro.dto.auth.Tokens;
 import com.pknu.studypro.service.auth.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,5 +40,10 @@ public class AuthController {
                                            @RequestBody final RoleRequest request) {
         authService.changeRole(loginUser, request);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/role")
+    public ResponseEntity<LoginUser> getRole(@Auth final LoginUser loginUser) {
+        return ResponseEntity.ok(loginUser);
     }
 }

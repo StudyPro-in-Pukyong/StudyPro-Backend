@@ -30,6 +30,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -126,5 +127,25 @@ class AuthControllerTest {
                 .andDo(document("유저 권한 변경",
                         requestHeaders(headerWithName(AUTHORIZATION).description("액세스 토큰")),
                         requestFields(fieldWithPath("role").description("변경할 권한"))));
+    }
+
+    @Test
+    @DisplayName("유저 권한 조회")
+    void getRole() throws Exception {
+        //given
+        final LoginUser loginUser = new LoginUser("id", Role.STUDENT);
+        given(authArgumentResolver.resolveArgument(any(), any(), any(), any()))
+                .willReturn(loginUser);
+
+        //when, then
+        mockMvc.perform(get("/auth/role")
+                        .header(AUTHORIZATION, "Bearer service.access.token"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("유저 권한 확인",
+                        requestHeaders(headerWithName(AUTHORIZATION).description("액세스 토큰")),
+                        responseFields(
+                                fieldWithPath("username").description("아이디"),
+                                fieldWithPath("role").description("현재 권한"))));
     }
 }
