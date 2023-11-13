@@ -1,13 +1,7 @@
 package com.pknu.studypro.domain.clazz;
 
 import com.pknu.studypro.domain.member.Member;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,11 +24,11 @@ public class Clazz {
     @Column(nullable = false)
     private String subject;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Member teacher;
-    @OneToOne
+    @ManyToOne
     private Member parent;
-    @OneToOne
+    @ManyToOne
     private Member student;
 
     public Clazz(final Pay pay, final String title, final String subject, final Member teacher, final Member parent, final Member student) {

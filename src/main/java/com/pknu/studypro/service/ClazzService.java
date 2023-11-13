@@ -27,19 +27,22 @@ public class ClazzService {
     private final MemberRepository memberRepository;
 
     public Clazz createClazz(Clazz clazz, ClazzRequestDto.Ids ids) {
-        Member teacher = new Member(Role.TEACHER, LoginType.KAKAO, "선생님", null, "닉네임1");
-        memberRepository.save(teacher);
+        // Member test 코드
+//        Member teacher = new Member(Role.TEACHER, LoginType.KAKAO, "선생님", null, "닉네임1");
+//        Member teacher2 = new Member(Role.TEACHER, LoginType.KAKAO, "선생님2", null, "닉네임2");
+//        memberRepository.save(teacher);
+//        memberRepository.save(teacher2);
 
         // ------------------------------------------------------
         // memberId 식별하는 코드 작성하기
         // member들이 one to one 매핑되어 있어서 같은 memberId 등록 X -> 수정 필요해보임
-        clazz.setTeacher(memberRepository.findById(ids.getTeacherId()).get());
+        clazz.setTeacher(
+                memberRepository.findById(ids.getTeacherId()).orElseThrow(
+                        () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND)
+                )
+        );
         if (ids.getParentId() != null) clazz.setTeacher(memberRepository.findById(ids.getParentId()).get());
         if (ids.getStudentId() != null) clazz.setTeacher(memberRepository.findById(ids.getStudentId()).get());
-
-        clazz.getPay();
-        FixedDatePay fixedDatePay = new FixedDatePay(1, LocalDate.now());
-//        fixedDatePay.get
 
         // request body example
         /*

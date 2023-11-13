@@ -27,8 +27,6 @@ public interface ClazzMapper {
     ClazzResponseDto.Response clazzToClazzResponse(Clazz clazz);
     default ClazzResponseDto.Response clazzToClazzResponseCustom(Clazz clazz) {
         ClazzResponseDto.Response response = clazzToClazzResponse(clazz);
-        System.out.println("!! " + clazz.getId());
-        System.out.println("!! " + response.getId());
 
         if(clazz.getPay().getClass().getName().contains("FixedDatePay"))
             response.setResponsePay(RESPONSE_FIXED_DATE_PAY(clazz));
