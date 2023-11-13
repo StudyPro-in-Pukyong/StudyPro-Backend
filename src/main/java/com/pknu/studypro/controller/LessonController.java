@@ -44,7 +44,7 @@ public class LessonController {
     // 레슨 목록 조회(선생님)
     // 레슨 목록 조회(부모님)
     // 레슨 목록 조회(학생)
-    @GetMapping("/lessons/teacher")
+    @GetMapping("/lessons")
     public ResponseEntity getLessons(@RequestParam("year") int year,
                                      @RequestParam("month") int month,
                                      @RequestParam("classId") long classId) {
