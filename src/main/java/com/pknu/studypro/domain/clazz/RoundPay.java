@@ -20,4 +20,8 @@ public class RoundPay extends Pay { // 회차
         super(amount);
         this.round = round;
     }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
 }

@@ -18,7 +18,11 @@ public interface ClazzMapper {
     Clazz clazzPostDtoToClazz(ClazzRequestDto.Post post, Pay pay);
     default Clazz clazzPostDtoToClazzCustom(ClazzRequestDto.Post post) {
         if(post.isFixedDatePay())  return clazzPostDtoToClazz(post, FIXED_DATE_PAY(post.getPostPay()));
-        else if(post.isRoundPay())  return clazzPostDtoToClazz(post, ROUND_PAY(post.getPostPay()));
+        else if(post.isRoundPay())  {
+            RoundPay roundPay = ROUND_PAY(post.getPostPay());
+            System.out.println("!! round : " + roundPay.getRound());
+            return clazzPostDtoToClazz(post, roundPay);
+        }
         else throw new BusinessLogicException(ExceptionCode.CLASS_POST_FAIL);
     }
     FixedDatePay FIXED_DATE_PAY(ClazzRequestDto.PostPay pay);

@@ -1,6 +1,7 @@
 package com.pknu.studypro.controller;
 
 import com.pknu.studypro.domain.clazz.Clazz;
+import com.pknu.studypro.domain.clazz.RoundPay;
 import com.pknu.studypro.dto.ClazzRequestDto;
 import com.pknu.studypro.dto.ClazzResponseDto;
 import com.pknu.studypro.mapper.ClazzMapper;
@@ -43,7 +44,12 @@ public class ClazzController {
     public ResponseEntity putClazz(@Valid @RequestBody ClazzRequestDto.Post post,
                                    @Positive @PathVariable("classId") long clazzId) {
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
-        clazz = clazzService.updateClazz(clazz, post.getIds(), clazzId);
+
+//        RoundPay roundPay = (RoundPay) (clazz.getPay());
+//        System.out.println("!! controller : " + roundPay.getRound());
+
+        clazz.setClassId(clazzId);
+        clazz = clazzService.updateClazz(clazz, post.getIds());
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

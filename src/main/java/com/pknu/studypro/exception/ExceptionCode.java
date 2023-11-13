@@ -8,7 +8,8 @@ public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "Member not found"),
     CLASS_NOT_FOUND(404, "Class not found"),
     LESSON_NOT_FOUND(404, "Lesson not found"),
-    CLASS_POST_FAIL(500, "PostDto convert fail");
+    CLASS_POST_FAIL(500, "PostDto convert fail"),
+    NOT_CHANGE_PAY_TYPE(500, "Can't change pay_type");
 
     @Getter
     private int status;

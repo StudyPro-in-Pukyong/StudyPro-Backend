@@ -21,5 +21,9 @@ public class FixedDatePay extends Pay { // 지정일
         super(amount);
         this.date = date;
     }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 }
 

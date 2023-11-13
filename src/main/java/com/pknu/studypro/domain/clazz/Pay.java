@@ -35,9 +35,19 @@ public abstract class Pay {
 
     public void setPlusCurrentRound() {
         currentRound++;
+        // totalTime 추가하기
     }
 
     public void setMinusCurrentRound() {
         currentRound--;
+        // totalTime 추가하기
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
