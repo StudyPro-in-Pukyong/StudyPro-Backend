@@ -44,4 +44,13 @@ public class AuthService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
         member.changeRole(request.role());
     }
+
+    // access 토큰을 재발행하기 위한 코드
+    public Tokens accessToken(long userId) {
+        final Member member = memberRepository.findById(userId).get();
+
+        final String accessToken = jwtTokenProvider.createAccessFrom(member.getUsername());
+        final String refresh = jwtTokenProvider.createRefresh();
+        return new Tokens(accessToken, refresh);
+    }
 }
