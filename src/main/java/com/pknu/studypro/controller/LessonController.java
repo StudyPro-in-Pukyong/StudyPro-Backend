@@ -1,8 +1,10 @@
 package com.pknu.studypro.controller;
 
+import com.pknu.studypro.controller.auth.Auth;
 import com.pknu.studypro.domain.lesson.Lesson;
 import com.pknu.studypro.dto.LessonRequestDto;
 import com.pknu.studypro.dto.LessonResponseDto;
+import com.pknu.studypro.dto.auth.LoginUser;
 import com.pknu.studypro.mapper.LessonMapper;
 import com.pknu.studypro.service.LessonService;
 import jakarta.validation.Valid;
@@ -25,7 +27,8 @@ public class LessonController {
 
     // CREATE
     @PostMapping("/lesson")
-    public ResponseEntity postLesson(@Valid @RequestBody LessonRequestDto.Post post) {
+    public ResponseEntity postLesson(@Auth LoginUser loginUser,
+                                     @Valid @RequestBody LessonRequestDto.Post post) {
         Lesson lesson = lessonService.createLesson(lessonMapper.lessonPostDtoToLesson(post));
         LessonResponseDto.Response response = lessonMapper.lessonToLessonResponseDto(lesson);
 
@@ -34,7 +37,8 @@ public class LessonController {
 
     // READ
     @GetMapping("/lesson/{lessonId}")
-    public ResponseEntity getLesson(@Positive @PathVariable("lessonId") long lessonId) {
+    public ResponseEntity getLesson(@Auth LoginUser loginUser,
+                                    @Positive @PathVariable("lessonId") long lessonId) {
         Lesson lesson = lessonService.readLesson(lessonId);
         LessonResponseDto.Response response = lessonMapper.lessonToLessonResponseDto(lesson);
 
@@ -45,7 +49,8 @@ public class LessonController {
     // 레슨 목록 조회(부모님)
     // 레슨 목록 조회(학생)
     @GetMapping("/lessons")
-    public ResponseEntity getLessons(@RequestParam("year") int year,
+    public ResponseEntity getLessons(@Auth LoginUser loginUser,
+                                     @RequestParam("year") int year,
                                      @RequestParam("month") int month,
                                      @RequestParam("classId") long classId) {
         List<Lesson> lessons = lessonService.readLessons(LocalDate.of(year, month, 1), classId);
@@ -56,7 +61,8 @@ public class LessonController {
 
     // UPDATE
     @PutMapping("/lesson")
-    public ResponseEntity putLesson(@Valid @RequestBody LessonRequestDto.Put put) {
+    public ResponseEntity putLesson(@Auth LoginUser loginUser,
+                                    @Valid @RequestBody LessonRequestDto.Put put) {
         Lesson lesson = lessonService.updateLesson(lessonMapper.lessonPutDtoToLesson(put));
         LessonResponseDto.Response response = lessonMapper.lessonToLessonResponseDto(lesson);
 
@@ -64,7 +70,8 @@ public class LessonController {
     }
 
     @PutMapping("/lesson/{lessonId}")
-    public ResponseEntity putIsDoneLesson(@Positive @PathVariable("lessonId") long lessonId,
+    public ResponseEntity putIsDoneLesson(@Auth LoginUser loginUser,
+                                          @Positive @PathVariable("lessonId") long lessonId,
                                           @RequestParam("isDone") boolean isDone) {
         Lesson lesson = lessonService.updateIsDoneLesson(lessonId, isDone);
         LessonResponseDto.Response response = lessonMapper.lessonToLessonResponseDto(lesson);
@@ -75,7 +82,8 @@ public class LessonController {
 
     // DELETE
     @DeleteMapping("/lesson/{lessonId}")
-    public ResponseEntity deleteLesson(@Positive @PathVariable("lessonId") long lessonId) {
+    public ResponseEntity deleteLesson(@Auth LoginUser loginUser,
+                                       @Positive @PathVariable("lessonId") long lessonId) {
         lessonService.deleteLesson(lessonId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

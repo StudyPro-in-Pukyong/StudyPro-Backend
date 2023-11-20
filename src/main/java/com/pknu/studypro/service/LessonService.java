@@ -24,16 +24,12 @@ import java.util.Optional;
 @AllArgsConstructor
 public class LessonService {
     private final LessonRepository lessonRepository;
+    private final ClazzService clazzService;
     private final ClazzRepository clazzRepository;
-    private final MemberRepository memberRepository;
 
     // CREATE
     public Lesson createLesson(Lesson lesson) {
-        // --------------------------------------------------------------------------
-        // classId 증명하는 코드 추가하기
-        clazzRepository.findById(lesson.getClassId());
-        // --------------------------------------------------------------------------
-
+        clazzService.verifiedClazz(lesson.getClassId());
         return lessonRepository.save(lesson);
     }
 

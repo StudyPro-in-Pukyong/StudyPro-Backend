@@ -6,6 +6,7 @@ import com.pknu.studypro.dto.auth.LoginUser;
 import com.pknu.studypro.dto.auth.RoleRequest;
 import com.pknu.studypro.dto.auth.Tokens;
 import com.pknu.studypro.repository.MemberRepository;
+import com.pknu.studypro.util.FindMember;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +16,12 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final FindMember findMember;
 
-    public AuthService(final MemberRepository memberRepository, final JwtTokenProvider jwtTokenProvider) {
+    public AuthService(MemberRepository memberRepository, JwtTokenProvider jwtTokenProvider, FindMember findMember) {
         this.memberRepository = memberRepository;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.findMember = findMember;
     }
 
     @Transactional
@@ -40,8 +43,7 @@ public class AuthService {
 
     @Transactional
     public void changeRole(final LoginUser loginUser, final RoleRequest request) {
-        final Member member = memberRepository.findByUsername(loginUser.username())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        final Member member = findMember.findMemberByToken(loginUser);
         member.changeRole(request.role());
     }
 
