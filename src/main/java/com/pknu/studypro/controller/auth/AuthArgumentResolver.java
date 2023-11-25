@@ -51,7 +51,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     private String getToken(final NativeWebRequest request) throws AuthenticationException {
         final String authorization = request.getHeader(AUTHORIZATION);
         if (isNull(authorization)) {
-            throw new AuthenticationException();
+            throw new AuthenticationException("인증 헤더가 필요합니다.");
         }
 
         return authorization.replace(BEARER, "");
