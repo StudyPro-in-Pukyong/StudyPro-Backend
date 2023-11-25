@@ -61,7 +61,7 @@ public class JwtTokenProvider {
         } catch (final ExpiredJwtException expired) {
             return expired.getClaims();
         } catch (final Exception e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
         }
     }
 
@@ -74,7 +74,7 @@ public class JwtTokenProvider {
         final Claims claims = toClaims(token);
 
         if (claims.getExpiration().before(new Date())) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("만료된 토큰입니다.");
         }
     }
 }
