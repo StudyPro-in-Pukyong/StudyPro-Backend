@@ -11,6 +11,6 @@ spring:
 
   auth:
     key: testestestseteststestsetestsetsetsetsetestsetestsetess
-    accessTokenExpired: 13221
-    refreshTokenExpired: 21321
+    accessTokenExpired: 3600000
+    refreshTokenExpired: 25200000
     url: https://test.com
