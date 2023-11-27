@@ -2,9 +2,7 @@ package com.pknu.studypro.service;
 
 import com.pknu.studypro.domain.clazz.Clazz;
 import com.pknu.studypro.domain.clazz.FixedDatePay;
-import com.pknu.studypro.domain.clazz.Pay;
 import com.pknu.studypro.domain.clazz.RoundPay;
-import com.pknu.studypro.domain.lesson.Lesson;
 import com.pknu.studypro.domain.member.LoginType;
 import com.pknu.studypro.domain.member.Member;
 import com.pknu.studypro.domain.member.Role;
@@ -115,7 +113,7 @@ public class ClazzService {
     }
 
     // 정산 요청하기
-    public Clazz settleClazz(long clazzId) {
+    public Clazz settleRequestClazz(long clazzId) {
         Clazz clazz = verifiedClazz(clazzId);
 
         // Pay 방법에 따른 정산방법 분류
@@ -141,6 +139,13 @@ public class ClazzService {
             }
         }
 
+        return clazz;
+    }
+
+    // 정산 허용하기
+    public Clazz settleAllowClazz(long clazzId) {
+        Clazz clazz = verifiedClazz(clazzId);
+        clazz.getPay().settle();
         return clazz;
     }
 

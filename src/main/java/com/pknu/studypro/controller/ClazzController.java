@@ -2,7 +2,6 @@ package com.pknu.studypro.controller;
 
 import com.pknu.studypro.controller.auth.Auth;
 import com.pknu.studypro.domain.clazz.Clazz;
-import com.pknu.studypro.domain.clazz.RoundPay;
 import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.ClazzRequestDto;
 import com.pknu.studypro.dto.ClazzResponseDto;
@@ -40,11 +39,22 @@ public class ClazzController {
     }
 
     // 정산 요청하기
-    @GetMapping("/class/settle/{classId}")
-    public ResponseEntity settleClazz(@Auth LoginUser loginUser,
+    @GetMapping("/class/settle-request/{classId}")
+    public ResponseEntity settleClazzByTeacher(@Auth LoginUser loginUser,
                                       @Positive @PathVariable("classId") long clazzId) {
         if(loginUser.role() != Role.TEACHER) throw  new BusinessLogicException(ExceptionCode.NOT_TEACHER); // 권한 확인
-        Clazz clazz = clazzService.settleClazz(clazzId);
+        Clazz clazz = clazzService.settleRequestClazz(clazzId);
+        ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 정산 허용하기
+    @GetMapping("/class/settle-allow/{classId}")
+    public ResponseEntity settleClazzByParent(@Auth LoginUser loginUser,
+                                      @Positive @PathVariable("classId") long clazzId) {
+        if(loginUser.role() != Role.PARENT) throw  new BusinessLogicException(ExceptionCode.NOT_PARENT); // 권한 확인
+        Clazz clazz = clazzService.settleAllowClazz(clazzId);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

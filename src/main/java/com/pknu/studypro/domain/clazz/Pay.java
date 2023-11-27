@@ -43,6 +43,10 @@ public abstract class Pay {
         totalTime -= minutes;
     }
 
+    public void settle() {
+        currentRound = 0;
+    }
+
     public void setAmount(int amount) {
         this.amount = amount;
     }
