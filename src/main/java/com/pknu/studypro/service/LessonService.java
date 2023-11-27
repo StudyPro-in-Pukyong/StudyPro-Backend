@@ -1,16 +1,11 @@
 package com.pknu.studypro.service;
 
 import com.pknu.studypro.domain.clazz.Clazz;
-import com.pknu.studypro.domain.clazz.FixedDatePay;
 import com.pknu.studypro.domain.lesson.Lesson;
-import com.pknu.studypro.domain.member.LoginType;
-import com.pknu.studypro.domain.member.Member;
-import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.exception.BusinessLogicException;
 import com.pknu.studypro.exception.ExceptionCode;
 import com.pknu.studypro.repository.ClazzRepository;
 import com.pknu.studypro.repository.LessonRepository;
-import com.pknu.studypro.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -76,16 +71,11 @@ public class LessonService {
         if(lesson.getIsDone() != isDone) { // isDone의 값 변경발생
             lesson.setIsDone(isDone);
 
-            // --------------------------------------------------------------------------
-
-            // classId 증명하는 코드 추가하기
-            Clazz clazz = clazzRepository.findById(lesson.getClassId()).get();
-
-            // --------------------------------------------------------------------------
-            if(isDone) { // isDone = false → true : Pay의 currentRound 증가
-                clazz.getPay().setPlusCurrentRound();
-            } else { // isDone = true → false : Pay의 currentRound 감소
-                clazz.getPay().setMinusCurrentRound();
+            Clazz clazz = clazzService.verifiedClazz(lesson.getClassId());
+            if(isDone) { // isDone = false → true : Pay의 currentRound 증가 & totalTime 증가
+                clazz.getPay().setPlusCurrentRoundAndTotalTime(lesson.getMinutes());
+            } else { // isDone = true → false : Pay의 currentRound 감소 & totalTime 감소
+                clazz.getPay().setMinusCurrentRoundAndTotalTime(lesson.getMinutes());
             }
         }
 
