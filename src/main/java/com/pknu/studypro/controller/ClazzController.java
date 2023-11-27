@@ -1,9 +1,14 @@
 package com.pknu.studypro.controller;
 
+import com.pknu.studypro.controller.auth.Auth;
 import com.pknu.studypro.domain.clazz.Clazz;
 import com.pknu.studypro.domain.clazz.RoundPay;
+import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.ClazzRequestDto;
 import com.pknu.studypro.dto.ClazzResponseDto;
+import com.pknu.studypro.dto.auth.LoginUser;
+import com.pknu.studypro.exception.BusinessLogicException;
+import com.pknu.studypro.exception.ExceptionCode;
 import com.pknu.studypro.mapper.ClazzMapper;
 import com.pknu.studypro.service.ClazzService;
 import jakarta.validation.Valid;
@@ -24,6 +29,7 @@ public class ClazzController {
     private final ClazzService clazzService;
     private final ClazzMapper clazzMapper;
 
+    // Create
     @PostMapping("/class")
     public ResponseEntity createClazz(@Valid @RequestBody ClazzRequestDto.Post post){
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
@@ -33,12 +39,23 @@ public class ClazzController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // 정산 요청하기
+    @GetMapping("/class/settle/{classId}")
+    public ResponseEntity settleClazz(@Auth LoginUser loginUser,
+                                      @Positive @PathVariable("classId") long clazzId) {
+        if(loginUser.role() != Role.TEACHER) throw  new BusinessLogicException(ExceptionCode.NOT_TEACHER); // 권한 확인
+        Clazz clazz = clazzService.settleClazz(clazzId);
+        ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // Delete
     @DeleteMapping("/class/{classId}")
     public ResponseEntity deleteClazz(@Positive @PathVariable("classId") long clazzId) {
         clazzService.deleteClazz(clazzId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 
     @PutMapping("/class/{classId}")
     public ResponseEntity putClazz(@Valid @RequestBody ClazzRequestDto.Post post,

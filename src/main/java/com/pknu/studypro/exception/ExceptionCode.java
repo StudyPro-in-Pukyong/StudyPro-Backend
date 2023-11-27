@@ -5,6 +5,8 @@ import lombok.Getter;
 import java.util.Arrays;
 
 public enum ExceptionCode {
+    NOT_ALLOW_SETTLE(400, "Not Allow Settle"),
+    NOT_TEACHER(403, "Forbidden Because User not Teacher"),
     MEMBER_NOT_FOUND(404, "Member not found"),
     CLASS_NOT_FOUND(404, "Class not found"),
     LESSON_NOT_FOUND(404, "Lesson not found"),

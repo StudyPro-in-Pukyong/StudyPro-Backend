@@ -113,4 +113,37 @@ public class ClazzService {
         List<Clazz> clazz = clazzRepository.findByTeacherId(teacherId);
         return clazz;
     }
+
+    // 정산 요청하기
+    public Clazz settleClazz(long clazzId) {
+        Clazz clazz = verifiedClazz(clazzId);
+
+        // Pay 방법에 따른 정산방법 분류
+        if(clazz.getPay().getClass().getName().contains("FixedDatePay")) { // FixedDatePay
+            FixedDatePay pay = (FixedDatePay) clazz.getPay();
+            LocalDate date = pay.getDate();
+
+            // 오늘 날짜가 pay의 date보다 크거나 같은 경우 정산 허용(다음달부터)
+            if(date.isBefore(date.plusMonths(1)) && date.getDayOfMonth() <= LocalDate.now().getDayOfMonth()) {
+                // TODO : 알람기능 만들기
+            } else { // 정산 허용 X
+                throw new BusinessLogicException(ExceptionCode.NOT_ALLOW_SETTLE);
+            }
+        } else if(clazz.getPay().getClass().getName().contains("RoundPay")) { // RoundPay
+            RoundPay pay = (RoundPay) clazz.getPay();
+            int round = pay.getRound();
+
+            // 현재 round가 지정한 round보다 클 경우 정산 허용
+            if(clazz.getPay().getCurrentRound() >= round) {
+                // TODO : 알람기능 만들기
+            } else { // 정산 허용 X
+                throw new BusinessLogicException(ExceptionCode.NOT_ALLOW_SETTLE);
+            }
+        }
+
+        return clazz;
+    }
+
+    // 정산방법 바꾸기 전 정산 완료여부 확인
+
 }
