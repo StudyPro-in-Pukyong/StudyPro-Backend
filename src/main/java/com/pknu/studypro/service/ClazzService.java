@@ -96,7 +96,7 @@ public class ClazzService {
             clazz.getPay().setId(beforeClazz.getPay().getId());
         } else { // Pay 방법이 바뀌는 경우
             // CurrentRound = 0 이 아닌 경우에는 에러 발생시키기
-            if(beforeClazz.getPay().getCurrentRound() > 0)
+            if(!checkCurrentRound(clazz))
                 throw new BusinessLogicException(ExceptionCode.NOT_CHANGE_PAY_TYPE);
         }
 
@@ -145,5 +145,8 @@ public class ClazzService {
     }
 
     // 정산방법 바꾸기 전 정산 완료여부 확인
-
+    public boolean checkCurrentRound(Clazz clazz) {
+        if(clazz.getPay().getCurrentRound() == 0) return true; // 정산방법 바꾸기 OK
+        return false; // 정산방법 바꾸기 X
+    }
 }
