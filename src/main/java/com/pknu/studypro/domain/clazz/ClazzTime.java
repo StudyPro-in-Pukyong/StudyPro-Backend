@@ -27,9 +27,9 @@ public class ClazzTime {
     @Column(nullable = false)
     private int endTime;
 
-    public ClazzTime(final Clazz clazz, final String date, final int startTime, final int endTime) {
+    public ClazzTime(final Clazz clazz, final String clazzDate, final int startTime, final int endTime) {
         this.clazz = clazz;
-        this.date = date;
+        this.clazzDate = clazzDate;
         this.startTime = startTime;
         this.endTime = endTime;
     }
