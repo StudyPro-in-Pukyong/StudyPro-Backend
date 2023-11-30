@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 public class ClazzRequestDto {
@@ -18,6 +19,8 @@ public class ClazzRequestDto {
         private String subject; //과목명
         private PostPay postPay; //지급 방식 및 급여
         private Ids ids;
+
+        private List<ClazzTime> clazzTimes;
 
         public boolean isFixedDatePay() {
             return this.getPostPay().date != null;
@@ -44,5 +47,13 @@ public class ClazzRequestDto {
         private Long teacherId; //선생님 아이디
         private Long parentId; //부모님 아이디
         private Long studentId; //헉생 아이디
+    }
+
+    @Getter
+    public static class ClazzTime{
+        private String clazzDate; //수업하는 날짜
+        private int startTime; //수업 시작 시간
+        private int endTime; // 수업 끝나는 시간
+
     }
 }

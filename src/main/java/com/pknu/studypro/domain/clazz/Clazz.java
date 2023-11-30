@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -31,13 +33,17 @@ public class Clazz {
     @ManyToOne
     private Member student;
 
-    public Clazz(final Pay pay, final String title, final String subject, final Member teacher, final Member parent, final Member student) {
+    @OneToMany(mappedBy = "clazz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClazzTime> clazzTimes;
+
+    public Clazz(final Pay pay, final String title, final String subject, final Member teacher, final Member parent, final Member student,  final List<ClazzTime> clazzTimes) {
         this.pay = pay;
         this.title = title;
         this.subject = subject;
         this.teacher = teacher;
         this.parent = parent;
         this.student = student;
+        this.clazzTimes = clazzTimes;
     }
 
     public void setTeacher(final Member teacher) {
