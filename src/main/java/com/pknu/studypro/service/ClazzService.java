@@ -1,6 +1,7 @@
 package com.pknu.studypro.service;
 
 import com.pknu.studypro.domain.clazz.Clazz;
+import com.pknu.studypro.domain.clazz.ClazzTime;
 import com.pknu.studypro.domain.clazz.FixedDatePay;
 import com.pknu.studypro.domain.clazz.RoundPay;
 import com.pknu.studypro.domain.member.LoginType;
@@ -10,6 +11,7 @@ import com.pknu.studypro.dto.ClazzRequestDto;
 import com.pknu.studypro.exception.BusinessLogicException;
 import com.pknu.studypro.exception.ExceptionCode;
 import com.pknu.studypro.repository.ClazzRepository;
+import com.pknu.studypro.repository.ClazzTimeRepository;
 import com.pknu.studypro.repository.MemberRepository;
 import com.pknu.studypro.repository.PayRepository;
 import jakarta.transaction.Transactional;
@@ -26,17 +28,23 @@ public class ClazzService {
     private final ClazzRepository clazzRepository;
     private final MemberRepository memberRepository;
     private final PayRepository payRepository;
+    private final ClazzTimeRepository clazzTimeRepository;
 
     public Clazz createClazz(Clazz clazz, ClazzRequestDto.Ids ids) {
 //         Member test 코드
-        Member teacher = new Member(Role.TEACHER, LoginType.KAKAO, "선생님", null, "선생님 닉네임1");
-        Member teacher2 = new Member(Role.TEACHER, LoginType.KAKAO, "선생님2", null, "선생님 닉네임2");
-        Member student = new Member(Role.STUDENT, LoginType.KAKAO, "학생1", null, "학생 닉네임1");
-        Member parent = new Member(Role.PARENT, LoginType.KAKAO, "학부모1", null, "학부모 닉네임1");
-        memberRepository.save(teacher);
-        memberRepository.save(teacher2);
-        memberRepository.save(student);
-        memberRepository.save(parent);
+//        Member teacher = new Member(Role.TEACHER, LoginType.KAKAO, "선생님", null, "선생님 닉네임1");
+//        Member teacher2 = new Member(Role.TEACHER, LoginType.KAKAO, "선생님2", null, "선생님 닉네임2");
+//        Member student = new Member(Role.STUDENT, LoginType.KAKAO, "학생1", null, "학생 닉네임1");
+//        Member parent = new Member(Role.PARENT, LoginType.KAKAO, "학부모1", null, "학부모 닉네임1");
+//        memberRepository.save(teacher);
+//        memberRepository.save(teacher2);
+//        memberRepository.save(student);
+//        memberRepository.save(parent);
+
+        // 수업일정 설정
+        for(ClazzTime clazzTime : clazz.getClazzTimes()) {
+            clazzTime.setClazz(clazz);
+        }
 
         // ------------------------------------------------------
         // memberId 식별하는 코드 작성하기
@@ -52,20 +60,32 @@ public class ClazzService {
 
         // request body example
         /*
-                {
-                "title" : "영어 과외",
-                "subject" : "영어",
-                "postPay" : {
-                    "amount" : "20000",
-                    "date" : null,
-                    "round" : "10"
+            {
+                "title": "영어 과외",
+                "subject": "영어",
+                "postPay": {
+                    "amount": "20000",
+                    "date": "2023-11-27",
+                    "round": null
                 },
-                "ids" : {
-                    "teacherId" : 1,
-                    "parentId" : null,
-                    "studentId" : null
-                }
-}
+                "ids": {
+                    "teacherId": 1,
+                    "parentId": null,
+                    "studentId": null
+                },
+                "clazzTimes": [
+                    {
+                        "clazzDate": "MON",
+                        "startTime": "09:00:00",
+                        "endTime": "10:00:00"
+                    },
+                    {
+                        "clazzDate": "TUE",
+                        "startTime": "09:00:00",
+                        "endTime": "10:00:00"
+                    }
+                ]
+            }
          */
         // ------------------------------------------------------
 
@@ -97,6 +117,13 @@ public class ClazzService {
             if(!checkCurrentRound(clazz))
                 throw new BusinessLogicException(ExceptionCode.NOT_CHANGE_PAY_TYPE);
         }
+
+        // 수업일정이 바뀌었는지 확인하기
+//        for(ClazzTime clazzTime : beforeClazz.getClazzTimes()) {
+//            clazzTime.equals()
+//        }
+//        clazzTimeRepository.delete();
+
 
         // class 관련 member 연관관계 성립
         clazz.setTeacher(memberRepository.findById(ids.getTeacherId()).get());

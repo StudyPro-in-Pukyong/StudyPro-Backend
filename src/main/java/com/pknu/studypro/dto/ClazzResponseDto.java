@@ -1,11 +1,14 @@
 package com.pknu.studypro.dto;
 
+import com.pknu.studypro.util.ClazzDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 
 public class ClazzResponseDto {
@@ -18,7 +21,8 @@ public class ClazzResponseDto {
         private String title; // 수업 이름
         private String subject; // 과목명
         private ResponsePay responsePay; // 지급 방식 및 급여
-//
+        private List<ClazzTime> clazzTimes; // 수업 일정
+
 //        public boolean isFixedDatePay() {
 //            return this.getPay().date != null;
 //        }
@@ -58,5 +62,13 @@ public class ClazzResponseDto {
             super(id, amount, totalTime, currentRound);
             this.round = round;
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ClazzTime{
+        private ClazzDate clazzDate; //수업하는 날짜
+        private LocalTime startTime; //수업 시작 시간
+        private LocalTime endTime; // 수업 끝나는 시간
     }
 }

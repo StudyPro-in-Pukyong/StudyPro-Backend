@@ -1,15 +1,15 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
   datasource:
-    url: jdbc:mysql://localhost:30000/studypro
+    url: jdbc:mysql://localhost:3306/studypro
     username: root
-    password: password
+    password: sinariari
 
   auth:
     key: dfsdsfdfsafseafesfaflsefjlijfilsjfilaesjfilejflajfiljile

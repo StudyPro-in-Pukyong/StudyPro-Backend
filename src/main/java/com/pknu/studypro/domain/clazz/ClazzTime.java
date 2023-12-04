@@ -1,15 +1,19 @@
 package com.pknu.studypro.domain.clazz;
 
 import com.pknu.studypro.domain.clazz.Clazz;
+import com.pknu.studypro.util.ClazzDate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class ClazzTime {
+public class ClazzTime { // 수업일정
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,18 +23,34 @@ public class ClazzTime {
     private Clazz clazz;
 
     @Column(nullable = false)
-    private String clazzDate; // 수업날짜
+    @Enumerated(EnumType.STRING)
+    private ClazzDate clazzDate; //수업하는 날짜
 
     @Column(nullable = false)
-    private int startTime;
+    private LocalTime startTime; //수업 시작 시간
 
     @Column(nullable = false)
-    private int endTime;
+    private LocalTime endTime; // 수업 끝나는 시간
 
-    public ClazzTime(final Clazz clazz, final String clazzDate, final int startTime, final int endTime) {
+    public ClazzTime(Clazz clazz, ClazzDate clazzDate, LocalTime startTime, LocalTime endTime) {
         this.clazz = clazz;
         this.clazzDate = clazzDate;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public void setClazz(Clazz clazz) {
+        this.clazz = clazz;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; // 자기 자신과 비교하면 true
+        if (o == null || getClass() != o.getClass()) return false; // null값이 들어오거나 다른 클래스가 들어오면 false
+
+        ClazzTime clazzTime = (ClazzTime) o;
+        return clazzDate == clazzTime.getClazzDate() &&
+                startTime == clazzTime.getStartTime() &&
+                endTime == clazzTime.getEndTime();
     }
 }

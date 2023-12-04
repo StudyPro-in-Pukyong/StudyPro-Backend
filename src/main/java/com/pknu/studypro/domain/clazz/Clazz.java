@@ -34,7 +34,7 @@ public class Clazz {
     private Member student;
 
     @OneToMany(mappedBy = "clazz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ClazzTime> clazzTimes;
+    private List<ClazzTime> clazzTimes; // 수업일정
 
     public Clazz(final Pay pay, final String title, final String subject, final Member teacher, final Member parent, final Member student,  final List<ClazzTime> clazzTimes) {
         this.pay = pay;

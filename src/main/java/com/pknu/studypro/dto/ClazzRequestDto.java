@@ -1,11 +1,14 @@
 package com.pknu.studypro.dto;
 
+import com.pknu.studypro.util.ClazzDate;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -51,9 +54,8 @@ public class ClazzRequestDto {
 
     @Getter
     public static class ClazzTime{
-        private String clazzDate; //수업하는 날짜
-        private int startTime; //수업 시작 시간
-        private int endTime; // 수업 끝나는 시간
-
+        private ClazzDate clazzDate; //수업하는 날짜
+        private LocalTime startTime; //수업 시작 시간
+        private LocalTime endTime; // 수업 끝나는 시간
     }
 }
