@@ -34,12 +34,12 @@ public class ClazzService {
 //         Member test 코드
 //        Member teacher = new Member(Role.TEACHER, LoginType.KAKAO, "선생님", null, "선생님 닉네임1");
 //        Member teacher2 = new Member(Role.TEACHER, LoginType.KAKAO, "선생님2", null, "선생님 닉네임2");
-        Member student = new Member(Role.STUDENT, LoginType.KAKAO, "학생1", null, "학생 닉네임1");
-        Member parent = new Member(Role.PARENT, LoginType.KAKAO, "학부모1", null, "학부모 닉네임1");
+//        Member student = new Member(Role.STUDENT, LoginType.KAKAO, "학생1", null, "학생 닉네임1");
+//        Member parent = new Member(Role.PARENT, LoginType.KAKAO, "학부모1", null, "학부모 닉네임1");
 //        memberRepository.save(teacher);
 //        memberRepository.save(teacher2);
-        memberRepository.save(student);
-        memberRepository.save(parent);
+//        memberRepository.save(student);
+//        memberRepository.save(parent);
 
         // 수업일정 설정
         for(ClazzTime clazzTime : clazz.getClazzTimes()) {
