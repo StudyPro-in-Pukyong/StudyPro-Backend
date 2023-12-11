@@ -85,8 +85,24 @@ public class ClazzController {
     //클래스 조회 선생님, 학부모, 학생
     //URL을 나눴기 때문에 추가적으로 검증할 필요 없음
     @GetMapping("/class/teacher")
-    public ResponseEntity getClass(@RequestParam("memberId") long memberId) {
-        List<Clazz> clazzes = clazzService.getClazz(memberId);
+    public ResponseEntity getTeacherClass(@RequestParam("memberId") long memberId) {
+        List<Clazz> clazzes = clazzService.getClazz(memberId, Role.TEACHER);
+        List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
+
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    @GetMapping("/class/student")
+    public ResponseEntity getStudentClass(@RequestParam("memberId") long memberId) {
+        List<Clazz> clazzes = clazzService.getClazz(memberId, Role.STUDENT);
+        List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
+
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    @GetMapping("/class/parent")
+    public ResponseEntity getParentClass(@RequestParam("memberId") long memberId) {
+        List<Clazz> clazzes = clazzService.getClazz(memberId, Role.PARENT);
         List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
 
         return new ResponseEntity<>(responses, HttpStatus.OK);
