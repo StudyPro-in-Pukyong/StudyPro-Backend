@@ -13,4 +13,7 @@ import java.util.List;
 @Repository
 public interface ClazzRepository extends JpaRepository<Clazz, Long> {
     List<Clazz> findByTeacherId(long teacher);
+    List<Clazz> findByStudentId(long Student);
+    List<Clazz> findByParentId(long parent);
+
 }

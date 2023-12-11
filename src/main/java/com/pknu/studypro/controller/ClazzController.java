@@ -30,7 +30,7 @@ public class ClazzController {
 
     // Create
     @PostMapping("/class")
-    public ResponseEntity createClazz(@Valid @RequestBody ClazzRequestDto.Post post){
+    public ResponseEntity createClazz(@Valid @RequestBody ClazzRequestDto.Post post) {
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
         clazz = clazzService.createClazz(clazz, post.getIds());
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
@@ -41,8 +41,8 @@ public class ClazzController {
     // 정산 요청하기
     @GetMapping("/class/settle-request/{classId}")
     public ResponseEntity settleClazzByTeacher(@Auth LoginUser loginUser,
-                                      @Positive @PathVariable("classId") long clazzId) {
-        if(loginUser.role() != Role.TEACHER) throw  new BusinessLogicException(ExceptionCode.NOT_TEACHER); // 권한 확인
+                                               @Positive @PathVariable("classId") long clazzId) {
+        if (loginUser.role() != Role.TEACHER) throw new BusinessLogicException(ExceptionCode.NOT_TEACHER); // 권한 확인
         Clazz clazz = clazzService.settleRequestClazz(clazzId);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
@@ -52,8 +52,8 @@ public class ClazzController {
     // 정산 허용하기
     @GetMapping("/class/settle-allow/{classId}")
     public ResponseEntity settleClazzByParent(@Auth LoginUser loginUser,
-                                      @Positive @PathVariable("classId") long clazzId) {
-        if(loginUser.role() != Role.PARENT) throw  new BusinessLogicException(ExceptionCode.NOT_PARENT); // 권한 확인
+                                              @Positive @PathVariable("classId") long clazzId) {
+        if (loginUser.role() != Role.PARENT) throw new BusinessLogicException(ExceptionCode.NOT_PARENT); // 권한 확인
         Clazz clazz = clazzService.settleAllowClazz(clazzId);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
