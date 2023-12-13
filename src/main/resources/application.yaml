@@ -7,9 +7,9 @@ spring:
       hibernate:
         format_sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/studypro
+    url: jdbc:mysql://localhost:30000/studypro
     username: root
-    password: sinariari
+    password: password
 
   auth:
     key: dfsdsfdfsafseafesfaflsefjlijfilsjfilaesjfilejflajfiljile

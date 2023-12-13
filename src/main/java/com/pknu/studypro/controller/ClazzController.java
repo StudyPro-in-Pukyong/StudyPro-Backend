@@ -30,7 +30,7 @@ public class ClazzController {
 
     // Create
     @PostMapping("/class")
-    public ResponseEntity createClazz(@Valid @RequestBody ClazzRequestDto.Post post){
+    public ResponseEntity createClazz(@Valid @RequestBody ClazzRequestDto.Post post) {
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
         clazz = clazzService.createClazz(clazz, post.getIds());
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
@@ -41,8 +41,8 @@ public class ClazzController {
     // 정산 요청하기
     @GetMapping("/class/settle-request/{classId}")
     public ResponseEntity settleClazzByTeacher(@Auth LoginUser loginUser,
-                                      @Positive @PathVariable("classId") long clazzId) {
-        if(loginUser.role() != Role.TEACHER) throw  new BusinessLogicException(ExceptionCode.NOT_TEACHER); // 권한 확인
+                                               @Positive @PathVariable("classId") long clazzId) {
+        if (loginUser.role() != Role.TEACHER) throw new BusinessLogicException(ExceptionCode.NOT_TEACHER); // 권한 확인
         Clazz clazz = clazzService.settleRequestClazz(clazzId);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
@@ -52,8 +52,8 @@ public class ClazzController {
     // 정산 허용하기
     @GetMapping("/class/settle-allow/{classId}")
     public ResponseEntity settleClazzByParent(@Auth LoginUser loginUser,
-                                      @Positive @PathVariable("classId") long clazzId) {
-        if(loginUser.role() != Role.PARENT) throw  new BusinessLogicException(ExceptionCode.NOT_PARENT); // 권한 확인
+                                              @Positive @PathVariable("classId") long clazzId) {
+        if (loginUser.role() != Role.PARENT) throw new BusinessLogicException(ExceptionCode.NOT_PARENT); // 권한 확인
         Clazz clazz = clazzService.settleAllowClazz(clazzId);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
@@ -85,8 +85,24 @@ public class ClazzController {
     //클래스 조회 선생님, 학부모, 학생
     //URL을 나눴기 때문에 추가적으로 검증할 필요 없음
     @GetMapping("/class/teacher")
-    public ResponseEntity getClass(@RequestParam("memberId") long memberId) {
-        List<Clazz> clazzes = clazzService.getClazz(memberId);
+    public ResponseEntity getTeacherClass(@RequestParam("memberId") long memberId) {
+        List<Clazz> clazzes = clazzService.getClazz(memberId, Role.TEACHER);
+        List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
+
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    @GetMapping("/class/student")
+    public ResponseEntity getStudentClass(@RequestParam("memberId") long memberId) {
+        List<Clazz> clazzes = clazzService.getClazz(memberId, Role.STUDENT);
+        List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
+
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    @GetMapping("/class/parent")
+    public ResponseEntity getParentClass(@RequestParam("memberId") long memberId) {
+        List<Clazz> clazzes = clazzService.getClazz(memberId, Role.PARENT);
         List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
 
         return new ResponseEntity<>(responses, HttpStatus.OK);

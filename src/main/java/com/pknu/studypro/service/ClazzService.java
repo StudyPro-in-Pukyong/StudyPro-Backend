@@ -48,15 +48,26 @@ public class ClazzService {
 
         // ------------------------------------------------------
         // memberId 식별하는 코드 작성하기
-        // member들이 one to one 매핑되어 있어서 같은 memberId 등록 X -> 수정 필요해보임
+        // member들이 one to one 매핑되어 있어서 같은 memberId 등록 X -> 수정 필요해보임 -> 수정완료함
         // class 관련 member 연관관계 성립
         clazz.setTeacher(
                 memberRepository.findById(ids.getTeacherId()).orElseThrow(
                         () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND)
                 )
         );
-        if (ids.getParentId() != null) clazz.setTeacher(memberRepository.findById(ids.getParentId()).get());
-        if (ids.getStudentId() != null) clazz.setTeacher(memberRepository.findById(ids.getStudentId()).get());
+        if (ids.getParentId() != null) {
+            if (Role.PARENT != memberRepository.findById(ids.getParentId()).get().getRole()){
+                new BusinessLogicException(ExceptionCode.NOT_PARENT);
+            }
+            clazz.setParent(memberRepository.findById(ids.getParentId()).get());
+        }
+
+        if (ids.getStudentId() != null) {
+            if (Role.STUDENT != memberRepository.findById(ids.getStudentId()).get().getRole()){
+                new BusinessLogicException(ExceptionCode.NOT_STUDENT);
+            }
+            clazz.setStudent(memberRepository.findById(ids.getStudentId()).get());
+        }
 
         // request body example
         /*
@@ -130,20 +141,33 @@ public class ClazzService {
 
         // class 관련 member 연관관계 성립
         clazz.setTeacher(memberRepository.findById(ids.getTeacherId()).get());
-        if (ids.getParentId() != null) clazz.setTeacher(memberRepository.findById(ids.getParentId()).get());
-        if (ids.getStudentId() != null) clazz.setTeacher(memberRepository.findById(ids.getStudentId()).get());
+        if (ids.getParentId() != null) {
+            if (Role.PARENT != memberRepository.findById(ids.getParentId()).get().getRole()){
+                new BusinessLogicException(ExceptionCode.NOT_PARENT);
+            }
+            clazz.setParent(memberRepository.findById(ids.getParentId()).get());
+        }
+
+        if (ids.getStudentId() != null) {
+            if (Role.STUDENT != memberRepository.findById(ids.getStudentId()).get().getRole()){
+                new BusinessLogicException(ExceptionCode.NOT_STUDENT);
+            }
+            clazz.setStudent(memberRepository.findById(ids.getStudentId()).get());
+        }
 
         payRepository.save(clazz.getPay());
         return clazzRepository.save(clazz);
     }
 
-    // 수업일정이 바뀌었는지 확인하기
-    public void checkClazzTime(Clazz clazz, Clazz beforeClazz) {
-//        for()
-    }
+    public List<Clazz> getClazz(long memberId, Role role){
+        List<Clazz> clazz = null;
 
-    public List<Clazz> getClazz(long teacherId){
-        List<Clazz> clazz = clazzRepository.findByTeacherId(teacherId);
+        switch (role){
+            case TEACHER -> clazz = clazzRepository.findByTeacherId(memberId);
+            case STUDENT -> clazz = clazzRepository.findByStudentId(memberId);
+            case PARENT -> clazz = clazzRepository.findByParentId(memberId);
+        }
+
         return clazz;
     }
 
