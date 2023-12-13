@@ -77,6 +77,7 @@ public class ClazzController {
 
         clazz.setClassId(clazzId);
         clazz = clazzService.updateClazz(clazz, post.getIds());
+        System.out.println("!! "  + post.getClazzTimes().get(0).getId());
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

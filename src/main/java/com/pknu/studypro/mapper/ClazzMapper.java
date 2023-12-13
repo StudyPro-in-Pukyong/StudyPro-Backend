@@ -47,6 +47,7 @@ public interface ClazzMapper {
         List<ClazzResponseDto.ClazzTime> clazzTimesResponses = new ArrayList<>();
         for (ClazzTime clazzTime : clazzTimes) {
             ClazzResponseDto.ClazzTime clazzTimeResonse = new ClazzResponseDto.ClazzTime(
+                    clazzTime.getId(),
                     clazzTime.getClazzDate(),
                     clazzTime.getStartTime(),
                     clazzTime.getEndTime()

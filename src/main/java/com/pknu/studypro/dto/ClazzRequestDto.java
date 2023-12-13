@@ -53,7 +53,8 @@ public class ClazzRequestDto {
     }
 
     @Getter
-    public static class ClazzTime{
+    public static class ClazzTime {
+        private Long id; // 식별자
         private ClazzDate clazzDate; //수업하는 날짜
         private LocalTime startTime; //수업 시작 시간
         private LocalTime endTime; // 수업 끝나는 시간

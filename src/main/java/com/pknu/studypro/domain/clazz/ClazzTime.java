@@ -32,7 +32,8 @@ public class ClazzTime { // 수업일정
     @Column(nullable = false)
     private LocalTime endTime; // 수업 끝나는 시간
 
-    public ClazzTime(Clazz clazz, ClazzDate clazzDate, LocalTime startTime, LocalTime endTime) {
+    public ClazzTime(Long id, Clazz clazz, ClazzDate clazzDate, LocalTime startTime, LocalTime endTime) {
+        this.id = id;
         this.clazz = clazz;
         this.clazzDate = clazzDate;
         this.startTime = startTime;

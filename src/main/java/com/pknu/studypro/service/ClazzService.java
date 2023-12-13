@@ -123,6 +123,10 @@ public class ClazzService {
 //            clazzTime.equals()
 //        }
 //        clazzTimeRepository.delete();
+        for(ClazzTime clazzTime : clazz.getClazzTimes()) {
+            System.out.println("!! clazzTimeId: " + clazzTime.getId());
+            clazzTime.setClazz(clazz);
+        }
 
 
         // class 관련 member 연관관계 성립
@@ -132,6 +136,11 @@ public class ClazzService {
 
         payRepository.save(clazz.getPay());
         return clazzRepository.save(clazz);
+    }
+
+    // 수업일정이 바뀌었는지 확인하기
+    public void checkClazzTime(Clazz clazz, Clazz beforeClazz) {
+//        for()
     }
 
     public List<Clazz> getClazz(long teacherId){
