@@ -37,7 +37,7 @@ public class ClazzRequestDto {
     @Getter
     public static class PostPay {
         private int amount;
-        private LocalDate date;
+        private Integer date;
         private Integer round;
 
         // default 값이 있어서 필요 없음

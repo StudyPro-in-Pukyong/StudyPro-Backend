@@ -45,9 +45,9 @@ public class ClazzResponseDto {
     @Getter
     @AllArgsConstructor
     public static class ResponseFixedDatePay extends ResponsePay {
-        private LocalDate date;
+        private int date;
 
-        public ResponseFixedDatePay(Long id, int amount, int totalTime, int currentRound, LocalDate date) {
+        public ResponseFixedDatePay(Long id, int amount, int totalTime, int currentRound, int date) {
             super(id, amount, totalTime, currentRound);
             this.date = date;
         }

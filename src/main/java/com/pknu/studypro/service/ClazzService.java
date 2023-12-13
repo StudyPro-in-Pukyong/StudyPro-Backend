@@ -124,7 +124,6 @@ public class ClazzService {
 //        }
 //        clazzTimeRepository.delete();
         for(ClazzTime clazzTime : clazz.getClazzTimes()) {
-            System.out.println("!! clazzTimeId: " + clazzTime.getId());
             clazzTime.setClazz(clazz);
         }
 
@@ -155,14 +154,17 @@ public class ClazzService {
         // Pay 방법에 따른 정산방법 분류
         if(clazz.getPay().getClass().getName().contains("FixedDatePay")) { // FixedDatePay
             FixedDatePay pay = (FixedDatePay) clazz.getPay();
-            LocalDate date = pay.getDate();
+            // TODO : 알람기능 만들기
+
+            // 이전 date가 localDate 타입이었을 경우 코드
+//            LocalDate date = pay.getDate();
 
             // 오늘 날짜가 pay의 date보다 크거나 같은 경우 정산 허용(다음달부터)
-            if(date.isBefore(date.plusMonths(1)) && date.getDayOfMonth() <= LocalDate.now().getDayOfMonth()) {
-                // TODO : 알람기능 만들기
-            } else { // 정산 허용 X
-                throw new BusinessLogicException(ExceptionCode.NOT_ALLOW_SETTLE);
-            }
+//            if(date.isBefore(date.plusMonths(1)) && date.getDayOfMonth() <= LocalDate.now().getDayOfMonth()) {
+//                // TODO : 알람기능 만들기
+//            } else { // 정산 허용 X
+//                throw new BusinessLogicException(ExceptionCode.NOT_ALLOW_SETTLE);
+//            }
         } else if(clazz.getPay().getClass().getName().contains("RoundPay")) { // RoundPay
             RoundPay pay = (RoundPay) clazz.getPay();
             int round = pay.getRound();
