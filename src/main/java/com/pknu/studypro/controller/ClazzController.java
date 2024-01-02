@@ -30,7 +30,8 @@ public class ClazzController {
 
     // Create
     @PostMapping("/class")
-    public ResponseEntity createClazz(@Valid @RequestBody ClazzRequestDto.Post post) {
+    public ResponseEntity createClazz(@Auth LoginUser loginUser,
+                                      @Valid @RequestBody ClazzRequestDto.Post post) {
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
         clazz = clazzService.createClazz(clazz, post.getIds());
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
@@ -62,13 +63,15 @@ public class ClazzController {
 
     // Delete
     @DeleteMapping("/class/{classId}")
-    public ResponseEntity deleteClazz(@Positive @PathVariable("classId") long clazzId) {
+    public ResponseEntity deleteClazz(@Auth LoginUser loginUser,
+                                      @Positive @PathVariable("classId") long clazzId) {
         clazzService.deleteClazz(clazzId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/class/{classId}")
-    public ResponseEntity putClazz(@Valid @RequestBody ClazzRequestDto.Post post,
+    public ResponseEntity putClazz(@Auth LoginUser loginUser,
+                                   @Valid @RequestBody ClazzRequestDto.Post post,
                                    @Positive @PathVariable("classId") long clazzId) {
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
 
@@ -85,7 +88,8 @@ public class ClazzController {
     //클래스 조회 선생님, 학부모, 학생
     //URL을 나눴기 때문에 추가적으로 검증할 필요 없음
     @GetMapping("/class/teacher")
-    public ResponseEntity getTeacherClass(@RequestParam("memberId") long memberId) {
+    public ResponseEntity getTeacherClass(@Auth LoginUser loginUser,
+                                          @RequestParam("memberId") long memberId) {
         List<Clazz> clazzes = clazzService.getClazz(memberId, Role.TEACHER);
         List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
 
@@ -93,7 +97,8 @@ public class ClazzController {
     }
 
     @GetMapping("/class/student")
-    public ResponseEntity getStudentClass(@RequestParam("memberId") long memberId) {
+    public ResponseEntity getStudentClass(@Auth LoginUser loginUser,
+                                          @RequestParam("memberId") long memberId) {
         List<Clazz> clazzes = clazzService.getClazz(memberId, Role.STUDENT);
         List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
 
@@ -101,7 +106,8 @@ public class ClazzController {
     }
 
     @GetMapping("/class/parent")
-    public ResponseEntity getParentClass(@RequestParam("memberId") long memberId) {
+    public ResponseEntity getParentClass(@Auth LoginUser loginUser,
+                                         @RequestParam("memberId") long memberId) {
         List<Clazz> clazzes = clazzService.getClazz(memberId, Role.PARENT);
         List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
 
