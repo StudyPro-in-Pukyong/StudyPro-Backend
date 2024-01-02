@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
-    List<Lesson> findByStartTimeBetween(LocalDateTime start, LocalDateTime finish);
+    List<Lesson> findByStartTimeBetweenAndClassId(LocalDateTime start, LocalDateTime finish, long classId);
 }

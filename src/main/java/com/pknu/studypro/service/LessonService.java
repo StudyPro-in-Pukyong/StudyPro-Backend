@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,18 +38,17 @@ public class LessonService {
     // 레슨 목록 조회(부모님)
     // 레슨 목록 조회(학생)
     public List<Lesson> readLessons(LocalDate localDate, long classId) {
-        // --------------------------------------------------------------------------
-        // classId 증명하는 코드 추가하기
-        Clazz clazz = clazzRepository.findById(classId).get();
-        // --------------------------------------------------------------------------
+        // classId 증명
+        Clazz clazz = clazzService.verifiedClazz(classId);
 
-        // 시작일
-        LocalDateTime start = localDate.withDayOfMonth(1).atTime(LocalTime.MIN);
+        // 시작일 -> 요청한 달 - 1
+        LocalDateTime start = localDate.plusMonths(-1).atTime(LocalTime.MIN);
 
-        // 마지막일
+        // 마지막일 -> 요청한 달 + 1
+        localDate = localDate.plusMonths(1);
         LocalDateTime finish = localDate.withDayOfMonth(localDate.lengthOfMonth()).atTime(LocalTime.MAX);
 
-        return lessonRepository.findByStartTimeBetween(start, finish);
+        return lessonRepository.findByStartTimeBetweenAndClassId(start, finish, classId);
     }
 
     // UPDATE
