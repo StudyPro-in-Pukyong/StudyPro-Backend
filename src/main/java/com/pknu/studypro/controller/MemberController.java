@@ -31,25 +31,10 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/find/member")
-    public ResponseEntity settleClazzByTeacher(@RequestParam("user") String user1) throws UnsupportedEncodingException {
-        // #을 기준으로 문자열 분리, Validation 으로 구분 할 수 있지 않을까?
-        // #이 없는 경우 예외처리를 해야될 것 같음
-        String user = URLDecoder.decode(user1, "UTF-8");
-        if (user.contains("#")) {
-            String[] parts = user.split("#");
-            if (parts.length < 2) {
-                // #이 사용자 문자열에 포함되어 있지 않은 경우 처리
-                return new ResponseEntity<>("유효하지 않은 사용자 형식", HttpStatus.BAD_REQUEST);
-            }
-            String memberName = parts[0];
-            long memberId = Integer.parseInt(parts[1]);
-            System.out.println(memberName);
+    public ResponseEntity settleClazzByTeacher(@RequestParam("memberName") String memberName,
+                                               @RequestParam("memberId") long memberId) {
             Member response = memberService.verifiedMember(memberId, memberName);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
-            System.out.println("실패" + user);
-            return new ResponseEntity<>("#이 포함되어 있지 않습니다", HttpStatus.BAD_REQUEST);
-        }
     }
 
 }

@@ -19,12 +19,9 @@ public class MemberService {
 
 
         Optional<Member> member = memberRepository.findById(memberId);
-        if (member.get().getUsername().equals(userName)){
+        if (member.get().getUsername().equals(userName)) {
             return null;
         }
         return member.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
-    //오하람
-    //오하람#0002 -> 요청성공
-    //오하람#0007
 }
