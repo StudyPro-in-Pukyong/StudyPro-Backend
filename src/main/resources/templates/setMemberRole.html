@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+    <meta charset="UTF-8">
+    <title>회원 역할 설정</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+            margin: 0;
+        }
+
+        .role-container {
+            width: 300px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .role-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .role-option {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            cursor: pointer; /* 마우스 포인터를 클릭 가능하게 */
+        }
+
+        .role-option input {
+            margin-right: 10px; /* 라디오 버튼과 텍스트 사이 간격 */
+        }
+
+        .submit-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4da6ff; /* 버튼 색상 */
+            color: white;
+            cursor: pointer; /* 포인터 커서 표시 */
+            font-size: 16px;
+        }
+    </style>
+    <body>
+        <div class="role-container">
+            <h1>역할 설정</h1>
+            <form id="roleForm" action="/auth/role" method="POST"> <!-- 역할 설정을 위한 폼 -->
+                <div class="role-option">
+                    <input type="radio" name="role" value="TEACHER">
+                    <label>선생님</label>
+                </div>
+                <div class="role-option">
+                    <input type="radio" name="role" value="PARENT">
+                    <label>학부모</label>
+                </div>
+                <div class="role-option">
+                    <input type="radio" name="role" value="STUDENT">
+                    <label>학생</label>
+                </div>
+                <button type="submit" class="submit-btn">저장하기</button>
+            </form>
+        </div>
+
+        <script th:src="@{/js/token.js}"></script>
+        <script>
+            // 쿠키 설정
+            const access = "[[${access}]]";  // 서버에서 액세스 토큰
+            const refresh = "[[${refresh}]]"; // 서버에서 리프레시 토큰
+            console.log("access  : ", access, " refresh : ", refresh);
+            setCookie("access", access, 7); // 7일 동안 유지
+            setCookie("refresh", refresh, 7);
+
+            document.getElementById("roleForm").addEventListener("submit", function(event) {
+                // 기존의 폼 전송을 막고, 새로운 요청을 보냅니다.
+                event.preventDefault();
+
+                // 선택된 역할 가져오기
+                const role = document.querySelector('input[name="role"]:checked').value;
+
+                // JSON 객체 생성
+                const requestBody = {
+                    role: role
+                };
+
+                fetch(this.action, {
+                    method: this.method,
+                    body: role, // JSON 문자열로 변환
+                    headers: {
+                        'Content-Type': 'application/json', // JSON 형식으로 설정
+                        'Authorization': 'Bearer ' + access // Authorization 헤더에 액세스 토큰 추가
+                    }
+                }).then(() => {
+                    // 역할 저장 성공
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            });
+        </script>
+    </body>
+</html>

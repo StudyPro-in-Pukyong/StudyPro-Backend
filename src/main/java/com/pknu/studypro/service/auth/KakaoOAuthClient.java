@@ -38,11 +38,8 @@ public class KakaoOAuthClient {
         final RequestEntity<Void> requestEntity = new RequestEntity<>(httpHeaders, HttpMethod.GET, URI.create(userInfoUrl));
 
         Map<String, Object> response = restTemplate.exchange(requestEntity, Map.class).getBody();
-        System.out.println(response);
-
 
         KakaoUser kakaoUser = restTemplate.exchange(requestEntity, KakaoUser.class).getBody();
-        System.out.println("!! 2 : " + kakaoUser);
         return kakaoUser;
     }
 

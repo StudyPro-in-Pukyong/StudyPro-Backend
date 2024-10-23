@@ -1,83 +1,83 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<meta charset="UTF-8">
-<title>과외Time 로그인</title>
-<style>
-    body {
-        font-family: 'Arial', sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-color: #f7f7f7;
-        margin: 0;
-    }
-    .loading-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+    <meta charset="UTF-8">
+    <title>과외Time 로그인</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+            margin: 0;
+        }
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    .loading-container img {
-        width: 200px; /* GIF 크기 조정 */
-        height: auto; /* 비율 유지 */
-    }
+        .loading-container img {
+            width: 200px; /* GIF 크기 조정 */
+            height: auto; /* 비율 유지 */
+        }
 
-    .login-container {
-        width: 300px;
-        padding: 20px;
-        background-color: white;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-        text-align: center;
-    }
+        .login-container {
+            width: 300px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
 
-    .login-container h1 {
-        margin-bottom: 30px;
-        font-size: 24px;
-        color: #7A7A7A ;
-    }
+        .login-container h1 {
+            margin-bottom: 30px;
+            font-size: 24px;
+            color: #7A7A7A ;
+        }
 
-    .login-container button {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        cursor: pointer;
-    }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
 
-    .title-container {
-        display: flex; /* Flexbox 사용 */
-        align-items: center; /* 수직 정렬 */
-        justify-content: center; /* 수평 정렬 */
-        text-align: center; /* 텍스트 중앙 정렬 */
-        margin-bottom: 10px;
-    }
+        .title-container {
+            display: flex; /* Flexbox 사용 */
+            align-items: center; /* 수직 정렬 */
+            justify-content: center; /* 수평 정렬 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            margin-bottom: 10px;
+        }
 
-    .title-container img {
-        width: 40px; /* 이미지 크기 조정 */
-        margin-right: 10px; /* 이미지와 텍스트 사이의 간격 */
-    }
+        .title-container img {
+            width: 40px; /* 이미지 크기 조정 */
+            margin-right: 10px; /* 이미지와 텍스트 사이의 간격 */
+        }
 
-    .title-container h1 {
-        color: #7A7A7A; /* 텍스트 색상 */
-        font-size: 24px; /* 텍스트 크기 */
-        margin: 0; /* 기본 마진 제거 */
-    }
-</style>
+        .title-container h1 {
+            color: #7A7A7A; /* 텍스트 색상 */
+            font-size: 24px; /* 텍스트 크기 */
+            margin: 0; /* 기본 마진 제거 */
+        }
+    </style>
     <body>
         <div class="loading-container">
-            <img id="logoGif" src="/images/logo.gif" alt="studypro logo"> <!-- GIF 파일 경로 -->
+            <img id="logoGif" th:src="@{/images/logo.gif}" alt="studypro logo"> <!-- GIF 파일 경로 -->
         </div>
         <div class="login-container">
             <div class="title-container">
-                <img src="/images/login-hat.png" alt="studypro hat">
+                <img th:src="@{/images/login-hat.png}" alt="studypro hat">
                 <h1>StudyPro</h1>
             </div>
             <a th:href="${url}">
-                <img src="/images/kakao_login_medium_wide.png" alt="Kakao Logo">
+                <img th:src="@{/images/kakao_login_medium_wide.png}" alt="Kakao Logo">
             </a>
         </div>
 

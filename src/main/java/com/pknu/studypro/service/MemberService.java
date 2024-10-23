@@ -16,8 +16,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public Member verifiedMember(long memberId, String userName) {
-
-
         Optional<Member> member = memberRepository.findById(memberId);
         if (member.get().getUsername().equals(userName)) {
             return null;

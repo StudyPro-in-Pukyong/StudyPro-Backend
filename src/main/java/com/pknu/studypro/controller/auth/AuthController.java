@@ -1,10 +1,15 @@
 package com.pknu.studypro.controller.auth;
 
+import com.pknu.studypro.domain.clazz.Clazz;
+import com.pknu.studypro.domain.member.Member;
+import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.auth.KakaoUser;
 import com.pknu.studypro.dto.auth.LoginUser;
 import com.pknu.studypro.dto.auth.RoleRequest;
 import com.pknu.studypro.dto.auth.Tokens;
+import com.pknu.studypro.service.ClazzService;
 import com.pknu.studypro.service.auth.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -12,6 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/auth")
 @Controller
@@ -27,6 +35,7 @@ public class AuthController {
     private String redirectUri;
 
     private final AuthService authService;
+    private final ClazzService clazzService;
     private final KakaoTokenConverter kakaoTokenConverter;
 
     // 기본 로그인 페이지
@@ -43,13 +52,21 @@ public class AuthController {
         KakaoUser kakaoUser = kakaoTokenConverter.convert(code);
 
         // 2. login 메서드 호출
-        Tokens tokens = authService.login(kakaoUser);
+        Member member = authService.findKakaoMember(kakaoUser);
+        Tokens tokens = authService.login(member);
 
         // 3. 모델에 사용자 정보 추가
         model.addAttribute("access", tokens.access());
         model.addAttribute("refresh", tokens.refresh());
 
-        return "signinSuccess";
+        // 4. 모델를 반환
+        if(member.getRole().equals(Role.ANONYMOUS)) { // 역할이 정해지지 않은 경우
+            return "setMemberRole";
+        } else {
+            List<Clazz> clazzes = clazzService.getClazz(member.getId(), member.getRole());
+            if(clazzes.isEmpty()) return "initialClazz"; // 아직 클래스를 생성하지 않은 경우
+            else return "clazz"; // 클래스 화면으로 이동
+        }
     }
 
     // access 토큰을 재발행하기 위한 코드
@@ -67,8 +84,8 @@ public class AuthController {
 
     @PostMapping("/role")
     public ResponseEntity<Void> changeRole(@Auth final LoginUser loginUser,
-                                           @RequestBody final RoleRequest request) {
-        authService.changeRole(loginUser, request);
+                                           @RequestBody final String role) {
+        authService.changeRole(loginUser, role);
         return ResponseEntity.noContent().build();
     }
 

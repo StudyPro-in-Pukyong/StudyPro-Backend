@@ -30,11 +30,4 @@ public class WebConfig implements WebMvcConfigurer {
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(authArgumentResolver);
     }
-
-    // 정적 이미지
-    @Override
-    public void  addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/images")
-                .addResourceLocations("file:src/main/resources/static/images");
-    }
 }
