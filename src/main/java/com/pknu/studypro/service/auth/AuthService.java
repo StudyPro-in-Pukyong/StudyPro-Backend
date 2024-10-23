@@ -26,6 +26,7 @@ public class AuthService {
 
     @Transactional
     public Tokens login(final KakaoUser kakaoUser) {
+        System.out.println("!! " + kakaoUser );
         final Member member = memberRepository.findByUsername(kakaoUser.id())
                 .orElseGet(() -> memberRepository.save(kakaoUser.toMember()));
 

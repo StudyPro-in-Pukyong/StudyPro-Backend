@@ -29,18 +29,25 @@ public class Member {
 
     @Column(nullable = false)
     private String username;
+
     private String password;
 
     @Column(nullable = false)
     private String nickname;
 
+    private String email;
+
+    private String phoneNumber;
+
     public Member(final Role role, final LoginType loginType, final String username,
-                  final String password, final String nickname) {
+                  final String password, final String nickname, final String email, final String phoneNumber) {
         this.role = role;
         this.loginType = loginType;
         this.username = username;
         this.password = password;
         this.nickname = nickname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     public void changeRole(final Role role) {

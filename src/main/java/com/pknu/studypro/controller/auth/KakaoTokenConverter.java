@@ -15,7 +15,8 @@ public class KakaoTokenConverter implements Converter<String, KakaoUser> {
     }
 
     @Override
-    public KakaoUser convert(final String token) {
-        return oAuthClient.findByKakaoToken(token);
+    public KakaoUser convert(final String code) {
+        String kakaoToken = oAuthClient.findKakaoToken(code);
+        return oAuthClient.findByKakaoToken(kakaoToken);
     }
 }
