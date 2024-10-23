@@ -24,9 +24,14 @@ import java.util.List;
 @AllArgsConstructor
 @Validated
 public class ClazzController {
-
     private final ClazzService clazzService;
     private final ClazzMapper clazzMapper;
+
+    // Create Clazz 화면 전환
+    @GetMapping("/createClazz")
+    public String createClazz() {
+        return "createClazz"; // createClazz.html로 이동
+    }
 
     // Create
     @PostMapping("/class")
