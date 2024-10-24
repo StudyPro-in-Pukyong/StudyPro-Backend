@@ -24,4 +24,5 @@ public class LessonResponseDto {
         private Type type; // 수업 유형
         private String progress; // 진도
         private final List<String> homeworks = new ArrayList<>(); // 숙제
-    }}
+    }
+}
