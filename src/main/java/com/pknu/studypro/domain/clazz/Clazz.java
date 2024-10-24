@@ -6,13 +6,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class Clazz {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,6 +35,10 @@ public class Clazz {
 
     @OneToMany(mappedBy = "clazz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClazzTime> clazzTimes; // 수업일정
+
+    private boolean isDone = false; // 클래스 종료
+    private LocalDateTime settleRequestDate; // 월급 요청일
+    private LocalDateTime settleResponseDate; // 월급일
 
     public Clazz(final Pay pay, final String title, final String subject, final Member teacher, final Member parent, final Member student,  final List<ClazzTime> clazzTimes) {
         this.pay = pay;

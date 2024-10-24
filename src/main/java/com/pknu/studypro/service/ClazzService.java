@@ -4,7 +4,6 @@ import com.pknu.studypro.domain.clazz.Clazz;
 import com.pknu.studypro.domain.clazz.ClazzTime;
 import com.pknu.studypro.domain.clazz.FixedDatePay;
 import com.pknu.studypro.domain.clazz.RoundPay;
-import com.pknu.studypro.domain.member.LoginType;
 import com.pknu.studypro.domain.member.Member;
 import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.ClazzRequestDto;
@@ -20,7 +19,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
