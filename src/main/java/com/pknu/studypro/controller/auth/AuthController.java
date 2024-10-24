@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class AuthController {
     }
 
     @GetMapping("/kakao/callback")
-    public String kakaoCallback(@RequestParam String code, Model model) {
+    public String kakaoCallback(@RequestParam String code, RedirectAttributes redirectAttributes) {
         // 1. KakaoTokenConverter를 사용하여 KakaoUser 객체 생성
         KakaoUser kakaoUser = kakaoTokenConverter.convert(code);
 
@@ -56,17 +57,17 @@ public class AuthController {
         Tokens tokens = authService.login(member);
 
         // 3. 모델에 사용자 정보 추가
-        model.addAttribute("access", tokens.access());
-        model.addAttribute("refresh", tokens.refresh());
-        model.addAttribute("role", member.getRole());
+        redirectAttributes.addFlashAttribute("access", tokens.access());
+        redirectAttributes.addFlashAttribute("refresh", tokens.refresh());
+        redirectAttributes.addFlashAttribute("role", member.getRole());
 
         // 4. 모델를 반환
         if(member.getRole().equals(Role.ANONYMOUS)) { // 역할이 정해지지 않은 경우
-            return "setMemberRole";
+            return "redirect:/auth/setMemberRole";
         } else {
-            List<Clazz> clazzes = clazzService.getClazz(member.getId(), member.getRole());
-            if(clazzes.isEmpty()) return "initialClazz"; // 아직 클래스를 생성하지 않은 경우
-            else return "clazz"; // 클래스 화면으로 이동
+            List<Clazz> clazzes = clazzService.getClazz(member);
+            if(clazzes.isEmpty()) return "redirect:/auth/initialClazz"; // 아직 클래스를 생성하지 않은 경우
+            else return "redirect:/clazz"; // 클래스 화면으로 이동
         }
     }
 
@@ -97,7 +98,14 @@ public class AuthController {
 
     // Create Clazz 화면 전환
     @GetMapping("/initialClazz")
-    public String createClazz(Model model) {
+    public String initialClazz(Model model) {
         return "initialClazz"; // 아직 클래스를 생성하지 않은 경우
+    }
+
+    // Member Role 설정
+    @GetMapping("/setMemberRole")
+    public String setMemberRole(Model model) {
+        System.out.println("!!" + model.getAttribute("role"));
+        return "setMemberRole"; // 아직 클래스를 생성하지 않은 경우
     }
 }
