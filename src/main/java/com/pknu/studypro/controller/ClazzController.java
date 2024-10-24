@@ -35,15 +35,22 @@ public class ClazzController {
         return "createClazzInfo"; // createClazzInfo.html로 이동
     }
 
+    // Create Clazz 화면 전환
+    @GetMapping("/clazz")
+    public String clazz(Model model) {
+        return "clazz"; // createClazzInfo.html로 이동
+    }
+
     // Create
     @PostMapping("/class")
     public String createClazz(@Auth LoginUser loginUser,
                                       @Valid @RequestBody ClazzRequestDto.Post post) {
+        // 클래스 생성
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
         clazz = clazzService.createClazz(clazz, post.getIds(), loginUser);
-        ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
-        return "clazz";
+        // 클래스 조회
+        return "redirect:/clazz";
     }
 
     // 정산 요청하기
@@ -68,23 +75,21 @@ public class ClazzController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // Delete
-    @DeleteMapping("/class/{classId}")
-    public ResponseEntity deleteClazz(@Auth LoginUser loginUser,
-                                      @Positive @PathVariable("classId") long clazzId) {
-        clazzService.deleteClazz(clazzId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    //클래스 조회 선생님, 학부모, 학생
+    @GetMapping("/class")
+    public ResponseEntity getTeacherClass(@Auth LoginUser loginUser,
+                                          Model model) {
+        List<Clazz> clazzes = clazzService.getClazz(loginUser);
+        List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
+    // 클래스 수정
     @PutMapping("/class/{classId}")
     public ResponseEntity putClazz(@Auth LoginUser loginUser,
                                    @Valid @RequestBody ClazzRequestDto.Post post,
                                    @Positive @PathVariable("classId") long clazzId) {
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
-
-//        RoundPay roundPay = (RoundPay) (clazz.getPay());
-//        System.out.println("!! controller : " + roundPay.getRound());
-
         clazz.setClassId(clazzId);
         clazz = clazzService.updateClazz(clazz, post.getIds(), loginUser);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
@@ -92,32 +97,11 @@ public class ClazzController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    //클래스 조회 선생님, 학부모, 학생
-    //URL을 나눴기 때문에 추가적으로 검증할 필요 없음
-    @GetMapping("/class/teacher")
-    public ResponseEntity getTeacherClass(@Auth LoginUser loginUser,
-                                          @RequestParam("memberId") long memberId) {
-        List<Clazz> clazzes = clazzService.getClazz(memberId, Role.TEACHER);
-        List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
-
-        return new ResponseEntity<>(responses, HttpStatus.OK);
-    }
-
-    @GetMapping("/class/student")
-    public ResponseEntity getStudentClass(@Auth LoginUser loginUser,
-                                          @RequestParam("memberId") long memberId) {
-        List<Clazz> clazzes = clazzService.getClazz(memberId, Role.STUDENT);
-        List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
-
-        return new ResponseEntity<>(responses, HttpStatus.OK);
-    }
-
-    @GetMapping("/class/parent")
-    public ResponseEntity getParentClass(@Auth LoginUser loginUser,
-                                         @RequestParam("memberId") long memberId) {
-        List<Clazz> clazzes = clazzService.getClazz(memberId, Role.PARENT);
-        List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
-
-        return new ResponseEntity<>(responses, HttpStatus.OK);
+    // Delete
+    @DeleteMapping("/class/{classId}")
+    public ResponseEntity deleteClazz(@Auth LoginUser loginUser,
+                                      @Positive @PathVariable("classId") long clazzId) {
+        clazzService.deleteClazz(clazzId, loginUser);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

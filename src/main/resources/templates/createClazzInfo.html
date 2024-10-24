@@ -535,7 +535,6 @@
                     },
                     clazzTimes: clazzTimes // 수업 시간 배열을 추가할 수 있음
                 };
-                console.log(clazzTimes);
 
                 // 서버로 POST 요청을 보냄
                 fetch('/class', {
@@ -547,9 +546,7 @@
                     body: JSON.stringify(requestData) // 데이터를 JSON으로 변환하여 전송
                 }).then(response => response.json())
                 .then(data => {
-                    console.log('성공:', data);
-                    alert('클래스가 성공적으로 생성되었습니다!');
-                    // 성공 후 필요시 다른 동작 추가
+                    // 성공
                 })
                 .catch(error => {
                     console.error('오류 발생:', error);

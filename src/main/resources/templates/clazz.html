@@ -1,10 +1,345 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Study Pro - Student Classes</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+        <style>
+            body {
+                background-color: #f7f7f7;
+            }
 
-</body>
+            .header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background-color: #4da6ff;
+                color: white;
+                padding: 10px;
+                font-size: 20px;
+                position: relative; /* 제목과 쓰레기통 배치 */
+            }
+
+            .header-icon {
+                width: 40px; /* 이미지 너비 */
+                height: 40px; /* 이미지 높이 */
+                margin-right: 10px; /* 이미지와 제목 간 간격 */
+            }
+
+            .logo-container {
+                display: flex;
+                align-items: center; /* 이미지와 텍스트를 수직 중앙 정렬 */
+                justify-content: center;
+                flex: 1; /* 가운데 정렬을 위한 확장 */
+            }
+
+            .trash {
+                font-size: 20px;
+                cursor: pointer;
+                position: absolute;
+                right: 10px; /* 오른쪽에 고정 */
+                width: 40px; /* 이미지 너비 */
+                height: 40px; /* 이미지 높이 */
+            }
+
+            .trash:hover {
+                opacity: 0.8;
+            }
+
+            .trash-black {
+                font-size: 20px;
+                cursor: pointer;
+                position: absolute;
+                right: 10px; /* 오른쪽에 고정 */
+                width: 40px; /* 이미지 너비 */
+                height: 40px; /* 이미지 높이 */
+            }
+
+            .trash-black:hover {
+                opacity: 0.8;
+            }
+
+            .class-container {
+                margin: 10px 20px;
+                padding: 15px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                background-color: rgba(0, 0, 0, 0.1);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .class-container .class-info {
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .class-container .class-status {
+                text-align: right;
+                font-size: 14px;
+                color: gray;
+            }
+
+            .add-class-btn {
+                position: fixed; /* 화면 하단에 고정 */
+                bottom: 30px; /* 바닥에서 10px 위로 위치 */
+                left: 50%; /* 화면의 가운데에 위치 */
+                transform: translateX(-50%); /* 수평 중앙 정렬 */
+                padding: 15px 65px;
+                background-color: #4da6ff;
+                color: white;
+                border: none;
+                border-radius: 30px;
+                cursor: pointer;
+                font-size: 16px;
+                z-index: 1000; /* 버튼이 다른 요소 위에 나타나도록 설정 */
+            }
+
+            .add-class-btn:hover {
+                background-color: #0056b3;
+            }
+
+            .add-class-btn.disabled {
+                /*opacity: 0.3;*/
+                background-color: #285380;
+                color: #7b7b7b;
+                pointer-events: none; /* 클릭을 방지 */
+            }
+
+
+            .delete-icon {
+                display: none;
+                position: absolute;
+                right: 10px;
+                font-size: 18px;
+                cursor: pointer;
+            }
+
+            .class-container.show-delete .delete-icon {
+                /*display: block;*/
+                display: flex;
+                align-items: center; /* 이미지와 텍스트를 수직 중앙 정렬 */
+                justify-content: center;
+                flex: 1; /* 가운데 정렬을 위한 확장 */
+            }
+
+            .delete-confirmation {
+                display: none;
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                z-index: 1000;
+            }
+
+            .modal-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+
+            .delete-btn {
+                margin-top: 10px;
+            }
+       </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="logo-container">
+                <img id="logo" th:src="@{/images/logo-static.png}" alt="studypro logo" class="header-icon">
+                <div class="title">Study Pro</div>
+            </div>
+            <img id="trash-white" th:src="@{/images/trash_white.png}" alt="trash-white" class="trash">
+        </div>
+
+        <div class="container mt-4">
+            <!-- 수업 목록 표시 영역 -->
+            <div id="class-list"></div>
+            <!-- 수업 추가 버튼 -->
+            <button class="add-class-btn" id="add-class-btn">수업 추가하기 +</button>
+        </div>
+
+        <!--   수업 삭제 모달창     -->
+        <div class="modal-overlay" id="modal-overlay"></div>
+        <div class="delete-confirmation" id="delete-confirmation">
+            <p>정말 수업을 삭제하시겠습니까?</p>
+            <button id="cancel-delete" class="btn btn-secondary">취소</button>
+            <button id="confirm-delete" class="btn btn-danger">확인</button>
+        </div>
+
+        <script th:src="@{/js/token.js}"></script>
+        <script>
+            // localStorage 설정
+            if(!getAccessToken()) {
+                const access = "[[${access}]]";  // 서버에서 액세스 토큰
+                const refresh = "[[${refresh}]]"; // 서버에서 리프레시 토큰
+                const role = "[[${role}]]";  // 서버에서 액세스 토큰
+
+                setLocalStorageWithExpiry("access", access, 7); // 7일 동안 유지
+                setLocalStorageWithExpiry("refresh", refresh, 7);
+                setLocalStorageWithExpiry("role", role, 7); // 7일 동안 유지
+            }
+
+            // 삭제 아이콘 활성화 설정
+            let isDeleteModeActive = false;  // 쓰레기통이 활성화된 상태를 저장할 변수
+            document.getElementById('trash-white').addEventListener('click', function() {
+                document.querySelectorAll('.class-container').forEach(container => {
+                    container.classList.toggle('show-delete');
+                });
+
+                // 쓰레기통이 보이는 상태이면 attachDeleteModalToClassContainers 이벤트 활성화
+                isDeleteModeActive = !isDeleteModeActive;
+
+                if (isDeleteModeActive) { // 쓰레기통이 보일 때만 이벤트 활성화
+                    attachDeleteModalToClassContainers();
+                } else { // 쓰레기통이 사라지면 이벤트 비활성화
+                    detachDeleteModalFromClassContainers();
+                }
+            });
+
+            // API 요청을 통해 서버에서 수업 데이터를 불러옴
+            function fetchStudentClasses(memberId) {
+                fetch(`/class`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + getAccessToken() // 필요한 경우 인증 토큰 추가
+                    },
+                }).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const classList = document.getElementById('class-list');
+                    classList.innerHTML = ''; // 기존 내용을 초기화
+
+                    // 수업 목록을 화면에 표시
+                    data.forEach(clazz => {
+                        const classContainer = document.createElement('div');
+                        classContainer.className = 'class-container';
+                        classContainer.setAttribute('data-id', clazz.id); // 수업 ID 설정
+
+                        const classInfo = document.createElement('div');
+                        classInfo.className = 'class-info';
+                        classInfo.textContent = `${clazz.title}`;
+
+                        const classStatus = document.createElement('div');
+                        classStatus.className = 'class-status';
+                        if('round' in clazz.responsePay) {
+                            classStatus.innerHTML = `
+                            수업현황 ${clazz.responsePay.currentRound}/${clazz.responsePay.round}<br>
+                            ${clazz.responsePay.amount.toLocaleString()} 원`;
+                        } else {
+                            classStatus.innerHTML = `
+                            총수업시간 ${clazz.responsePay.totalTime}, 월급일 ${clazz.responsePay.date}일<br>
+                            ${clazz.responsePay.amount.toLocaleString()} 원`;
+                        }
+
+                        const deleteIcon = document.createElement('div');
+                        deleteIcon.className = 'delete-icon';
+                        deleteIcon.innerHTML = `
+                            <img src="/images/trash_black.png" alt="trash-black" class="trash-black">
+                        `;
+                        deleteIcon.addEventListener('click', (event) => {
+                            event.stopPropagation(); // 이벤트 버블링 방지 (수업 정보가 클릭되지 않도록)
+                            confirmDelete(clazz.id);
+                        });
+
+                        classContainer.appendChild(classInfo);
+                        classContainer.appendChild(classStatus);
+                        classContainer.appendChild(deleteIcon);
+
+                        classList.appendChild(classContainer);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching student classes:', error);
+                });
+            }
+
+            let selectedClassId = null;
+
+            // 수업 정보를 담고 있는 div 클릭 시 삭제 모달창 띄우기
+            function attachDeleteModalToClassContainers() {
+                document.querySelectorAll('.class-container').forEach(container => {
+                    container.addEventListener('click', handleClassContainerClick);  // 이벤트 추가
+                });
+            }
+
+            // 수업 정보를 담고 있는 div 클릭 이벤트 제거 (비활성화)
+            function detachDeleteModalFromClassContainers() {
+                document.querySelectorAll('.class-container').forEach(container => {
+                    container.removeEventListener('click', handleClassContainerClick);  // 이벤트 제거
+                });
+            }
+
+            // 실제 수업 div 클릭 시 삭제 모달창 띄우는 함수
+            function handleClassContainerClick() {
+                const classId = this.getAttribute('data-id'); // 수업 ID 가져오기
+                confirmDelete(classId); // 수업 삭제 모달창 띄우기
+            }
+
+
+            // 삭제 아이콘을 클릭했을 때와 동일한 모달창 띄우기 기능
+            function confirmDelete(classId) {
+                selectedClassId = classId;
+                document.getElementById('delete-confirmation').style.display = 'block';
+                document.getElementById('modal-overlay').style.display = 'block';
+                document.getElementById('add-class-btn').classList.add('disabled'); // 버튼을 연하게
+            }
+
+            document.getElementById('cancel-delete').addEventListener('click', function() {
+                closeDeleteModal();
+            });
+
+            document.getElementById('confirm-delete').addEventListener('click', function() {
+                deleteClass(selectedClassId);
+            });
+
+            // 삭제 시 확인 모달창 닫기
+            function closeDeleteModal() {
+                document.getElementById('delete-confirmation').style.display = 'none';
+                document.getElementById('modal-overlay').style.display = 'none';
+                document.getElementById('add-class-btn').classList.remove('disabled'); // 버튼을 원래 상태로
+            }
+
+            // class 삭제 API 호출
+            function deleteClass(classId) {
+                fetch(`/class/${classId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + getAccessToken() // 인증 토큰 필요시 추가
+                    }
+                })
+                    .then(() => {
+                        closeDeleteModal();
+                        fetchStudentClasses(1); // 클래스 목록 갱신
+                    })
+                    .catch(error => {
+                        console.error('Error deleting class:', error);
+                    });
+            }
+
+            // 페이지 로드 시 수업 목록을 가져옴 (memberId를 실제 값으로 설정)
+            document.addEventListener('DOMContentLoaded', function() {
+                const memberId = 1; // 실제 memberId로 변경 필요
+                fetchStudentClasses(memberId);
+            });
+
+            // 수업 추가하기 버튼 클릭 시 /createClazz API 호출
+            document.getElementById('add-class-btn').addEventListener('click', function() {
+                window.location.href = '/createClazz';
+            });
+        </script>
+    </body>
 </html>

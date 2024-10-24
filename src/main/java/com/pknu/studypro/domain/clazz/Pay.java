@@ -54,4 +54,8 @@ public abstract class Pay {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public void setTotalTime(int totalTime) {
+        this.totalTime = totalTime;
+    }
 }

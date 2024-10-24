@@ -116,10 +116,31 @@ public class ClazzService {
         return clazzRepository.save(clazz);
     }
 
-    public void deleteClazz(long clazzId) {
+    public void deleteClazz(long clazzId, LoginUser loginUser) {
         //class가 있는지 없는지 검증하기
         Clazz clazz = verifiedClazz(clazzId);
-        clazzRepository.delete(clazz);
+        Member member = findMember.findMemberByToken(loginUser);
+        if(member.getRole() == Role.TEACHER) {
+            if(clazz.getTeacher().getId() != member.getId()) {
+                throw new BusinessLogicException(ExceptionCode.NOT_TEACHER);
+            }
+            clazz.setTeacher(null);
+        } else if (member.getRole() == Role.PARENT) {
+            if(clazz.getParent().getId() != member.getId()) {
+                throw new BusinessLogicException(ExceptionCode.NOT_PARENT);
+            }
+            clazz.setParent(null);
+        } else if (member.getRole() == Role.STUDENT) {
+            if(clazz.getStudent().getId() != member.getId()) {
+                throw new BusinessLogicException(ExceptionCode.NOT_STUDENT);
+            }
+            clazz.setStudent(null);
+        }
+
+        clazzRepository.save(clazz);
+
+        // 완전 삭제
+//        clazzRepository.delete(clazz);
     }
 
     public Clazz verifiedClazz(long clazzId) {
@@ -184,7 +205,15 @@ public class ClazzService {
         return clazzRepository.save(clazz);
     }
 
-    public List<Clazz> getClazz(long memberId, Role role){
+    public List<Clazz> getClazz(LoginUser loginUser){
+        Member member = findMember.findMemberByToken(loginUser);
+        return getClazz(member);
+    }
+
+    public List<Clazz> getClazz(Member member){
+        Role role = member.getRole();
+        long memberId = member.getId();
+
         List<Clazz> clazz = null;
 
         switch (role){

@@ -26,7 +26,7 @@ public class Clazz {
     @Column(nullable = false)
     private String subject;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Member teacher;
     @ManyToOne
     private Member parent;
