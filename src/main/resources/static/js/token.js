@@ -50,3 +50,15 @@ function getLocalStorageWithExpiry(key) {
 
     return item.value; // 만료되지 않았으면 저장된 값 반환
 }
+
+function getRole() {
+    return getLocalStorageWithExpiry('role');
+}
+
+function getAccessToken() {
+    return getLocalStorageWithExpiry('access');
+}
+
+function getRefreshToken() {
+    return getLocalStorageWithExpiry('refresh');
+}

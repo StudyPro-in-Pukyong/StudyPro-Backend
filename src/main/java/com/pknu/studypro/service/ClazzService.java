@@ -8,12 +8,14 @@ import com.pknu.studypro.domain.member.LoginType;
 import com.pknu.studypro.domain.member.Member;
 import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.ClazzRequestDto;
+import com.pknu.studypro.dto.auth.LoginUser;
 import com.pknu.studypro.exception.BusinessLogicException;
 import com.pknu.studypro.exception.ExceptionCode;
 import com.pknu.studypro.repository.ClazzRepository;
 import com.pknu.studypro.repository.ClazzTimeRepository;
 import com.pknu.studypro.repository.MemberRepository;
 import com.pknu.studypro.repository.PayRepository;
+import com.pknu.studypro.util.FindMember;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,8 +31,10 @@ public class ClazzService {
     private final MemberRepository memberRepository;
     private final PayRepository payRepository;
     private final ClazzTimeRepository clazzTimeRepository;
+    private final FindMember findMember;
 
-    public Clazz createClazz(Clazz clazz, ClazzRequestDto.Ids ids) {
+    @Transactional
+    public Clazz createClazz(Clazz clazz, ClazzRequestDto.Ids ids, LoginUser loginUser) {
 //         Member test 코드
 //        Member teacher = new Member(Role.TEACHER, LoginType.KAKAO, "선생님", null, "선생님 닉네임1");
 //        Member teacher2 = new Member(Role.TEACHER, LoginType.KAKAO, "선생님2", null, "선생님 닉네임2");
@@ -46,22 +50,31 @@ public class ClazzService {
             clazzTime.setClazz(clazz);
         }
 
+        Member member = findMember.findMemberByToken(loginUser);
+        if(member.getRole() == Role.TEACHER) {
+            clazz.setTeacher(member);
+        } else if (member.getRole() == Role.PARENT) {
+            clazz.setParent(member);
+        } else if (member.getRole() == Role.STUDENT) {
+            clazz.setStudent(member);
+        }
+
         // ------------------------------------------------------
         // memberId 식별하는 코드 작성하기
         // member들이 one to one 매핑되어 있어서 같은 memberId 등록 X -> 수정 필요해보임 -> 수정완료함
         // class 관련 member 연관관계 성립
-        clazz.setTeacher(
-                memberRepository.findById(ids.getTeacherId()).orElseThrow(
-                        () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND)
-                )
-        );
+        if (ids.getTeacherId() != null) {
+            if (Role.TEACHER != memberRepository.findById(ids.getTeacherId()).get().getRole()){
+                new BusinessLogicException(ExceptionCode.NOT_TEACHER);
+            }
+            clazz.setTeacher(memberRepository.findById(ids.getParentId()).get());
+        }
         if (ids.getParentId() != null) {
             if (Role.PARENT != memberRepository.findById(ids.getParentId()).get().getRole()){
                 new BusinessLogicException(ExceptionCode.NOT_PARENT);
             }
             clazz.setParent(memberRepository.findById(ids.getParentId()).get());
         }
-
         if (ids.getStudentId() != null) {
             if (Role.STUDENT != memberRepository.findById(ids.getStudentId()).get().getRole()){
                 new BusinessLogicException(ExceptionCode.NOT_STUDENT);
@@ -115,7 +128,7 @@ public class ClazzService {
     }
 
     @Transactional
-    public Clazz updateClazz(Clazz clazz, ClazzRequestDto.Ids ids) {
+    public Clazz updateClazz(Clazz clazz, ClazzRequestDto.Ids ids, LoginUser loginUser) {
         Clazz beforeClazz = verifiedClazz(clazz.getId());
 
         // Pay 방법이 바뀌는지 확인하기
@@ -138,16 +151,28 @@ public class ClazzService {
             clazzTime.setClazz(clazz);
         }
 
+        Member member = findMember.findMemberByToken(loginUser);
+        if(member.getRole() == Role.TEACHER) {
+            clazz.setTeacher(member);
+        } else if (member.getRole() == Role.PARENT) {
+            clazz.setParent(member);
+        } else if (member.getRole() == Role.STUDENT) {
+            clazz.setStudent(member);
+        }
 
         // class 관련 member 연관관계 성립
-        clazz.setTeacher(memberRepository.findById(ids.getTeacherId()).get());
+        if (ids.getTeacherId() != null) {
+            if (Role.TEACHER != memberRepository.findById(ids.getTeacherId()).get().getRole()){
+                new BusinessLogicException(ExceptionCode.NOT_TEACHER);
+            }
+            clazz.setTeacher(memberRepository.findById(ids.getParentId()).get());
+        }
         if (ids.getParentId() != null) {
             if (Role.PARENT != memberRepository.findById(ids.getParentId()).get().getRole()){
                 new BusinessLogicException(ExceptionCode.NOT_PARENT);
             }
             clazz.setParent(memberRepository.findById(ids.getParentId()).get());
         }
-
         if (ids.getStudentId() != null) {
             if (Role.STUDENT != memberRepository.findById(ids.getStudentId()).get().getRole()){
                 new BusinessLogicException(ExceptionCode.NOT_STUDENT);

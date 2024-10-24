@@ -15,12 +15,14 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @AllArgsConstructor
 @Validated
 public class ClazzController {
@@ -29,19 +31,19 @@ public class ClazzController {
 
     // Create Clazz 화면 전환
     @GetMapping("/createClazz")
-    public String createClazz() {
-        return "createClazz"; // createClazz.html로 이동
+    public String createClazz(Model model) {
+        return "createClazzInfo"; // createClazzInfo.html로 이동
     }
 
     // Create
     @PostMapping("/class")
-    public ResponseEntity createClazz(@Auth LoginUser loginUser,
+    public String createClazz(@Auth LoginUser loginUser,
                                       @Valid @RequestBody ClazzRequestDto.Post post) {
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
-        clazz = clazzService.createClazz(clazz, post.getIds());
+        clazz = clazzService.createClazz(clazz, post.getIds(), loginUser);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return "clazz";
     }
 
     // 정산 요청하기
@@ -84,7 +86,7 @@ public class ClazzController {
 //        System.out.println("!! controller : " + roundPay.getRound());
 
         clazz.setClassId(clazzId);
-        clazz = clazzService.updateClazz(clazz, post.getIds());
+        clazz = clazzService.updateClazz(clazz, post.getIds(), loginUser);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
