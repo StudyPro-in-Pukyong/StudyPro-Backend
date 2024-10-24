@@ -71,12 +71,11 @@
 
         <script th:src="@{/js/token.js}"></script>
         <script>
-            // 쿠키 설정
+            // localStorage 설정
             const access = "[[${access}]]";  // 서버에서 액세스 토큰
             const refresh = "[[${refresh}]]"; // 서버에서 리프레시 토큰
-            console.log("access  : ", access, " refresh : ", refresh);
-            setCookie("access", access, 7); // 7일 동안 유지
-            setCookie("refresh", refresh, 7);
+            setLocalStorageWithExpiry("access", access, 7); // 7일 동안 유지
+            setLocalStorageWithExpiry("refresh", refresh, 7);
 
             document.getElementById("roleForm").addEventListener("submit", function(event) {
                 // 기존의 폼 전송을 막고, 새로운 요청을 보냅니다.
@@ -97,10 +96,12 @@
                         'Content-Type': 'application/json', // JSON 형식으로 설정
                         'Authorization': 'Bearer ' + access // Authorization 헤더에 액세스 토큰 추가
                     }
-                }).then(() => {
-                    // 역할 저장 성공
-                })
-                .catch(error => {
+                }).then(response => response.text()) // 역할 저장 성공
+                .then(html => {
+                    document.open();   // 문서 열기
+                    document.write(html);  // 서버에서 받은 HTML을 문서에 쓰기
+                    document.close();  // 문서 닫기
+                }).catch(error => {
                     console.error("Error:", error);
                 });
             });

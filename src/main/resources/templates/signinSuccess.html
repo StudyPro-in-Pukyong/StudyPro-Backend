@@ -46,12 +46,19 @@
             font-size: 16px;
         }
     </style>
-</head>
-<body>
-<div class="success-container">
-    <h1>Congratulations!</h1>
-    <p>Leaning Connect에 오신걸 환영합니다<br>함께 달려봐요!</p>
-    <button class="next-btn">다음</button>
-</div>
-</body>
+    </head>
+        <body>
+        <div class="success-container">
+            <h1>Congratulations!</h1>
+            <p>Leaning Connect에 오신걸 환영합니다<br>함께 달려봐요!</p>
+            <a th:href="@{/auth/initialClazz}" class="next-btn">다음</a>
+        </div>
+
+        <script th:src="@{/js/token.js}"></script>
+        <script>
+            // localStorage 설정
+            const role = "[[${role}]]";  // 서버에서 액세스 토큰
+            setLocalStorageWithExpiry("role", role, 7); // 7일 동안 유지
+        </script>
+    </body>
 </html>

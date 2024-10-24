@@ -58,6 +58,7 @@ public class AuthController {
         // 3. 모델에 사용자 정보 추가
         model.addAttribute("access", tokens.access());
         model.addAttribute("refresh", tokens.refresh());
+        model.addAttribute("role", member.getRole());
 
         // 4. 모델를 반환
         if(member.getRole().equals(Role.ANONYMOUS)) { // 역할이 정해지지 않은 경우
@@ -83,14 +84,20 @@ public class AuthController {
     }
 
     @PostMapping("/role")
-    public ResponseEntity<Void> changeRole(@Auth final LoginUser loginUser,
-                                           @RequestBody final String role) {
+    public String changeRole(@Auth final LoginUser loginUser, @RequestBody final String role, Model model) {
+        model.addAttribute("role", role);
         authService.changeRole(loginUser, role);
-        return ResponseEntity.noContent().build();
+            return "signinSuccess";
     }
 
     @GetMapping("/role")
     public ResponseEntity<LoginUser> getRole(@Auth final LoginUser loginUser) {
         return ResponseEntity.ok(loginUser);
+    }
+
+    // Create Clazz 화면 전환
+    @GetMapping("/initialClazz")
+    public String createClazz(Model model) {
+        return "initialClazz"; // 아직 클래스를 생성하지 않은 경우
     }
 }

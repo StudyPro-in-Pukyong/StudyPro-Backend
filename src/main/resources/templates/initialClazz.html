@@ -51,5 +51,17 @@
             <h1>Welcome!</h1>
         </div>
         <a th:href="@{/createClazz}" class="add-button">수업 추가하기 +</a>
+
+        <script th:src="@{/js/token.js}"></script>
+        <script>
+            // localStorage 설정
+            const access = "[[${access}]]";  // 서버에서 액세스 토큰
+            const refresh = "[[${refresh}]]"; // 서버에서 리프레시 토큰
+            const role = "[[${role}]]";  // 서버에서 액세스 토큰
+
+            setLocalStorageWithExpiry("access", access, 7); // 7일 동안 유지
+            setLocalStorageWithExpiry("refresh", refresh, 7);
+            setLocalStorageWithExpiry("role", role, 7); // 7일 동안 유지
+        </script>
     </body>
 </html>
