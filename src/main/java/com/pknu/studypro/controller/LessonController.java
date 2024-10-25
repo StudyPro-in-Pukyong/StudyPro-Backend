@@ -12,18 +12,26 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@RestController
+@Controller
 @Validated
 @AllArgsConstructor
 public class LessonController {
     private final LessonService lessonService;
     private final LessonMapper lessonMapper;
+
+    // lesson 화면 전환
+    @GetMapping("/lesson")
+    public String clazz(Model model) {
+        return "lesson"; // clazz.html로 이동
+    }
 
     // CREATE
     @PostMapping("/lesson")
@@ -55,7 +63,6 @@ public class LessonController {
                                      @RequestParam("classId") long classId) {
         List<Lesson> lessons = lessonService.readLessons(LocalDate.of(year, month, 1), classId);
         List<LessonResponseDto.Response> responses = lessonMapper.lessonsToLessonResponseDtos(lessons);
-
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
@@ -77,7 +84,6 @@ public class LessonController {
         LessonResponseDto.Response response = lessonMapper.lessonToLessonResponseDto(lesson);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
-
     }
 
     // DELETE

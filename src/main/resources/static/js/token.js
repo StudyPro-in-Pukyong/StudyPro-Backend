@@ -62,3 +62,7 @@ function getAccessToken() {
 function getRefreshToken() {
     return getLocalStorageWithExpiry('refresh');
 }
+
+function getClassId() {
+    return getLocalStorageWithExpiry('classId');
+}
