@@ -203,12 +203,12 @@ public class ClazzService {
         return clazzRepository.save(clazz);
     }
 
-    public List<Clazz> getClazz(LoginUser loginUser){
+    public List<Clazz> getClazzes(LoginUser loginUser){
         Member member = findMember.findMemberByToken(loginUser);
-        return getClazz(member);
+        return getClazzes(member);
     }
 
-    public List<Clazz> getClazz(Member member){
+    public List<Clazz> getClazzes(Member member){
         Role role = member.getRole();
         long memberId = member.getId();
 

@@ -36,7 +36,7 @@ public class Clazz {
     @OneToMany(mappedBy = "clazz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClazzTime> clazzTimes; // 수업일정
 
-    private boolean isDone = false; // 클래스 종료
+    private boolean isDone = false; // 클래스 종료 여부
     private LocalDateTime settleRequestDate; // 월급 요청일
     private LocalDateTime settleResponseDate; // 월급일
 

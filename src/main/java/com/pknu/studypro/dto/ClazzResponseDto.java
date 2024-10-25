@@ -20,6 +20,7 @@ public class ClazzResponseDto {
         private Long id; // 식별자
         private String title; // 수업 이름
         private String subject; // 과목명
+        private boolean isDone; // 클래스 종료 여부
         private ResponsePay responsePay; // 지급 방식 및 급여
         private List<ClazzTime> clazzTimes; // 수업 일정
 

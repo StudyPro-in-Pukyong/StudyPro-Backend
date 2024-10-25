@@ -77,11 +77,18 @@ public class ClazzController {
 
     //클래스 조회 선생님, 학부모, 학생
     @GetMapping("/class")
-    public ResponseEntity getTeacherClass(@Auth LoginUser loginUser,
-                                          Model model) {
-        List<Clazz> clazzes = clazzService.getClazz(loginUser);
+    public ResponseEntity getClasses(@Auth LoginUser loginUser) {
+        List<Clazz> clazzes = clazzService.getClazzes(loginUser);
         List<ClazzResponseDto.Response> responses = clazzMapper.clazzListToClazzResponseList(clazzes);
         return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    //클래스 조회 선생님, 학부모, 학생
+    @GetMapping("/class/{classId}")
+    public ResponseEntity getClass(@Positive @PathVariable("classId") long clazzId) {
+        Clazz clazz = clazzService.verifiedClazz(clazzId);
+        ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 클래스 수정
