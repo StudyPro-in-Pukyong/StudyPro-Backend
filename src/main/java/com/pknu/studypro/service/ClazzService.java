@@ -135,10 +135,10 @@ public class ClazzService {
             clazz.setStudent(null);
         }
 
-        clazzRepository.save(clazz);
-
-        // 완전 삭제
-//        clazzRepository.delete(clazz);
+        if(clazz.getParent() == null && clazz.getTeacher() == null && clazz.getStudent() == null) {
+            // 완전 삭제
+            clazzRepository.delete(clazz);
+        } else clazzRepository.save(clazz);
     }
 
     public Clazz verifiedClazz(long clazzId) {
