@@ -35,10 +35,10 @@ public class ClazzController {
         return "createClazzInfo"; // createClazzInfo.html로 이동
     }
 
-    // Create Clazz 화면 전환
+    // Clazz 화면 전환
     @GetMapping("/clazz")
     public String clazz(Model model) {
-        return "clazz"; // createClazzInfo.html로 이동
+        return "clazz"; // clazz.html로 이동
     }
 
     // Create
