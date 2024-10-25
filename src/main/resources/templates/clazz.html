@@ -71,6 +71,11 @@
                 cursor: pointer;
             }
 
+            .class-container.completed {
+                background-color: #0000003d; /* 어두운 배경색 (예: 연한 회색) */
+                opacity: 0.8; /* 약간 투명하게 설정하여 종료된 느낌 강조 */
+            }
+
             .class-container .class-info {
                 font-size: 18px;
                 font-weight: bold;
@@ -225,6 +230,12 @@
                         const classContainer = document.createElement('div');
                         classContainer.className = 'class-container';
                         classContainer.setAttribute('data-id', clazz.id); // 수업 ID 설정
+
+                        // 종료된 수업일 경우 completed 클래스를 추가
+                        console.log(clazz.isDone);
+                        if (clazz.isDone) {
+                            classContainer.classList.add('completed');
+                        }
 
                         const classInfo = document.createElement('div');
                         classInfo.className = 'class-info';

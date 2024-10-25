@@ -31,6 +31,7 @@ public interface ClazzMapper {
 
     default ClazzResponseDto.Response clazzToClazzResponseCustom(Clazz clazz) {
         ClazzResponseDto.Response response = clazzToClazzResponse(clazz);
+        response.setIsDone(clazz.isDone());
 
         if (clazz.getPay().getClass().getName().contains("FixedDatePay"))
             response.setResponsePay(RESPONSE_FIXED_DATE_PAY(clazz));
