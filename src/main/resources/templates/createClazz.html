@@ -544,11 +544,10 @@
                         'Authorization': 'Bearer ' + getAccessToken() // 필요한 경우 인증 토큰 추가
                     },
                     body: JSON.stringify(requestData) // 데이터를 JSON으로 변환하여 전송
-                }).then(response => response.json())
-                .then(data => {
-                    // 성공
                 })
-                .catch(error => {
+                .then(response => {
+                    window.location.href = '/clazz';
+                }).catch(error => {
                     console.error('오류 발생:', error);
                     alert('클래스 생성 중 오류가 발생했습니다.');
                 });

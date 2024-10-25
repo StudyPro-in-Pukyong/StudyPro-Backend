@@ -5,11 +5,9 @@ import com.pknu.studypro.domain.member.Member;
 import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.auth.KakaoUser;
 import com.pknu.studypro.dto.auth.LoginUser;
-import com.pknu.studypro.dto.auth.RoleRequest;
 import com.pknu.studypro.dto.auth.Tokens;
 import com.pknu.studypro.service.ClazzService;
 import com.pknu.studypro.service.auth.AuthService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Map;
 
 @RequestMapping("/auth")
 @Controller
@@ -65,7 +62,7 @@ public class AuthController {
         if(member.getRole().equals(Role.ANONYMOUS)) { // 역할이 정해지지 않은 경우
             return "redirect:/auth/setMemberRole";
         } else {
-            List<Clazz> clazzes = clazzService.getClazz(member);
+            List<Clazz> clazzes = clazzService.getClazzes(member);
             if(clazzes.isEmpty()) return "redirect:/auth/initialClazz"; // 아직 클래스를 생성하지 않은 경우
             else return "redirect:/clazz"; // 클래스 화면으로 이동
         }
@@ -105,7 +102,6 @@ public class AuthController {
     // Member Role 설정
     @GetMapping("/setMemberRole")
     public String setMemberRole(Model model) {
-        System.out.println("!!" + model.getAttribute("role"));
         return "setMemberRole"; // 아직 클래스를 생성하지 않은 경우
     }
 }

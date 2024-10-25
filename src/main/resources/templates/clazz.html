@@ -186,7 +186,7 @@
         <script th:src="@{/js/token.js}"></script>
         <script>
             // localStorage 설정
-            if(!getAccessToken()) {
+            if("[[${access}]]") {
                 const access = "[[${access}]]";  // 서버에서 액세스 토큰
                 const refresh = "[[${refresh}]]"; // 서버에서 리프레시 토큰
                 const role = "[[${role}]]";  // 서버에서 액세스 토큰

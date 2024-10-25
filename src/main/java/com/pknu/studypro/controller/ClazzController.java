@@ -32,7 +32,7 @@ public class ClazzController {
     // Create Clazz 화면 전환
     @GetMapping("/createClazz")
     public String createClazz(Model model) {
-        return "createClazzInfo"; // createClazzInfo.html로 이동
+        return "createClazz"; // createClazzInfo.html로 이동
     }
 
     // Clazz 화면 전환
