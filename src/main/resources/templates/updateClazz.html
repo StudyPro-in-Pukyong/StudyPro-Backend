@@ -4,12 +4,17 @@
         <meta charset="UTF-8">
         <title>Lesson Schedule Management</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
-        <link rel="stylesheet" th:href="@{/css/createClazz.css}">
+        <link rel="stylesheet" th:href="@{/css/clazz.css}">
     </head>
     <body>
-        <div class="container mt-4">
-            <h1>정보를 가입해주세요.</h1>
+        <a th:href="@{/lesson}">
+            <img class="title-img" th:src="@{/images/left_black.png}" alt="plus">
+        </a>
 
+        <div class="container mt-4">
+            <div class="title">
+                <h1 class="title-text">클래스 정보 입력</h1>
+            </div>
 
             <form th:action="@{/class}" method="post">
                 <!-- 입력 필드 추가 -->
@@ -88,7 +93,7 @@
 
                 <!-- 기존 고정시간 설정 필드 -->
                 <div class="mb-3">
-                    <label for="mon"> 고정시간</label>
+                    <label for="student-nickname" style="font-weight: bold;"> 고정시간</label>
                     <div>
                         <button type="button" class="day-btn none active" id="mon" data-day="월">월</button>
                         <button type="button" class="day-btn none" id="tue" data-day="화">화</button>
