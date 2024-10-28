@@ -31,16 +31,34 @@
                 height: 25px;
                 margin-left: 10px;
             }
+            /*.summary-box {*/
+            /*    margin: 10px 20px;*/
+            /*    padding: 15px;*/
+            /*    border-radius: 10px;*/
+            /*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
+            /*    background-color: rgba(0, 0, 0, 0.1);*/
+            /*    display: flex;*/
+            /*    justify-content: space-between;*/
+            /*    align-items: center;*/
+            /*}*/
+
             .summary-box {
                 margin: 10px 20px;
                 padding: 15px;
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                 background-color: rgba(0, 0, 0, 0.1);
+            }
+
+            .summary-header {
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
             }
+
+            .class-time {
+                margin-top: 5px;
+            }
+
             #title{
                 position: absolute;
                 left: 50%;
@@ -318,10 +336,18 @@
 
         <div class="container">
             <!-- 수업 요약 박스 -->
+<!--            <div class="summary-box">-->
+<!--                <div id="time">총 3시간 근무</div>-->
+<!--                <div id="money">30,000원</div>-->
+<!--            </div>-->
             <div class="summary-box">
-                <div id="time">총 3시간 근무</div>
-                <div id="money">30,000원</div>
+                <div class="summary-header">
+                    <div id="time">총 3시간 근무</div>
+                    <div id="money">30,000원</div>
+                </div>
+                <div id="classTimesContainer"></div>
             </div>
+
 
             <!-- 달력 -->
             <div class="calendar-container">
@@ -394,6 +420,10 @@
                     } else {
                         document.getElementById('count').innerText = `매월 ${clazz.responsePay.date}일`;
                     }
+
+                    // classTimes 표시
+                    const clazzTimes = clazz.clazzTimes;
+                    if(clazzTimes.length > 0) attachClassTimes(clazzTimes);
                 }).catch(error => {
                     console.error("Error:", error);
                 });
@@ -402,6 +432,33 @@
             // classId에 해당하는 클래스를 호출
             let classId = getClassId();
             document.addEventListener('DOMContentLoaded', fetchClassInfo(classId));
+
+            // classTimes 표시
+            function attachClassTimes(classTimes) {
+                const summaryHeader = document.querySelector('.summary-header');
+                summaryHeader.style.marginBottom = "10px";
+                summaryHeader.style.borderBottom = "1px solid";
+
+                // classTimes 정보를 표시할 위치 선택
+                const classTimesInfo = document.getElementById('classTimesContainer'); // 단일 요소로 선택
+                const timeDiv = document.createElement('div');
+                timeDiv.innerHTML = `고정시간`;
+                classTimesInfo.appendChild(timeDiv);
+
+                // classTimes 데이터 순회
+                classTimes.forEach(time => {
+                    const timeDiv = document.createElement('div');
+                    timeDiv.classList.add('class-time'); // 스타일 지정 가능
+
+                    // 표시할 내용을 원하는 형식으로 추가
+                    timeDiv.innerHTML = `
+                        ${time.clazzDate} ${time.startTime} ~ ${time.endTime}<br>
+                    `;
+
+                    // classTimes-info에 추가
+                    classTimesInfo.appendChild(timeDiv);
+                });
+            }
 
             // lesson info
             let today = new Date();
