@@ -18,7 +18,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public List<Member> verifiedMember(Long memberId, String nickName, Role role) {
+    public List<Member> verifiedMembers(Long memberId, String nickName, Role role) {
         if(memberId != null) {
             List<Member> list = new ArrayList<>();
             list.add(memberRepository.findByIdAndRole(memberId, role).orElse((null)));
@@ -26,5 +26,10 @@ public class MemberService {
         }
 
         return memberRepository.findByNicknameAndRole(nickName, role);
+    }
+
+    public Member verifiedMember(Long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 }

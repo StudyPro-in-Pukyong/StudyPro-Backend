@@ -40,7 +40,8 @@ public class Clazz {
     private LocalDateTime settleRequestDate; // 월급 요청일
     private LocalDateTime settleResponseDate; // 월급일
 
-    public Clazz(final Pay pay, final String title, final String subject, final Member teacher, final Member parent, final Member student,  final List<ClazzTime> clazzTimes) {
+    public Clazz(final Long id, final Pay pay, final String title, final String subject, final Member teacher, final Member parent, final Member student,  final List<ClazzTime> clazzTimes) {
+        this.id = id;
         this.pay = pay;
         this.title = title;
         this.subject = subject;
@@ -56,6 +57,10 @@ public class Clazz {
 
     public void setParent(final Member parent) {
         this.parent = parent;
+    }
+
+    public void setIsDone(final boolean isDone) {
+        this.isDone = isDone;
     }
 
     public void setStudent(final Member student) {

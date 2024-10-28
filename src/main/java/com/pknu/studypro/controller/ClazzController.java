@@ -35,6 +35,12 @@ public class ClazzController {
         return "createClazz"; // createClazzInfo.html로 이동
     }
 
+    // Update Clazz 화면 전환
+    @GetMapping("/updateClazz")
+    public String updateClazz(Model model) {
+        return "updateClazz"; // createClazzInfo.html로 이동
+    }
+
     // Clazz 화면 전환
     @GetMapping("/clazz")
     public String clazz(Model model) {
@@ -44,7 +50,7 @@ public class ClazzController {
     // Create
     @PostMapping("/class")
     public String createClazz(@Auth LoginUser loginUser,
-                                      @Valid @RequestBody ClazzRequestDto.Post post) {
+                              @Valid @RequestBody ClazzRequestDto.Post post) {
         // 클래스 생성
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
         clazz = clazzService.createClazz(clazz, post.getIds(), loginUser);
@@ -92,13 +98,22 @@ public class ClazzController {
     }
 
     // 클래스 수정
-    @PutMapping("/class/{classId}")
+    @PutMapping("/class")
     public ResponseEntity putClazz(@Auth LoginUser loginUser,
-                                   @Valid @RequestBody ClazzRequestDto.Post post,
-                                   @Positive @PathVariable("classId") long clazzId) {
+                                   @Valid @RequestBody ClazzRequestDto.Post post) {
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
-        clazz.setClassId(clazzId);
         clazz = clazzService.updateClazz(clazz, post.getIds(), loginUser);
+        ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 종료 여부 수정
+    @PutMapping("/class/{classId}")
+    public ResponseEntity putIsDoneClazz(@Auth LoginUser loginUser,
+                                         @Positive @PathVariable("classId") long classId,
+                                         @RequestParam("isDone") boolean isDone) {
+        Clazz clazz = clazzService.updateClazz(classId, isDone);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

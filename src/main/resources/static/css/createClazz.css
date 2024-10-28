@@ -1,0 +1,232 @@
+.day-btn {
+    border-radius: 50%;
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    margin: 5px;
+    border: 1px solid #4da6ff;
+    background-color: white;
+}
+
+.day-btn.active {
+    background-color: #4da6ff;
+    color: white;
+}
+
+.day-btn.none {
+    border: 1px solid white;
+}
+
+.set-time-box {
+    border: 2px solid #4da6ff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plus-img {
+    width : 30px;
+    height: 30px;
+}
+
+.set-time-btn {
+    background-color: white;
+    border: transparent;
+    padding: 10px;
+    font-size: 20px;
+}
+
+.time-slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #4da6ff;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background-color: #f0f8ff;
+    transition: transform 0.5s ease;
+}
+
+.time-slot.delete {
+    transform: translateX(-100%);
+}
+
+.time-dial {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #0056b3;
+    border-radius: 10px;
+    background-color: #f0f8ff;
+    transition: transform 0.5s ease;
+}
+
+.time-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+}
+
+.time-item {
+    text-align: center;
+    margin: 0 15px; /* 시작과 종료 사이 간격 설정 */
+}
+
+.time-item span {
+    font-size: 12px;
+}
+
+.time-item input {
+    font-size: 20px;
+    text-align: center;
+}
+
+.time-dash {
+    font-size: 20px;
+}
+
+.time-btn {
+    position: absolute;
+    right: 10px;
+}
+
+/* 추가된 입력 필드 스타일 */
+.info-section {
+    margin-bottom: 20px;
+}
+
+.info-section label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    /*display: block;*/
+}
+
+.info-section input,
+.info-section .form-control {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.info-section .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.radio-label {
+    margin-right: 15px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 입력 필드와 동일한 테두리 스타일 */
+.form-control {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+
+/* 기본적으로 조회 결과 박스를 숨김 */
+.member-container {
+    max-height: 150px; /* 최대 높이, 스크롤 표시 */
+    overflow-y: auto;
+    border: 1px solid #1b1b1b;
+    padding: 10px;
+    width: 300px;
+    display: none; /* 기본적으로 숨김 */
+    margin-bottom: -10px;
+}
+
+.member-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.member-item.selected {
+    background-color: #f0f8ff;
+}
+
+.search-btn {
+    padding: 5px 10px;
+    background-color: #4da6ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    /*border-bottom-right-radius: 5px;*/
+    /*border-top-right-radius: 5px;*/
+    cursor: pointer;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+.submit-btn {
+    background-color: #4da6ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.raido-div {
+    margin-bottom: 10px;
+}
+
+.radio-container {
+    display: inline-flex;
+    align-items: center;
+    background-color: #ddd;
+    border-radius: 20px;
+    padding: 5px;
+}
+
+.radio-label {
+    padding: 8px 15px;
+    border-radius: 15px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+input[type="radio"] {
+    display: none; /* Hide actual radio buttons */
+}
+
+/* Style for selected option */
+input[type="radio"]:checked + .radio-label {
+    background-color: #4da6ff;
+    color: white;
+}

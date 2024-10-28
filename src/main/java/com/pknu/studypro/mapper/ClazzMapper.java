@@ -6,19 +6,20 @@ import com.pknu.studypro.dto.ClazzResponseDto;
 import com.pknu.studypro.exception.BusinessLogicException;
 import com.pknu.studypro.exception.ExceptionCode;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ClazzMapper {
+    @Mapping(source = "post.id", target = "id")
     Clazz clazzPostDtoToClazz(ClazzRequestDto.Post post, Pay pay);
 
     default Clazz clazzPostDtoToClazzCustom(ClazzRequestDto.Post post) {
         if (post.isFixedDatePay()) return clazzPostDtoToClazz(post, FIXED_DATE_PAY(post.getPostPay()));
         else if (post.isRoundPay()) {
             RoundPay roundPay = ROUND_PAY(post.getPostPay());
-            System.out.println("!! round : " + roundPay.getRound());
             return clazzPostDtoToClazz(post, roundPay);
         } else throw new BusinessLogicException(ExceptionCode.CLASS_POST_FAIL);
     }
@@ -39,6 +40,13 @@ public interface ClazzMapper {
             response.setResponsePay(ROUND_PAY(clazz));
 
         response.setClazzTimes(clazzTimesToClazzResponseDtoClazzTimes(clazz.getClazzTimes()));
+
+        ClazzResponseDto.Ids ids = new ClazzResponseDto.Ids(
+                clazz.getTeacher() == null ? null : clazz.getTeacher().getId(),
+                clazz.getParent() == null ? null : clazz.getParent().getId(),
+                clazz.getStudent() == null ? null : clazz.getStudent().getId()
+        );
+        response.setIds(ids);
 
         return response;
     }

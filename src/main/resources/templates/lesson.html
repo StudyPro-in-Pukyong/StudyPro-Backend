@@ -310,9 +310,9 @@
             </div>
             <div id="title">김승찬 학생 수업</div>
             <div class="header-icons">
-                <img th:src="@{/images/alert.png}" alt="alert">
-                <img th:src="@{/images/add.png}" alt="add">
-                <img th:src="@{/images/setting.png}" alt="setting">
+                <img id="alert-icon" th:src="@{/images/alert.png}" alt="alert">
+                <img id="add-icon" th:src="@{/images/add.png}" alt="add">
+                <img id="settings-icon" th:src="@{/images/setting.png}" alt="setting">
             </div>
         </div>
 
@@ -651,6 +651,13 @@
                     console.error('Error updating lesson:', error);
                 });
             }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // 'settings-icon' 아이디를 가진 이미지에 클릭 이벤트 추가
+                document.getElementById('settings-icon').addEventListener('click', function() {
+                    window.location.href = '/updateClazz';
+                });
+            });
         </script>
     </body>
 </html>

@@ -22,15 +22,8 @@ public class ClazzResponseDto {
         private String subject; // 과목명
         private Boolean isDone; // 클래스 종료 여부
         private ResponsePay responsePay; // 지급 방식 및 급여
+        private Ids ids; // 관련 사람들 id
         private List<ClazzTime> clazzTimes; // 수업 일정
-
-//        public boolean isFixedDatePay() {
-//            return this.getPay().date != null;
-//        }
-//
-//        public boolean isRoundPay() {
-//            return this.getPay().round != null;
-//        }
     }
 
     @Getter
@@ -63,6 +56,14 @@ public class ClazzResponseDto {
             super(id, amount, totalTime, currentRound);
             this.round = round;
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class Ids{
+        private Long teacherId; //선생님 아이디
+        private Long parentId; //부모님 아이디
+        private Long studentId; //헉생 아이디
     }
 
     @Getter

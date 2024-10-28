@@ -18,10 +18,12 @@ public class ClazzRequestDto {
     @Setter
     @Getter
     public static class Post{
+        private Long id;
         private String title; //수업 이름
         private String subject; //과목명
+        private Boolean isDone; // 클래스 종료 여부
         private PostPay postPay; //지급 방식 및 급여
-        private Ids ids;
+        private Ids ids; // 관련 사람들 id
 
         private List<ClazzTime> clazzTimes;
 

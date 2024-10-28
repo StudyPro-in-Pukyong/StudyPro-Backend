@@ -6,7 +6,6 @@ import com.pknu.studypro.dto.MemberResponseDto;
 import com.pknu.studypro.mapper.MemberMapper;
 import com.pknu.studypro.service.MemberService;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +23,7 @@ public class MemberController {
     @GetMapping("/members")
     public List<MemberResponseDto.Response> findMembers(@RequestParam("nickname") String nickname,
                                                @RequestParam("role") Role role) {
-        List<Member> members = memberService.verifiedMember(null, nickname, role);
+        List<Member> members = memberService.verifiedMembers(null, nickname, role);
 
         return memberMapper.membersToMemberResponseDtos(members);
     }
