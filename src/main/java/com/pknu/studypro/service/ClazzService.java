@@ -100,6 +100,7 @@ public class ClazzService {
             clazz.getPay().setId(beforeClazz.getPay().getId());
         } else { // Pay 방법이 바뀌는 경우
             // CurrentRound = 0 이 아닌 경우에는 에러 발생시키기
+            // TODO : CurrentRound = 0 이 아닌 경우에는 팝업창 띄우기
             if (!checkCurrentRound(clazz))
                 throw new BusinessLogicException(ExceptionCode.NOT_CHANGE_PAY_TYPE);
         }
