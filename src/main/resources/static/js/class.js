@@ -86,7 +86,6 @@ function addTimeSlot(selectedDay, startTime, endTime) {
             endTime: endTime
         };
         clazzTimes.push(timeData);
-        console.log(clazzTimes);
 
         // 삭제 버튼 클릭 이벤트 개별 등록
         timeSlot.querySelector('.delete-btn').addEventListener('click', function () {
@@ -106,7 +105,6 @@ function addTimeSlot(selectedDay, startTime, endTime) {
             if (index !== -1) {
                 clazzTimes.splice(index, 1); // 배열에서 시간 데이터를 제거
             }
-            console.log(clazzTimes);
 
             timeSlot.classList.add('delete'); // 삭제 애니메이션
             setTimeout(() => {
@@ -119,13 +117,9 @@ function addTimeSlot(selectedDay, startTime, endTime) {
 // role에 따른 닉네임 검색 표시
 const role = getRole();
 // 역할에 따라 특정 필드를 숨기기
-if (role === 'TEACHER') {
-    document.getElementById('teacher-nickname-section').style.display = 'none';
-} else if (role === 'PARENT') {
-    document.getElementById('parent-nickname-section').style.display = 'none';
-} else if (role === 'STUDENT') {
-    document.getElementById('student-nickname-section').style.display = 'none';
-}
+if (role === 'TEACHER') document.getElementById('teacher-nickname-section').style.display = 'none';
+else if (role === 'PARENT') document.getElementById('parent-nickname-section').style.display = 'none';
+else if (role === 'STUDENT') document.getElementById('student-nickname-section').style.display = 'none';
 
 function searchMembers(nickname, role, resultElementId, hiddenInputId) {
     fetch(`/members?nickname=${nickname}&role=${role}`)
