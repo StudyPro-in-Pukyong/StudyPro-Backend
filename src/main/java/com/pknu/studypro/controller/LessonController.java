@@ -16,8 +16,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -40,8 +45,16 @@ public class LessonController {
     }
 
     // lesson 수정 화면 전환
-    @GetMapping("/updateLesson")
-    public String updateLesson(Model model) {
+    @PutMapping("/updateLesson")
+    public String updateLesson(@RequestBody LessonResponseDto.ModelResponse lesson, Model model) {
+        model.addAttribute("id", lesson.getId());
+        model.addAttribute("date", lesson.getDate());
+        model.addAttribute("startTime", lesson.getStartTime());
+        model.addAttribute("endTime", lesson.getEndTime());
+        model.addAttribute("isDone", lesson.getIsDone());
+        model.addAttribute("type", lesson.getType());
+        model.addAttribute("progress", lesson.getProgress());
+        model.addAttribute("homeworks", lesson.getHomeworks());
         return "updateLesson"; // updateLesson.html로 이동
     }
 

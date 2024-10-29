@@ -59,14 +59,6 @@ public class LessonService {
     // isDone = false → true : Pay의 currentRound 증가
     // isDone = true → false : Pay의 currentRound 감소
     public Lesson updateIsDoneLesson(long lessonId, boolean isDone) {
-        // 기초 엔티티 → 삭제 예정
-//        Member teacher = new Member(Role.TEACHER, LoginType.KAKAO, "선생님", null, "닉네임1");
-//        memberRepository.save(teacher);
-//        FixedDatePay fixedDatePay = new FixedDatePay(20000, 10);
-//        Clazz clazz = new Clazz(fixedDatePay, "수학 과외", teacher, teacher, teacher);
-//        clazzRepository.save(clazz);
-        // --------------------------------------------------------------------------------------------
-
         Lesson lesson = verifiedLesson(lessonId);
         if(lesson.getIsDone() != isDone) { // isDone의 값 변경발생
             lesson.setIsDone(isDone);
