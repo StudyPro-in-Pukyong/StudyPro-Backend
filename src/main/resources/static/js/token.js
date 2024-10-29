@@ -66,3 +66,52 @@ function getRefreshToken() {
 function getClassId() {
     return getLocalStorageWithExpiry('classId');
 }
+
+async function fetchWithAuth(url, options = {}) {
+    try {
+        const accessToken = getAccessToken();
+        const response = await fetch(url, {
+            ...options,
+            headers: {
+                ...options.headers,
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        if (response.status === 401) {  // 토큰 만료
+            const refreshToken = getRefreshToken(); // Refresh Token 가져오기
+            const refreshResponse = await fetch('/auth/refresh', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ access: accessToken, refresh: refreshToken })
+            });
+
+            // 새로운 access 토큰 재발행
+            if (refreshResponse.ok) {
+                const { access, refresh } = await refreshResponse.json();
+                setLocalStorageWithExpiry("access", access, 1); // 새 accessToken 저장
+                setLocalStorageWithExpiry("refresh", refresh, 1); // 새 refreshToken 저장
+
+                // 원래 요청을 재시도
+                return await fetch(url, {
+                    ...options,
+                    headers: {
+                        ...options.headers,
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${access}`
+                    }
+                });
+            } else { // Refresh token이 만료되었을 때
+                alert('세션이 만료되었습니다. 다시 로그인해 주세요.');
+                localStorage.clear(); // 토큰 정보 삭제
+                window.location.href = '/auth/login'; // 로그인 페이지로 이동
+                return; // 이후 코드 실행 중지
+            }
+        }
+        return response;
+    } catch (error) {
+        console.error('Error in fetchWithAuth:', error);
+        throw error;
+    }
+}

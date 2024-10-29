@@ -196,9 +196,9 @@
                 const refresh = "[[${refresh}]]"; // 서버에서 리프레시 토큰
                 const role = "[[${role}]]";  // 서버에서 액세스 토큰
 
-                setLocalStorageWithExpiry("access", access, 7); // 7일 동안 유지
-                setLocalStorageWithExpiry("refresh", refresh, 7);
-                setLocalStorageWithExpiry("role", role, 7); // 7일 동안 유지
+                setLocalStorageWithExpiry("access", access, 1); // 1일 동안 유지
+                setLocalStorageWithExpiry("refresh", refresh, 1);
+                setLocalStorageWithExpiry("role", role, 1); // 1일 동안 유지
             }
 
             // 삭제 아이콘 활성화 설정
@@ -214,12 +214,8 @@
 
             // API 요청을 통해 서버에서 수업 데이터를 불러옴
             function fetchStudentClasses(memberId) {
-                fetch(`/class`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + getAccessToken() // 필요한 경우 인증 토큰 추가
-                    },
+                fetchWithAuth(`/class`, {
+                    method: 'GET'
                 }).then(response => response.json())
                 .then(data => {
                     const classList = document.getElementById('class-list');
@@ -232,7 +228,6 @@
                         classContainer.setAttribute('data-id', clazz.id); // 수업 ID 설정
 
                         // 종료된 수업일 경우 completed 클래스를 추가
-                        console.log(clazz.isDone);
                         if (clazz.isDone) {
                             classContainer.classList.add('completed');
                         }
@@ -288,7 +283,7 @@
                             confirmDelete(classId); // 수업 삭제 모달창 띄우기
                         } else {
                             // 삭제 모드가 아닐 때 lesson 페이지로 이동
-                            setLocalStorageWithExpiry("classId", classId, 7);
+                            setLocalStorageWithExpiry("classId", classId, 1);
                             window.location.href = `/lesson`;
                         }
                     });
@@ -320,11 +315,8 @@
 
             // class 삭제 API 호출
             function deleteClass(classId) {
-                fetch(`/class/${classId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': 'Bearer ' + getAccessToken() // 인증 토큰 필요시 추가
-                    }
+                fetchWithAuth(`/class/${classId}`, {
+                    method: 'DELETE'
                 }).then(() => {
                     closeDeleteModal();
                     fetchStudentClasses(1); // 클래스 목록 갱신

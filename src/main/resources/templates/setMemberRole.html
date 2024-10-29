@@ -75,8 +75,8 @@
                 // localStorage 설정
                 const access = "[[${access}]]";  // 서버에서 액세스 토큰
                 const refresh = "[[${refresh}]]"; // 서버에서 리프레시 토큰
-                setLocalStorageWithExpiry("access", access, 7); // 7일 동안 유지
-                setLocalStorageWithExpiry("refresh", refresh, 7);
+                setLocalStorageWithExpiry("access", access, 1); // 1일 동안 유지
+                setLocalStorageWithExpiry("refresh", refresh, 1);
             }
 
             document.getElementById("roleForm").addEventListener("submit", function(event) {
@@ -91,13 +91,9 @@
                     role: role
                 };
 
-                fetch(this.action, {
+                fetchWithAuth(this.action, {
                     method: this.method,
-                    body: role, // JSON 문자열로 변환
-                    headers: {
-                        'Content-Type': 'application/json', // JSON 형식으로 설정
-                        'Authorization': 'Bearer ' + access // Authorization 헤더에 액세스 토큰 추가
-                    }
+                    body: role // JSON 문자열로 변환
                 }).then(response => response.text()) // 역할 저장 성공
                 .then(html => {
                     document.open();   // 문서 열기

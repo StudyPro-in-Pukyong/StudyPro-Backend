@@ -267,12 +267,8 @@
                 };
 
                 // 서버로 POST 요청을 보냄
-                fetch('/lesson', {
+                fetchWithAuth('/lesson', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + getAccessToken() // 필요한 경우 인증 토큰 추가
-                    },
                     body: JSON.stringify(requestData) // 데이터를 JSON으로 변환하여 전송
                 }).then(response => {
                     window.location.href = '/lesson';
