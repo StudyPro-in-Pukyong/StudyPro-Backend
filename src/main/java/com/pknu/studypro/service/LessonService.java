@@ -42,11 +42,13 @@ public class LessonService {
         Clazz clazz = clazzService.verifiedClazz(classId);
 
         // 시작일 -> 요청한 달 - 1
-        LocalDateTime start = localDate.plusMonths(-1).atTime(LocalTime.MIN);
+        LocalDateTime start = localDate.atTime(LocalTime.MIN);
 
         // 마지막일 -> 요청한 달 + 1
-        localDate = localDate.plusMonths(1);
         LocalDateTime finish = localDate.withDayOfMonth(localDate.lengthOfMonth()).atTime(LocalTime.MAX);
+
+        System.out.println("!! " + start + " " + finish);
+        System.out.println(localDate);
 
         return lessonRepository.findByStartTimeBetweenAndClassId(start, finish, classId);
     }

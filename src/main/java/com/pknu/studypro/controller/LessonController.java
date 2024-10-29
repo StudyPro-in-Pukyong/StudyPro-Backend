@@ -86,6 +86,7 @@ public class LessonController {
                                      @RequestParam("year") int year,
                                      @RequestParam("month") int month,
                                      @RequestParam("classId") long classId) {
+        System.out.println(year + " " + month);
         List<Lesson> lessons = lessonService.readLessons(LocalDate.of(year, month, 1), classId);
         List<LessonResponseDto.Response> responses = lessonMapper.lessonsToLessonResponseDtos(lessons);
         return new ResponseEntity<>(responses, HttpStatus.OK);
