@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 public enum ExceptionCode {
     NOT_ALLOW_SETTLE(400, "Not Allow Settle"),
+    TOKEN_EXPIRED(401, "Token Expired"),
     NOT_TEACHER(403, "Forbidden Because User not Teacher"),
     NOT_PARENT(403, "Forbidden Because User not Parent"),
     NOT_STUDENT(403, "Forbidden Because User not Student"),

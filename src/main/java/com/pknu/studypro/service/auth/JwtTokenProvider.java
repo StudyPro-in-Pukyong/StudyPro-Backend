@@ -1,5 +1,7 @@
 package com.pknu.studypro.service.auth;
 
+import com.pknu.studypro.exception.BusinessLogicException;
+import com.pknu.studypro.exception.ExceptionCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
@@ -74,7 +76,7 @@ public class JwtTokenProvider {
         final Claims claims = toClaims(token);
 
         if (claims.getExpiration().before(new Date())) {
-            throw new IllegalArgumentException("만료된 토큰입니다.");
+            throw new BusinessLogicException(ExceptionCode.TOKEN_EXPIRED);
         }
     }
 }

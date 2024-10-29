@@ -7,16 +7,14 @@ spring:
       hibernate:
         format_sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/studypro
-#    url: jdbc:mysql://studypro-database.cquzlsoxbqjs.ap-northeast-2.rds.amazonaws.com:3306/StudyPro_DB
+    url: jdbc:mysql://studypro-database.cquzlsoxbqjs.ap-northeast-2.rds.amazonaws.com:3306/StudyPro_DB
     username: root
-    password: sinariari
-#    password: StudyPro123!
+    password: StudyPro123!
 
   auth:
     key: dfsdsfdfsafseafesfaflsefjlijfilsjfilaesjfilejflajfiljile
-    accessTokenExpired: 3600000
-    refreshTokenExpired: 25200000
+    accessTokenExpired: 3600000 # ms 단위(1시간)
+    refreshTokenExpired: 25200000 # ms 단위(7시간)
 
 kakao:
   client_id: ${STUDYPRO_KAKAO_CLIENT_ID}
