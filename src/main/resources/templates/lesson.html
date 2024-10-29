@@ -4,8 +4,6 @@
         <meta charset="UTF-8">
         <title>수업 관리</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css"> <!-- Pikaday CSS 추가 -->
-        <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script> <!-- Pikaday JS 추가 -->
 
         <style>
             body {
@@ -31,19 +29,9 @@
                 height: 25px;
                 margin-left: 10px;
             }
-            /*.summary-box {*/
-            /*    margin: 10px 20px;*/
-            /*    padding: 15px;*/
-            /*    border-radius: 10px;*/
-            /*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
-            /*    background-color: rgba(0, 0, 0, 0.1);*/
-            /*    display: flex;*/
-            /*    justify-content: space-between;*/
-            /*    align-items: center;*/
-            /*}*/
 
             .summary-box {
-                margin: 10px 20px;
+                margin: 10px 0px;
                 padding: 15px;
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -63,12 +51,6 @@
                 position: absolute;
                 left: 50%;
                 transform: translateX(-50%);
-            }
-
-            .calendar-container {
-                margin: 10px 0;
-                display: flex;
-                justify-content: center;
             }
             .btn-send {
                 background-color: #4da6ff;
@@ -329,17 +311,17 @@
             <div id="title">김승찬 학생 수업</div>
             <div class="header-icons">
                 <img id="alert-icon" th:src="@{/images/alert.png}" alt="alert">
-                <img id="add-icon" th:src="@{/images/add.png}" alt="add">
-                <img id="settings-icon" th:src="@{/images/setting.png}" alt="setting">
+                <a th:href="@{/createLesson}">
+                    <img id="add-icon" th:src="@{/images/add.png}" alt="add">
+                </a>
+                <a th:href="@{/updateClazz}">
+                    <img id="settings-icon" th:src="@{/images/setting.png}" alt="setting">
+                </a>
             </div>
         </div>
 
         <div class="container">
             <!-- 수업 요약 박스 -->
-<!--            <div class="summary-box">-->
-<!--                <div id="time">총 3시간 근무</div>-->
-<!--                <div id="money">30,000원</div>-->
-<!--            </div>-->
             <div class="summary-box">
                 <div class="summary-header">
                     <div id="time">총 3시간 근무</div>
@@ -348,11 +330,7 @@
                 <div id="classTimesContainer"></div>
             </div>
 
-
             <!-- 달력 -->
-            <div class="calendar-container">
-                <input type="text" id="datepicker">
-            </div>
             <div class="calendarBox">
                 <div id="month"></div>
                 <div id="calendar"></div>
@@ -370,7 +348,6 @@
         </div>
 
         <script th:src="@{/js/token.js}"></script>
-
         <script>
             // 'before' 아이디를 가진 이미지에 클릭 이벤트 추가
             document.getElementById('before').addEventListener('click', function() {
@@ -452,7 +429,7 @@
 
                     // 표시할 내용을 원하는 형식으로 추가
                     timeDiv.innerHTML = `
-                        ${time.clazzDate} ${time.startTime} ~ ${time.endTime}<br>
+                        ${time.clazzDate} ${formatTime(time.startTime)} ~ ${formatTime(time.endTime)}<br>
                     `;
 
                     // classTimes-info에 추가
@@ -504,14 +481,6 @@
 
             // 페이지가 로드되면 자동으로 수업 데이터 불러오기
             document.addEventListener('DOMContentLoaded', loadLessons);
-
-            var picker = new Pikaday({
-                field: document.getElementById('datepicker'),
-                format: 'YYYY-MM-DD',
-                onSelect: function(date) {
-                    console.log('선택한 날짜:', picker.toString());
-                }
-            });
 
             // 정산 알림 버튼 클릭 시 동작
             document.getElementById('send-notification-btn').addEventListener('click', function() {
@@ -646,6 +615,15 @@
                         // 종료 시간 계산: 시작 시간에 분량(분)을 더함
                         const endTime = new Date(startTime.getTime() + lesson.minutes * 60000); // 60000ms = 1분
 
+                        const difH = endTime.getHours() - startTime.getHours();
+                        const difM = endTime.getMinutes() - startTime.getMinutes();
+                        let dif = `${difH}시간 ${difM}분`;
+                        if(difH < 0) {
+                            dif = `${difM}분`;
+                        } else if(difM === 0) {
+                            dif = `${difH}시간`;
+                        }
+
                         // 보충, 기존 수업 여부
                         let type = lesson.type === "ORIGINAL" ? "기본 수업" : "보충 수업";
 
@@ -654,9 +632,9 @@
 
                         lessonInfoContainer.innerHTML += `
                             <div class="lesson-card" data-lesson-id="${lesson.id}">
-                                <p><strong>메모 :</strong> ${type}</p>
+                                <p><strong>수업 유형 :</strong> ${type}</p>
                                 <p><strong>메모 :</strong> ${lesson.progress}</p>
-                                <p><strong>수업시간 :</strong> ${startTime.toLocaleTimeString()} ~ ${endTime.toLocaleTimeString()}</p>
+                                <p><strong>수업시간 :</strong> ${formatTime(startTime.toLocaleTimeString())} ~ ${formatTime(endTime.toLocaleTimeString())} (${dif})</p>
                                 <p><strong>숙제:</strong></p>
                                 <ul>${homeworkList}</ul> <!-- 숙제 목록 출력 -->
                                 <label>
@@ -709,12 +687,11 @@
                 });
             }
 
-            document.addEventListener('DOMContentLoaded', function () {
-                // 'settings-icon' 아이디를 가진 이미지에 클릭 이벤트 추가
-                document.getElementById('settings-icon').addEventListener('click', function() {
-                    window.location.href = '/updateClazz';
-                });
-            });
+            // 시간 설정을 통해서 hh:mm 표기
+            function formatTime(time) {
+                const [hours, minutes] = time.split(':');
+                return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+            }
         </script>
     </body>
 </html>

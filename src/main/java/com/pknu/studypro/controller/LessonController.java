@@ -33,6 +33,18 @@ public class LessonController {
         return "lesson"; // clazz.html로 이동
     }
 
+    // lesson 생성 화면 전환
+    @GetMapping("/createLesson")
+    public String createLesson(Model model) {
+        return "createLesson"; // createLesson.html로 이동
+    }
+
+    // lesson 수정 화면 전환
+    @GetMapping("/updateLesson")
+    public String updateLesson(Model model) {
+        return "updateLesson"; // updateLesson.html로 이동
+    }
+
     // CREATE
     @PostMapping("/lesson")
     public ResponseEntity postLesson(@Auth LoginUser loginUser,
