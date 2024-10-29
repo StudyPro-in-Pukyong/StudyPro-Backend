@@ -678,6 +678,7 @@
                         });
                     });
 
+                    // lesson 수정 버튼 클릭 이벤트
                     document.querySelectorAll('.edit-icon').forEach(editButton => {
                         editButton.addEventListener('click', function () {
                             const lessonCard = this.closest('.lesson-card');
@@ -726,13 +727,27 @@
                         });
                     });
 
+                    // lesson 삭제 버튼 클릭 이벤트
                     document.querySelectorAll('.delete-icon').forEach(deleteButton => {
                         deleteButton.addEventListener('click', function () {
                             const lessonId = this.closest('.lesson-card').getAttribute('data-lesson-id');
-                            // 삭제 기능 실행 코드 작성
-                            console.log(`Deleting lesson ID: ${lessonId}`);
-                            console.log(this);
-                            console.log(this.closest('.lesson-card'));
+                            const lessonCard = this.closest('.lesson-card');
+
+                            // DELETE 요청을 보냅니다
+                            fetch(`/lesson/${lessonId}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + getAccessToken()
+                                }
+                            }).then(response => {
+                                // 요청이 성공하면 lesson list에서 해당 lesson을 제거합니다
+                                lessonCard.remove();
+                                console.log(`Lesson ID ${lessonId} deleted successfully`);
+                            }).catch(error => {
+                                console.error('Failed to delete the lesson');
+                                console.error('Error:', error);
+                            });
                         });
                     });
                 } else {
