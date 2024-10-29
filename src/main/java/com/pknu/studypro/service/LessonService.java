@@ -47,9 +47,6 @@ public class LessonService {
         // 마지막일 -> 요청한 달 + 1
         LocalDateTime finish = localDate.withDayOfMonth(localDate.lengthOfMonth()).atTime(LocalTime.MAX);
 
-        System.out.println("!! " + start + " " + finish);
-        System.out.println(localDate);
-
         return lessonRepository.findByStartTimeBetweenAndClassId(start, finish, classId);
     }
 
