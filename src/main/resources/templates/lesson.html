@@ -19,6 +19,11 @@
                 font-size: 20px;
                 position: relative; /* 제목과 쓰레기통 배치 */
             }
+            .header-title {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
             .header-icons {
                 display: flex;
                 align-items: center;
@@ -325,7 +330,7 @@
             <div class="header-icons">
                 <img id="before" th:src="@{/images/left.png}" alt="before">
             </div>
-            <div id="title">김승찬 학생 수업</div>
+            <div id="title" class="header-title">김승찬 학생 수업</div>
             <div class="header-icons">
                 <img id="alert-icon" th:src="@{/images/alert.png}" alt="alert">
                 <a th:href="@{/createLesson}">

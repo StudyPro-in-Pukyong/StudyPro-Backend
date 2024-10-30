@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>Lesson Schedule Management</title>
+        <title>레슨 관리</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
         <link rel="stylesheet" th:href="@{/css/clazz.css}">
 
@@ -16,6 +16,11 @@
                 color: white;
                 font-size: 20px;
                 position: relative; /* 제목과 쓰레기통 배치 */
+            }
+            .header-title {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
             }
             .header-icons {
                 display: flex;
@@ -115,7 +120,7 @@
                     <img id="before" th:src="@{/images/left.png}" alt="before">
                 </a>
             </div>
-            <div id="title">김승찬 학생 수업</div>
+            <div id="title" class="header-title">김승찬 학생 수업</div>
             <div class="header-icons"> </div>
         </div>
 
