@@ -2,9 +2,11 @@ package com.pknu.studypro.service;
 
 import com.pknu.studypro.domain.member.Member;
 import com.pknu.studypro.domain.member.Role;
+import com.pknu.studypro.dto.auth.LoginUser;
 import com.pknu.studypro.exception.BusinessLogicException;
 import com.pknu.studypro.exception.ExceptionCode;
 import com.pknu.studypro.repository.MemberRepository;
+import com.pknu.studypro.util.FindMember;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final FindMember findMember;
 
     public List<Member> verifiedMembers(Long memberId, String nickName, Role role) {
         if(memberId != null) {
@@ -31,5 +34,16 @@ public class MemberService {
     public Member verifiedMember(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+    public Member verifiedMember(LoginUser loginUser) {
+        return findMember.findMemberByToken(loginUser);
+    }
+
+    public Member updateMember(LoginUser loginUser, String nickname) {
+        Member member = findMember.findMemberByToken(loginUser);
+        member.setNickname(nickname);
+
+        return memberRepository.save(member);
     }
 }

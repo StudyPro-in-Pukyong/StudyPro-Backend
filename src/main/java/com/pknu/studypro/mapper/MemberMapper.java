@@ -7,6 +7,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
-    MemberResponseDto memberToMemberResponseDto(Member member);
+    MemberResponseDto.Response memberToMemberResponseDto(Member member);
     List<MemberResponseDto.Response> membersToMemberResponseDtos(List<Member> member);
 }

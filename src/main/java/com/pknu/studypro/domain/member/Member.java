@@ -57,4 +57,8 @@ public class Member {
 
         this.role = role;
     }
+
+    public void setNickname(final String nickname) {
+        this.nickname = nickname;
+    }
 }

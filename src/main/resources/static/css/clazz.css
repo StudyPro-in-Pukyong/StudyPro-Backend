@@ -181,9 +181,8 @@ h1 {
     overflow-y: auto;
     border: 1px solid #1b1b1b;
     padding: 10px;
-    /*width: 300px;*/
     display: none; /* 기본적으로 숨김 */
-    /*margin-bottom: -10px;*/
+    margin-left: 10px !important;
 }
 
 .member-item {

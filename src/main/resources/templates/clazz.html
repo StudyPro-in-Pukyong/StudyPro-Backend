@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>Study Pro - Student Classes</title>
+        <title>클래스 조회</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
         <style>
             body {
@@ -18,6 +18,7 @@
                 padding: 10px;
                 font-size: 20px;
                 position: relative; /* 제목과 쓰레기통 배치 */
+                min-height: 60px; /* 원하는 높이로 설정 */
             }
 
             .header-icon {
@@ -33,6 +34,30 @@
                 flex: 1; /* 가운데 정렬을 위한 확장 */
             }
 
+            .user {
+                font-size: 20px;
+                cursor: pointer;
+                position: absolute;
+                left: 10px; /* 왼쪽에 고정 */
+                width: 40px; /* 이미지 너비 */
+                height: 40px; /* 이미지 높이 */
+            }
+
+            .question {
+                font-size: 20px;
+                cursor: pointer;
+                position: absolute;
+                right: 60px; /* 오른쪽에 고정 */
+                width: 40px; /* 이미지 너비 */
+                height: 40px; /* 이미지 높이 */
+            }
+
+            .header-title {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
             .trash {
                 font-size: 20px;
                 cursor: pointer;
@@ -42,7 +67,7 @@
                 height: 40px; /* 이미지 높이 */
             }
 
-            .trash:hover {
+            .user:hover .question:hover .trash:hover {
                 opacity: 0.8;
             }
 
@@ -166,10 +191,16 @@
     </head>
     <body>
         <div class="header">
-            <div class="logo-container">
-                <img id="logo" th:src="@{/images/logo-static.png}" alt="studypro logo" class="header-icon">
-                <div class="title">Study Pro</div>
+                <img id="user" th:src="@{/images/user.png}" alt="user" class="user">
+            <div class="header-title">
+                <div class="logo-container">
+                    <img id="logo" th:src="@{/images/logo-static.png}" alt="studypro logo" class="header-icon">
+                    <div class="title">Study Pro</div>
+                </div>
             </div>
+            <a th:href="@{https://forms.gle/tgATcshm8AnC7TFW9}" style="position: absolute; right: 10px; top: 10px">
+                <img id="question" th:src="@{/images/question.png}" alt="question" class="question">
+            </a>
             <img id="trash-white" th:src="@{/images/trash_white.png}" alt="trash-white" class="trash">
         </div>
 
@@ -334,6 +365,21 @@
             // 수업 추가하기 버튼 클릭 시 /createClazz API 호출
             document.getElementById('add-class-btn').addEventListener('click', function() {
                 window.location.href = '/createClazz';
+            });
+
+            // 마이페이지 이동
+            document.getElementById('user').addEventListener('click', function() {
+                fetchWithAuth(`/mypage`, {
+                    method: 'GET'
+                }).then(response => response.text()) // 역할 저장 성공
+                .then(html => {
+                        document.open();
+                        document.write(html); // 페이지에 HTML 작성
+                        document.close();
+                        history.pushState(null, '', '/mypage'); // URL을 '/mypage'로 변경
+                }).catch(error => {
+                    console.error('Error loading mypage:', error);
+                });
             });
         </script>
     </body>
