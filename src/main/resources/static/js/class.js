@@ -230,3 +230,53 @@ function populateFormWithClassData() {
 
 // 페이지 로드 시 함수 호출로 데이터를 자동으로 폼에 채워넣기
 document.addEventListener('DOMContentLoaded', populateFormWithClassData);
+
+// 정산 방법이 '지정일'인 경우에 1~31 사이의 값만 들어갈 수 있도록 변경
+document.addEventListener('DOMContentLoaded', function() {
+    // postPay-amount 요소를 name 속성으로 선택
+    const postPayAmountInput = document.querySelector('input[name="postPay-amount"]');
+    const paymentTypeRadioButtons = document.querySelectorAll('input[name="postPay-radio"]');
+
+    // postPayAmountInput이 null이 아닌 경우에만 제한을 적용
+    if (postPayAmountInput) {
+        const selectedRadio = document.querySelector('input[name="postPay-radio"]:checked');
+        if (selectedRadio && selectedRadio.value === '지정일') {
+            applyDateRestrictions();
+        }
+
+        paymentTypeRadioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === '지정일') {
+                    applyDateRestrictions();
+                } else {
+                    removeDateRestrictions();
+                }
+            });
+        });
+
+        function applyDateRestrictions() {
+            postPayAmountInput.min = 1;
+            postPayAmountInput.max = 31;
+            postPayAmountInput.placeholder = "ex) 매월 10일 (1~31 사이 숫자만)";
+            postPayAmountInput.addEventListener('input', validateDateInput);
+            validateDateInput();
+        }
+
+        function removeDateRestrictions() {
+            postPayAmountInput.removeAttribute('min');
+            postPayAmountInput.removeAttribute('max');
+            postPayAmountInput.placeholder = "ex) 8회차 (숫자만 입력)";
+            postPayAmountInput.removeEventListener('input', validateDateInput);
+            postPayAmountInput.setCustomValidity("");
+        }
+
+        function validateDateInput() {
+            const value = parseInt(postPayAmountInput.value, 10);
+            if (isNaN(value) || value < 1 || value > 31) {
+                postPayAmountInput.setCustomValidity("1에서 31 사이의 숫자만 입력하세요.");
+            } else {
+                postPayAmountInput.setCustomValidity("");
+            }
+        }
+    }
+});
