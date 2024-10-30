@@ -63,7 +63,7 @@ public class JwtTokenProvider {
         } catch (final ExpiredJwtException expired) {
             return expired.getClaims();
         } catch (final Exception e) {
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+            throw new BusinessLogicException(ExceptionCode.TOKEN_NOT_VALID);
         }
     }
 
