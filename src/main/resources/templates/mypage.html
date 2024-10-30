@@ -171,11 +171,12 @@
                     method: 'PUT',
                     body: JSON.stringify({ nickname }) // JSON으로 데이터를 전송
                 }).then(response => {
-                    if(response.ok) {
-                        showToast('닉네임이 성공적으로 변경되었습니다!'); // 성공 알림
+                    if (response.status >= 400) {
+                        throw new Error(`서버 오류: ${response.status}`);
                     }
+                    showToast('닉네임이 성공적으로 변경되었습니다!', 2000, true); // 성공 알림
                 }).catch(error => {
-                    showToast('닉네임 변경에 실패했습니다.', 4000); // 실패 알림
+                    showToast('닉네임 변경에 실패했습니다.', 4000, false); // 실패 알림
                     console.error('오류 발생:', error);
                     alert('닉네임 변경 중 오류가 발생했습니다.');
                 });

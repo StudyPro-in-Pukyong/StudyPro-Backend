@@ -251,7 +251,12 @@
             function fetchStudentClasses(memberId) {
                 fetchWithAuth(`/class`, {
                     method: 'GET'
-                }).then(response => response.json())
+                }).then(response => {
+                    if (response.status >= 400) {
+                        throw new Error(`서버 오류: ${response.status}`);
+                    }
+                    return response.json()
+                })
                 .then(data => {
                     const classList = document.getElementById('class-list');
                     classList.innerHTML = ''; // 기존 내용을 초기화
@@ -353,12 +358,15 @@
             function deleteClass(classId) {
                 fetchWithAuth(`/class/${classId}`, {
                     method: 'DELETE'
-                }).then(() => {
+                }).then(response => {
+                    if (response.status >= 400) {
+                        throw new Error(`서버 오류: ${response.status}`);
+                    }
                     closeDeleteModal();
                     fetchStudentClasses(1); // 클래스 목록 갱신
-                    showToast('클래스가 성공적으로 삭제되었습니다!', 2000); // 성공 알림
+                    showToast('클래스가 성공적으로 삭제되었습니다!', 2000, true); // 성공 알림
                 }).catch(error => {
-                    showToast('클래스 삭제에 실패했습니다.', 4000); // 실패 알림
+                    showToast('클래스 삭제에 실패했습니다.', 4000, false); // 실패 알림
                     console.error('Error deleting class:', error);
                 });
             }
@@ -378,7 +386,13 @@
             document.getElementById('user').addEventListener('click', function() {
                 fetchWithAuth(`/mypage`, {
                     method: 'GET'
-                }).then(response => response.text()) // 역할 저장 성공
+                }).then(response => {
+                    if (response.status >= 400) {
+                        throw new Error(`서버 오류: ${response.status}`);
+                    }
+
+                    return response.text()
+                }) // 역할 저장 성공
                 .then(html => {
                         document.open();
                         document.write(html); // 페이지에 HTML 작성

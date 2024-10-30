@@ -94,8 +94,12 @@
                 fetchWithAuth(this.action, {
                     method: this.method,
                     body: role // JSON 문자열로 변환
-                }).then(response => response.text()) // 역할 저장 성공
-                .then(html => {
+                }).then(response => {
+                    if (response.status >= 400) {
+                        throw new Error(`서버 오류: ${response.status}`);
+                    }
+                    return response.text()
+                }).then(html => {
                     document.open();   // 문서 열기
                     document.write(html);  // 서버에서 받은 HTML을 문서에 쓰기
                     document.close();  // 문서 닫기
