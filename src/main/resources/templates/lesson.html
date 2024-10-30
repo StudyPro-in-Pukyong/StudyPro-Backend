@@ -369,7 +369,11 @@
             </div>
         </div>
 
+        <!-- 토스트 알림 컨테이너 -->
+        <div id="toast-container" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;"></div>
+
         <script th:src="@{/js/token.js}"></script>
+        <script th:src="@{/js/toast.js}"></script>
         <script>
             // 'before' 아이디를 가진 이미지에 클릭 이벤트 추가
             document.getElementById('before').addEventListener('click', function() {
@@ -616,12 +620,12 @@
             });
 
             // Lesson 정보를 동적으로 표시하는 함수
-            function displayLessons(lessons, selectedDate) {
+            function displayLessons(selectedLessons, selectedDate) {
                 const lessonInfoContainer = document.getElementById('lesson-info');
                 lessonInfoContainer.innerHTML = ''; // 이전 내용 초기화
 
-                if (lessons.length > 0) {
-                    lessons.forEach(lesson => {
+                if (selectedLessons.length > 0) {
+                    selectedLessons.forEach(lesson => {
                         // 숙제 목록 생성
                         let homeworkList = '없음';
                         if (lesson.homeworks && lesson.homeworks.length > 0) {
@@ -721,8 +725,6 @@
                             }).catch(error => {
                                 console.error('Error:', error);
                             });
-
-                            // window.location.href = '/updateLesson';
                         });
                     });
 
@@ -737,8 +739,11 @@
                                 method: 'DELETE'
                             }).then(response => {
                                 // 요청이 성공하면 lesson list에서 해당 lesson을 제거합니다
+                                showToast('레슨이 성공적으로 삭제되었습니다!', 2000); // 성공 알림
+                                lessons = lessons.filter(lesson => lesson.id !== Number(lessonId));
                                 lessonCard.remove();
                             }).catch(error => {
+                                showToast('레슨 삭제에 실패했습니다.', 4000); // 실패 알림
                                 console.error('Failed to delete the lesson');
                                 console.error('Error:', error);
                             });

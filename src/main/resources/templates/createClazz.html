@@ -126,12 +126,20 @@
             </form>
         </div>
 
+        <!-- 토스트 알림 컨테이너 -->
+        <div id="toast-container" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;"></div>
+
         <script th:src="@{/js/token.js}"></script>
         <script th:src="@{/js/class.js}"></script>
+        <script th:src="@{/js/toast.js}"></script>
         <script>
             // 클래스 생성하기
             document.querySelector('form').addEventListener('submit', function (event) {
                 event.preventDefault(); // 기본 폼 제출 방지
+
+                const submitButton = document.querySelector('.submit-btn'); // 버튼 선택자
+                submitButton.disabled = true; // 버튼 비활성화
+                submitButton.textContent = '처리 중...'; // 로딩 상태 표시
 
                 // 선택된 ID 값을 가져오기
                 const teacherId = document.getElementById('teacher-id').value;
@@ -168,8 +176,12 @@
                     body: JSON.stringify(requestData) // 데이터를 JSON으로 변환하여 전송
                 })
                 .then(response => {
-                    window.location.href = '/clazz';
+                    showToast('클래스가 성공적으로 생성되었습니다!'); // 성공 알림
+                    setTimeout(() => {
+                        window.location.href = '/clazz';
+                    }, 2000);
                 }).catch(error => {
+                    showToast('클래스 생성에 실패했습니다.', 4000); // 실패 알림
                     console.error('오류 발생:', error);
                     alert('클래스 생성 중 오류가 발생했습니다.');
                 });
