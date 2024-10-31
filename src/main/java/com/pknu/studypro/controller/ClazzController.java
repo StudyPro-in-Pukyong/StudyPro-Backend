@@ -103,12 +103,6 @@ public class ClazzController {
     public ResponseEntity putClazz(@Auth LoginUser loginUser,
                                    @Valid @RequestBody ClazzRequestDto.Post post) {
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
-        System.out.println("!! " + clazz.getSettleDate());
-
-        Clazz clazz1 = new Clazz(10L, new RoundPay(0,0), "title", "subject", null, null, null, null);
-        Clazz clazz2 = new Clazz(9L, new RoundPay(0,0), "title", "subject", null, null, null, null);
-        System.out.println("!! " + clazz1.getSettleDate());
-        System.out.println("!! " + clazz2.getSettleDate());
         clazz = clazzService.updateClazz(clazz, post.getIds(), loginUser);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
