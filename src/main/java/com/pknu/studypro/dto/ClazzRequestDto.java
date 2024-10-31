@@ -41,10 +41,6 @@ public class ClazzRequestDto {
         private int amount;
         private Integer date;
         private Integer round;
-
-        // default 값이 있어서 필요 없음
-//        private int currentRound;
-//        private int totalTime;
     }
 
     @Getter

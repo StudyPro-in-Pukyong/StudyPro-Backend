@@ -42,7 +42,7 @@ public class Clazz {
     private List<ClazzTime> clazzTimes = new ArrayList<>(); // 수업일정
 
     private boolean isDone = false; // 클래스 종료 여부
-    private LocalDate settleDate = LocalDate.now(); // 마지막 월급일
+    private LocalDate settleDate; // 마지막 월급일
 
     public Clazz(final Long id, final Pay pay, final String title, final String subject, final Member teacher, final Member parent, final Member student,  final List<ClazzTime> clazzTimes) {
         this.id = id;

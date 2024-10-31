@@ -101,7 +101,7 @@ public class ClazzService {
         } else { // Pay 방법이 바뀌는 경우
             // CurrentRound = 0 이 아닌 경우에는 에러 발생시키기
             // TODO : CurrentRound = 0 이 아닌 경우에는 팝업창 띄우기
-            if (!checkCurrentRound(clazz))
+            if (!checkCurrentRound(beforeClazz))
                 throw new BusinessLogicException(ExceptionCode.NOT_CHANGE_PAY_TYPE);
         }
 
@@ -110,10 +110,10 @@ public class ClazzService {
             clazzTime.setClazz(clazz);
         }
 
-//        Member member = findMember.findMemberByToken(loginUser);
-//        if (member.getRole() == Role.TEACHER) clazz.setTeacher(member);
-//        else if (member.getRole() == Role.PARENT) clazz.setParent(member);
-//        else if (member.getRole() == Role.STUDENT) clazz.setStudent(member);
+        // 그외의 정보 설정하기(settleDate, totalTime, currentRound)
+        clazz.setSettleDate(beforeClazz.getSettleDate());
+        clazz.getPay().setTotalTime(beforeClazz.getPay().getTotalTime());
+        clazz.getPay().setCurrentRound(beforeClazz.getPay().getCurrentRound());
 
         // class 관련 member 연관관계 성립
         classSetMembers(ids, clazz);

@@ -2,6 +2,7 @@ package com.pknu.studypro.controller;
 
 import com.pknu.studypro.controller.auth.Auth;
 import com.pknu.studypro.domain.clazz.Clazz;
+import com.pknu.studypro.domain.clazz.RoundPay;
 import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.ClazzRequestDto;
 import com.pknu.studypro.dto.ClazzResponseDto;
@@ -102,6 +103,12 @@ public class ClazzController {
     public ResponseEntity putClazz(@Auth LoginUser loginUser,
                                    @Valid @RequestBody ClazzRequestDto.Post post) {
         Clazz clazz = clazzMapper.clazzPostDtoToClazzCustom(post);
+        System.out.println("!! " + clazz.getSettleDate());
+
+        Clazz clazz1 = new Clazz(10L, new RoundPay(0,0), "title", "subject", null, null, null, null);
+        Clazz clazz2 = new Clazz(9L, new RoundPay(0,0), "title", "subject", null, null, null, null);
+        System.out.println("!! " + clazz1.getSettleDate());
+        System.out.println("!! " + clazz2.getSettleDate());
         clazz = clazzService.updateClazz(clazz, post.getIds(), loginUser);
         ClazzResponseDto.Response response = clazzMapper.clazzToClazzResponseCustom(clazz);
 
