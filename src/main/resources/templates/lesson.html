@@ -506,9 +506,31 @@
 
             // 정산 알림 버튼 클릭 시 동작
             document.getElementById('send-notification-btn').addEventListener('click', function() {
-                alert('정산 알림이 전송되었습니다!');
+                // alert('정산 알림이 전송되었습니다!');
                 this.classList.add('disabled');
+                settle();
             });
+
+            function settle() {
+                fetchWithAuth(`/alert?clazzId=${classId}`, {
+                    method: 'POST'
+                }).then(response => {
+                    return response.json();
+                }).then(json => {
+                    if(json.status === 404 && json.message === "Member not found") {
+                        alert("클래스의 학부모를 설정해주세요");
+                    } else if(json.status === 409 && json.message === "Alert already settled") {
+                        alert("이번 달에 이미 정산 요청을 했습니다");
+                    } else if(json.status === 409 && json.message === "No current round") {
+                        alert("정산이 가능한 일수를 채우지 못했습니다.");
+                    } else if (json.status >= 400) {
+                        throw new Error(`서버 오류: ${json.status}`);
+                    } else showToast('정산 알림을 보냈습니다', 2000, true); // 성공 알림
+                }).catch(error => {
+                    console.error("Error:", error);
+                    showToast('정산 알림 보내기가 실패했습니다.', 4000, false); // 실패 알림
+                });
+            }
         </script>
         <script> // 달력 js
             // 달력 제목 출력
