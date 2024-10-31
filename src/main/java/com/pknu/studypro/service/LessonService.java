@@ -52,6 +52,7 @@ public class LessonService {
 
     // UPDATE
     public Lesson updateLesson(Lesson lesson) {
+        updateIsDoneLesson(lesson.getId(), lesson.getIsDone());
         return lessonRepository.save(lesson);
     }
 
@@ -76,6 +77,10 @@ public class LessonService {
     // DELETE
     public void deleteLesson(long lessonId) {
         Lesson lesson = verifiedLesson(lessonId);
+        if(lesson.getIsDone()) {
+            Clazz clazz = clazzService.verifiedClazz(lesson.getClassId());
+            clazz.getPay().setMinusCurrentRoundAndTotalTime(lesson.getMinutes());
+        }
         lessonRepository.delete(lesson);
     }
 
