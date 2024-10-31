@@ -193,7 +193,7 @@
                     `;
 
                     container.appendChild(acceptNotification);
-                } else { // `acceptDate`가 없는 경우
+                } else if(getRole() === 'PARENT') { // `acceptDate`가 없는 경우 && 학부모일 경우
                     const acceptButton = document.createElement('button');
                     acceptButton.textContent = '수락';
                     acceptButton.classList.add('btn', 'btn-primary', 'accept-button');
