@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>Alert List</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+        <style>
+            .header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px;
+                background-color: #4da6ff;
+                color: white;
+                font-size: 20px;
+                position: relative; /* 제목과 쓰레기통 배치 */
+            }
+            .header-title {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .header-icons {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+            }
+            .header-icons img {
+                width: 25px;
+                height: 25px;
+                margin-left: 10px;
+            }
+            .notification-container {
+                background-color: #f7f7f7;
+                font-family: Arial, sans-serif;
+                padding: 20px;
+            }
+
+            .notification {
+                width: 100%;
+                background: #fff;
+                padding: 15px;
+                border-radius: 12px;
+                margin-bottom: 15px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: flex-start;
+                position: relative; /* 버튼 위치 기준 설정 */
+            }
+
+            .notification-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 20px;
+                margin-right: 10px;
+            }
+
+            .notification-content {
+                flex: 1;
+            }
+
+            .notification-title {
+                font-weight: bold;
+                color: #555;
+                font-size: 15px;
+            }
+
+            .notification-message {
+                font-size: 16px;
+                margin-top: 4px;
+                color: #333;
+            }
+
+            .notification-time {
+                font-size: 12px;
+                color: gray;
+                margin-top: 4px;
+                text-align: right;
+            }
+
+            .accept-button {
+                position: absolute;
+                right: 15px; /* 부모 요소의 오른쪽에서 15px */
+                top: 15px; /* 부모 요소의 위에서 15px */
+                background-color: #4da6ff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-icons">
+                <a th:href="@{/clazz}">
+                    <img id="before" src="/images/left.png" alt="before">
+                </a>
+            </div>
+            <div id="title" class="header-title">알림</div>
+        </div>
+
+        <div class="notification-container" id="notification-container"></div>
+
+        <!-- 토스트 알림 컨테이너 -->
+        <div id="toast-container" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;"></div>
+
+        <script th:src="@{/js/token.js}"></script>
+        <script th:src="@{/js/toast.js}"></script>
+    </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', fetchAlerts);
+
+        // API를 통해 요청 알람 데이터를 가져오는 함수
+        const alerts = [];
+        function fetchAlerts() {
+            fetchWithAuth(`/alerts`, {
+                method: 'GET'
+            }).then(response => {
+                if (response.status >= 400) {
+                    throw new Error(`서버 오류: ${response.status}`);
+                }
+                return response.json();
+            }).then(data => {
+                alerts.push(...data);
+                populateAlertTable()
+            }).catch(error => console.error('API 요청 실패:', error));
+        }
+
+        // 데이터를 테이블에 표시하는 함수
+        function populateAlertTable() {
+            const container = document.getElementById('notification-container');
+            container.innerHTML = '';  // 기존 내용 초기화
+
+            if (alerts.length === 0) {
+                // 알림이 없는 경우
+                container.innerHTML = `<div class="no-alert">새 알림이 없습니다</div>`;
+                container.querySelector(".no-alert").style.cssText = `
+                        text-align: center;
+                        font-size: 18px;
+                        color: gray;
+                        padding: 20px;
+                    `;
+                return;
+            }
+
+            alerts.forEach(alert => {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+
+                const classTitle = alert.classTitle;
+                const amount = alert.amount;
+                const title = `"${classTitle}" 수업 선생님 월급 요청 알림`;
+                const requestDate = alert.requestDate;
+                const settleDate = alert.settleDate;
+                let message;
+                if(settleDate != null) message = `${settleDate} 월급을 요청합니다.`;
+                else message = `월급을 요청합니다.`
+
+                notification.innerHTML = `
+                        <div class="notification-icon">🔔</div>
+                        <div class="notification-content" data-alert-id=${alert.id}>
+                            <div class="notification-title">${title}</div>
+                            <div class="notification-message">${message}</div>
+                            <div class="notification-time">${requestDate}</div>
+                        </div>
+                    `;
+
+                // `acceptDate`가 있을 때 두 번째 알림 추가
+                const acceptDate = alert.acceptDate;
+                if (acceptDate) {
+                    const acceptNotification = document.createElement('div');
+                    acceptNotification.className = 'notification';
+
+                    const acceptTitle = `"${classTitle}" 수업 학부모님 월급 수락 알림`;
+                    let acceptMessage;
+                    if(settleDate != null) acceptMessage = `${settleDate} 월급 요청이 수락되었습니다. (요청일 : ${requestDate})`;
+                    else acceptMessage = `월급 요청이 수락되었습니다. (요청일 : ${requestDate})`
+
+                    acceptNotification.innerHTML = `
+                        <div class="notification-icon">✅</div>
+                        <div class="notification-content">
+                            <div class="notification-title">${acceptTitle}</div>
+                            <div class="notification-message">${acceptMessage}</div>
+                            <div class="notification-time">${acceptDate}</div>
+                        </div>
+                    `;
+
+                    container.appendChild(acceptNotification);
+                } else { // `acceptDate`가 없는 경우
+                    const acceptButton = document.createElement('button');
+                    acceptButton.textContent = '수락';
+                    acceptButton.classList.add('btn', 'btn-primary', 'accept-button');
+                    acceptButton.addEventListener('click', () => acceptAlert(alert.id, notification));
+                    notification.appendChild(acceptButton);
+                }
+
+                container.appendChild(notification);
+            });
+        }
+
+        // 수락 버튼 클릭 시 서버에 수락 요청을 보내는 함수
+        function acceptAlert(alertId, notification) {
+            fetchWithAuth(`/alert/accept?alertId=${alertId}`, {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    // 요청이 성공하면 버튼을 제거하고 수락된 알림으로 업데이트
+                    notification.querySelector('.accept-button').remove();
+                    alerts.filter(alert => alert.id === alertId)[0].acceptDate = formatDateToYYYYMMDD();
+                    populateAlertTable();
+                    showToast('수락되었습니다', 2000, true); // 성공 알림
+                } else {
+                    throw new Error(`서버 오류: ${response.status}`);
+                }
+            }).catch(error => {
+                showToast('알람 수락 요청이 실패했습니다.', 4000, false); // 실패 알림
+                console.error('수락 요청 오류:', error);
+            });
+        }
+
+        // 날짜를 "yyyy-mm-dd" 형식으로 변환하는 함수
+        function formatDateToYYYYMMDD() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+    </script>
+</html>

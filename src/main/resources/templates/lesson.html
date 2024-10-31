@@ -328,11 +328,12 @@
     <body>
         <div class="header">
             <div class="header-icons">
-                <img id="before" th:src="@{/images/left.png}" alt="before">
+                <a th:href="@{/clazz}">
+                    <img id="before" th:src="@{/images/left.png}" alt="before">
+                </a>
             </div>
             <div id="title" class="header-title">김승찬 학생 수업</div>
             <div class="header-icons">
-                <img id="alert-icon" th:src="@{/images/alert.png}" alt="alert">
                 <a th:href="@{/createLesson}">
                     <img id="add-icon" th:src="@{/images/add.png}" alt="add">
                 </a>
@@ -375,11 +376,6 @@
         <script th:src="@{/js/token.js}"></script>
         <script th:src="@{/js/toast.js}"></script>
         <script>
-            // 'before' 아이디를 가진 이미지에 클릭 이벤트 추가
-            document.getElementById('before').addEventListener('click', function() {
-                window.location.href = '/clazz';
-            });
-
             // 클래스 정보 조회 후 렌더링
             let clazz;
             function fetchClassInfo(classId) {
