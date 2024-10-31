@@ -362,7 +362,7 @@
             <div id="lesson-info" class="lesson-info-container"></div>
 
             <!-- 정산 알림 버튼 -->
-            <div class="btn-send-container">
+            <div class="btn-send-container" id="sendNotificationContainer" style="display: none;">
                 <button class="btn-send" id="send-notification-btn">
                     정산 알림 보내기
                     <div id="count">수업 완료 횟수 3/8</div>
@@ -839,6 +839,16 @@
                 loadLessons();
             }
 
+            // 선생님일 때에만 '정산하기' 버튼 표시하기
+            document.addEventListener('DOMContentLoaded', function() {
+                const role = getRole();  // getRole 함수로 역할을 가져옴
+                const sendNotificationContainer = document.getElementById('sendNotificationContainer');
+
+                // 역할이 TEACHER일 때만 버튼을 표시
+                if (role === "TEACHER") {
+                    sendNotificationContainer.style.display = "block";
+                }
+            });
         </script>
     </body>
 </html>
