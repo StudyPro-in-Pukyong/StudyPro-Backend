@@ -47,6 +47,10 @@ public abstract class Pay {
         currentRound = 0;
     }
 
+    public void setCurrentRound(int currentRound) {
+        this.currentRound = currentRound;
+    }
+
     public void setAmount(int amount) {
         this.amount = amount;
     }

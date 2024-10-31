@@ -122,6 +122,11 @@ public class ClazzService {
         return clazzRepository.save(clazz);
     }
 
+    @Transactional
+    public Clazz updateClazz(Clazz clazz) {
+        return clazzRepository.save(clazz);
+    }
+
     public Clazz updateClazz(long classId, boolean isDone) {
         Clazz clazz = verifiedClazz(classId);
         clazz.setIsDone(isDone);

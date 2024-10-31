@@ -14,6 +14,10 @@ public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "Member not found"),
     CLASS_NOT_FOUND(404, "Class not found"),
     LESSON_NOT_FOUND(404, "Lesson not found"),
+    ALERT_NOT_FOUND(404, "Alert not found"),
+    ALERT_ALREADY_ACCEPTED(409, "Alert already accepted"),
+    NO_CURRENT_ROUND(409, "No current round"),
+    ALERT_ALREADY_SETTLED(409, "Alert already settled"),
     CLASS_POST_FAIL(500, "PostDto convert fail"),
     NOT_CHANGE_PAY_TYPE(500, "Can't change pay_type");
 
