@@ -323,6 +323,17 @@
                 color: gray;
                 font-size: 14px;
             }
+
+            .create-lesson-btn {
+                padding: 5px 10px;
+                font-size: 14px;
+                background-color: #4da6ff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
         </style>
     </head>
     <body>
@@ -445,7 +456,7 @@
                 // classTimes 정보를 표시할 위치 선택
                 const classTimesInfo = document.getElementById('classTimesContainer'); // 단일 요소로 선택
                 const timeDiv = document.createElement('div');
-                timeDiv.innerHTML = `고정시간`;
+                timeDiv.innerHTML = `      <고정시간>`;
                 classTimesInfo.appendChild(timeDiv);
 
                 // classTimes 데이터 순회
@@ -545,10 +556,38 @@
 
                 let month = document.getElementById("month");
                 month.innerHTML = `
-                    <img class="left_img" src="/images/left_black.png">
-                    <span style='font-size: 20px'> ${currentMonthName}</span>
-                    <img class="right_img" src="/images/right_black.png">
+                    <button id="create-lesson-btn" class="create-lesson-btn" style="margin-left: 10px;">
+                        이번달 레슨 생성
+                    </button>
+                    <div>
+                        <img class="left_img" src="/images/left_black.png">
+                        <span style='font-size: 20px'> ${currentMonthName}</span>
+                        <img class="right_img" src="/images/right_black.png">
+                    </div>
                 `;
+
+                // 이번달 레슨 생성 버튼 누른 후 다시 달력 로드
+                document.getElementById("create-lesson-btn").addEventListener("click", function() {
+                    const lessonsReq = {
+                        classId: classId,
+                        year: lessonYear,
+                        month: lessonMonth
+                    };
+
+                    // 레슨 생성 기능 구현
+                    fetchWithAuth(`/lessons`, {
+                        method: 'POST',
+                        body: JSON.stringify(lessonsReq)
+                    }).then(response => {
+                        if (response.status >= 400) {
+                            throw new Error(`서버 오류: ${response.status}`);
+                        }
+                        loadLessons();
+                        showToast('레슨이 성공적으로 생성되었습니다!', 2000, true); // 성공 알림
+                    }).catch(error => {
+                        showToast('레슨 생성에 실패했습니다.', 4000, false); // 실패 알림
+                    });
+                });
             }
 
             //이번 달 달력 그리기
