@@ -68,6 +68,16 @@ public class LessonController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    // 이번달에 class 수업시간에 따른 lesson 생성하기
+    @PostMapping("/lessons")
+    public ResponseEntity postLessons(@Auth LoginUser loginUser,
+                                      @Valid @RequestBody LessonRequestDto.Posts posts) {
+        List<Lesson> lessons = lessonService.createLessons(posts.getClassId(), posts.getYear(), posts.getMonth());
+        List<LessonResponseDto.Response> responses = lessonMapper.lessonsToLessonResponseDtos(lessons);
+
+        return new ResponseEntity<>(responses, HttpStatus.CREATED);
+    }
+
     // READ
     @GetMapping("/lesson/{lessonId}")
     public ResponseEntity getLesson(@Auth LoginUser loginUser,

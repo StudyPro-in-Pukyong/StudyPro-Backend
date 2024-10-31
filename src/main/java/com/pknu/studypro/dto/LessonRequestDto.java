@@ -30,6 +30,16 @@ public class LessonRequestDto {
     @NoArgsConstructor
     @Setter
     @Getter
+    public static class Posts {
+        private Long classId; // 연관관계에 있는 class
+        private int year; // 수업을 생성할 year
+        private int month; // 수업을 생성할 month
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Setter
+    @Getter
     public static class Put {
         private Long id;
         private Long classId; // 연관관계에 있는 class

@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findByStartTimeBetweenAndClassId(LocalDateTime start, LocalDateTime finish, long classId);
+    boolean existsByClassIdAndStartTime(long classId, LocalDateTime date);
 }

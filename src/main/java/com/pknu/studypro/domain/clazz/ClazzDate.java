@@ -1,4 +1,4 @@
-package com.pknu.studypro.util;
+package com.pknu.studypro.domain.clazz;
 
 import lombok.Getter;
 

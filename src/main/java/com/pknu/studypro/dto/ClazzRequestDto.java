@@ -1,13 +1,11 @@
 package com.pknu.studypro.dto;
 
-import com.pknu.studypro.util.ClazzDate;
-import jakarta.persistence.Column;
+import com.pknu.studypro.domain.clazz.ClazzDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 

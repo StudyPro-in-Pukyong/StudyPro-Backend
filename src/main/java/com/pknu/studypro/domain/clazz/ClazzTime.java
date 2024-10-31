@@ -1,13 +1,10 @@
 package com.pknu.studypro.domain.clazz;
 
-import com.pknu.studypro.domain.clazz.Clazz;
-import com.pknu.studypro.util.ClazzDate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,7 +21,7 @@ public class ClazzTime { // 수업일정
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ClazzDate clazzDate; //수업하는 날짜
+    private ClazzDate clazzDate; //수업하는 요일
 
     @Column(nullable = false)
     private LocalTime startTime; //수업 시작 시간
