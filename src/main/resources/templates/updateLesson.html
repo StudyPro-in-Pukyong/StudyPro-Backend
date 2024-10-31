@@ -143,10 +143,10 @@
                 <div class="raido-div">
                     <label style="font-weight: bold">진행 상태</label>
                     <div class="radio-container">
-                        <input type="radio" id="in-progress" name="isDone-radio" value="false" required checked>
+                        <input type="radio" id="in-progress" name="isDone-radio" th:checked="${isDone.toString() == 'false'}" value="false" required checked>
                         <label class="radio-label" for="in-progress">진행 중</label>
 
-                        <input type="radio" id="completed" name="isDone-radio" value="true" required>
+                        <input type="radio" id="completed" name="isDone-radio" th:checked="${isDone.toString() == 'true'}" value="true" required>
                         <label class="radio-label" for="completed">종료</label>
                     </div>
                 </div>

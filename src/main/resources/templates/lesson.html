@@ -422,7 +422,10 @@
 
                     // classTimes 표시
                     const clazzTimes = clazz.clazzTimes;
-                    if(clazzTimes.length > 0) attachClassTimes(clazzTimes);
+                    if(clazzTimes.length > 0 && attachedClassTimesIdx === 0) {
+                        attachClassTimes(clazzTimes);
+                        attachedClassTimesIdx++;
+                    }
                 }).catch(error => {
                     console.error("Error:", error);
                 });
@@ -433,6 +436,7 @@
             document.addEventListener('DOMContentLoaded', fetchClassInfo(classId));
 
             // classTimes 표시
+            let attachedClassTimesIdx = 0;
             function attachClassTimes(classTimes) {
                 const summaryHeader = document.querySelector('.summary-header');
                 summaryHeader.style.marginBottom = "10px";
@@ -697,7 +701,8 @@
                             const startTime = convertTo24HourFormat(lessonCard.getAttribute('data-lesson-startTime'));
                             const endTime = convertTo24HourFormat(lessonCard.getAttribute('data-lesson-endTime'));
                             const homeworkList = lessonCard.getAttribute('data-lesson-homeworkList').split(',');
-                            const isDone = this.checked; // 체크 여부 확인
+                            // const isDone = this.checked; // 체크 여부 확인
+                            const isDone = lessonCard.querySelector('.is-done-checkbox').checked;
 
                             // 필요한 lesson 데이터를 객체로 생성
                             const lesson = {
@@ -748,6 +753,7 @@
                                 showToast('레슨이 성공적으로 삭제되었습니다!', 2000, true); // 성공 알림
                                 lessons = lessons.filter(lesson => lesson.id !== Number(lessonId));
                                 lessonCard.remove();
+                                fetchClassInfo(classId);
                             }).catch(error => {
                                 showToast('레슨 삭제에 실패했습니다.', 4000, false); // 실패 알림
                                 console.error('Failed to delete the lesson');
@@ -771,7 +777,7 @@
                     return response.json();
                 }).then(data => {
                     // lessons 배열의 해당 lesson을 업데이트
-                    const lessonIndex = lessons.findIndex(lesson => lesson.id == lessonId);
+                    const lessonIndex = lessons.findIndex(lesson => lesson.id === lessonId);
                     if (lessonIndex > -1) {
                         lessons[lessonIndex].isDone = data.isDone;
                     }
