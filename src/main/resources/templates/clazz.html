@@ -201,7 +201,6 @@
                     <img id="alert-icon" th:src="@{/images/alert.png}" alt="alert">
                 </a>
                 <a th:href="@{https://forms.gle/tgATcshm8AnC7TFW9}">
-<!--                    <img id="question" th:src="@{/images/question.png}" alt="question" class="question">-->
                     <img id="question" th:src="@{/images/question.png}" alt="question">
                 </a>
                 <img id="trash-white" th:src="@{/images/trash_white.png}" alt="trash-white" class="trash">
@@ -283,14 +282,16 @@
 
                         const classStatus = document.createElement('div');
                         classStatus.className = 'class-status';
-                        if('round' in clazz.responsePay) {
-                            classStatus.innerHTML = `
-                            수업현황 ${clazz.responsePay.currentRound}/${clazz.responsePay.round}<br>
-                            ${clazz.responsePay.amount.toLocaleString()} 원`;
-                        } else {
-                            classStatus.innerHTML = `
-                            총수업시간 ${clazz.responsePay.totalTime}, 월급일 ${clazz.responsePay.date}일<br>
-                            ${clazz.responsePay.amount.toLocaleString()} 원`;
+                        if(getRole() != 'STUDENT') {
+                            if ('round' in clazz.responsePay) {
+                                classStatus.innerHTML = `
+                                수업현황 ${clazz.responsePay.currentRound}/${clazz.responsePay.round}<br>
+                                ${clazz.responsePay.amount.toLocaleString()} 원`;
+                            } else {
+                                classStatus.innerHTML = `
+                                총수업시간 ${clazz.responsePay.totalTime}, 월급일 ${clazz.responsePay.date}일<br>
+                                ${clazz.responsePay.amount.toLocaleString()} 원`;
+                            }
                         }
 
                         const deleteIcon = document.createElement('div');
@@ -379,6 +380,14 @@
             document.addEventListener('DOMContentLoaded', function() {
                 const memberId = 1; // 실제 memberId로 변경 필요
                 fetchStudentClasses(memberId);
+
+                const role = getRole();  // getRole 함수로 역할을 가져옴
+                const alertIcon = document.getElementById('alert-icon');
+
+                // 역할이 STUDENT일 때에는 알람 표시하지 않기
+                if (role === "STUDENT") {
+                    alertIcon.style.display = "none";
+                }
             });
 
             // 수업 추가하기 버튼 클릭 시 /createClazz API 호출

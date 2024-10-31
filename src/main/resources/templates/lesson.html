@@ -346,7 +346,7 @@
         <div class="container">
             <!-- 수업 요약 박스 -->
             <div class="summary-box">
-                <div class="summary-header">
+                <div class="summary-header" id="summary-header">
                     <div id="time">총 3시간 근무</div>
                     <div id="money">30,000원</div>
                 </div>
@@ -839,15 +839,16 @@
                 loadLessons();
             }
 
-            // 선생님일 때에만 '정산하기' 버튼 표시하기
             document.addEventListener('DOMContentLoaded', function() {
                 const role = getRole();  // getRole 함수로 역할을 가져옴
-                const sendNotificationContainer = document.getElementById('sendNotificationContainer');
 
-                // 역할이 TEACHER일 때만 버튼을 표시
-                if (role === "TEACHER") {
-                    sendNotificationContainer.style.display = "block";
-                }
+                // 선생님일 때에만 '정산하기' 버튼 표시하기
+                const sendNotificationContainer = document.getElementById('sendNotificationContainer');
+                if (role === "TEACHER") sendNotificationContainer.style.display = "block";
+
+                // 학생일 때 금액 표시하지 않기
+                const attendSummaryBox = document.getElementById('summary-header');
+                if (role === "STUDENT") attendSummaryBox.style.display = "none";
             });
         </script>
     </body>
