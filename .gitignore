@@ -4,6 +4,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 src/main/resources/application-local.yaml
+src/test/resources/application-local.yaml
 studypro.key
 
 ### STS ###
