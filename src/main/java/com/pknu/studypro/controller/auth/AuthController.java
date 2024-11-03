@@ -68,13 +68,6 @@ public class AuthController {
         }
     }
 
-    // access 토큰을 재발행하기 위한 코드
-    @PostMapping("/access/{userId}")
-    public ResponseEntity<Tokens> test(@PathVariable("userId") long userId) {
-        final Tokens tokens = authService.accessToken(userId);
-        return ResponseEntity.ok(tokens);
-    }
-
     @PostMapping("/refresh")
     public ResponseEntity<Tokens> refresh(@RequestBody final Tokens tokens) {
         final Tokens refreshed = authService.refresh(tokens);

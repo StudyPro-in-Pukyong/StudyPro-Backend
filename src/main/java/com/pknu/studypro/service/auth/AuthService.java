@@ -51,13 +51,4 @@ public class AuthService {
         final Member member = findMember.findMemberByToken(loginUser);
         member.changeRole(Role.valueOf(role));
     }
-
-    // access 토큰을 재발행하기 위한 코드
-    public Tokens accessToken(long userId) {
-        final Member member = memberRepository.findById(userId).get();
-
-        final String accessToken = jwtTokenProvider.createAccessFrom(member.getUsername());
-        final String refresh = jwtTokenProvider.createRefresh();
-        return new Tokens(accessToken, refresh);
-    }
 }
