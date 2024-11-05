@@ -1,16 +1,24 @@
 spring:
   jpa:
+    hibernate:
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-    hibernate:
-      ddl-auto: update
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MariaDB;DATABASE_TO_LOWER=TRUE
+    url: jdbc:mysql://studypro-database.cquzlsoxbqjs.ap-northeast-2.rds.amazonaws.com:3306/StudyPro_DB
+    username: root
+    password: StudyPro123!
 
   auth:
-    key: testestestseteststestsetestsetsetsetsetestsetestsetess
-    accessTokenExpired: 3600000
-    refreshTokenExpired: 25200000
-    url: https://test.com
+    key: dfsdsfdfsafseafesfaflsefjlijfilsjfilaesjfilejflajfiljile
+    accessTokenExpired: 3600000 # ms 단위(1시간)
+    refreshTokenExpired: 25200000 # ms 단위(7시간)
+
+kakao:
+  client_id: ${STUDYPRO_KAKAO_CLIENT_ID}
+  redirect_url: http://localhost:8080/auth/kakao/callback
+  token_url: https://kauth.kakao.com/oauth/token
+  info_url: https://kapi.kakao.com/v2/user/me
+  login_url: https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s
