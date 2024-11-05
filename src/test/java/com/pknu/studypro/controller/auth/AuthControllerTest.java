@@ -112,6 +112,7 @@ class AuthControllerTest {
                 .andDo(document("토큰 갱신",
                         resource(ResourceSnippetParameters.builder()
                                 .description("토큰 갱신")
+                                .tag("Auth API")
                                 .requestFields(
                                         fieldWithPath("access").description("액세스 토큰"),
                                         fieldWithPath("refresh").description("리프레시 토큰"))
@@ -163,6 +164,7 @@ class AuthControllerTest {
                 .andDo(document("유저 권한 조회",
                         resource(ResourceSnippetParameters.builder()
                                 .description("유저 권한 조회")
+                                .tag("Auth API")
                                 .requestHeaders(headerWithName(AUTHORIZATION).description("액세스 토큰"))
                                 .responseFields(
                                         fieldWithPath("username").description("아이디"),
