@@ -35,9 +35,10 @@ class MemberRepositoryTest {
         });
     }
 
-    private Member saveMember(final String username) {
+    private Member saveMember(final String  username) {
         return memberRepository.save(
-                new Member(Role.PARENT, LoginType.KAKAO, username, null, "nickname"));
+                new Member(Role.PARENT, LoginType.KAKAO, username, null, "nickname",
+                        "email", "phoneNumber"));
     }
 
     @Test

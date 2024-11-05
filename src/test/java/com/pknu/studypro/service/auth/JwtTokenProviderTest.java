@@ -1,5 +1,7 @@
 package com.pknu.studypro.service.auth;
 
+import com.pknu.studypro.exception.BusinessLogicException;
+import com.pknu.studypro.exception.ExceptionCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +82,6 @@ class JwtTokenProviderTest {
 
         //when, then
         assertThatThrownBy(() -> jwtTokenProvider.refreshAccessToken(access, refresh))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BusinessLogicException.class);
     }
 }

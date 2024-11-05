@@ -12,7 +12,8 @@ class MemberTest {
     @DisplayName("권한을 변경할 수 있다")
     void changeRole() {
         //given
-        final Member member = new Member(Role.ANONYMOUS, LoginType.KAKAO, "아이디", "비번", "닉네임");
+        final Member member = new Member(Role.ANONYMOUS, LoginType.KAKAO,
+                "username", null, "nickname", "email", "phoneNumber");
 
         //when
         member.changeRole(Role.STUDENT);
@@ -25,7 +26,8 @@ class MemberTest {
     @DisplayName("ANONYMOUS가 아니면 권한을 변경할 때 예외가 발생한다")
     void changeRole_fail() {
         //given
-        final Member member = new Member(Role.STUDENT, LoginType.KAKAO, "아이디", "비번", "닉네임");
+        final Member member = new Member(Role.STUDENT, LoginType.KAKAO,
+                "username", null, "nickname", "email", "phoneNumber");
 
         //when, then
         assertThatThrownBy(() -> member.changeRole(Role.TEACHER))

@@ -1,5 +1,7 @@
 package com.pknu.studypro.service.auth;
 
+import com.pknu.studypro.domain.member.LoginType;
+import com.pknu.studypro.domain.member.Member;
 import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.auth.KakaoUser;
 import com.pknu.studypro.dto.auth.LoginUser;
@@ -29,23 +31,24 @@ class AuthServiceTest {
     @DisplayName("첫 로그인이면 회원가입이 된다")
     void login() {
         //given
-        final KakaoUser kakaoUser = KakaoUser.of("회원 아이디", "닉네임");
+        final KakaoUser kakaoUser = KakaoUser.of("username", "nickname", "email", "phoneNumber", "profileImage");
 
         //when
-        authService.login(kakaoUser);
+        authService.findKakaoMember(kakaoUser);
 
         //then
-        assertThat(memberRepository.findByUsername("회원 아이디")).isPresent();
+        assertThat(memberRepository.findByUsername("username")).isPresent();
     }
 
     @Test
     @DisplayName("로그인을 하면 토큰을 발급한다")
     void login2() {
         //given
-        final KakaoUser kakaoUser = KakaoUser.of("회원 아이디", "닉네임");
+        final Member member = new Member(Role.ANONYMOUS, LoginType.KAKAO,
+                "username", null, "nickname", "email", "phoneNumber");
 
         //when
-        final Tokens tokens = authService.login(kakaoUser);
+        final Tokens tokens = authService.login(member);
 
         //then
         assertSoftly(softAssertions -> {
@@ -58,8 +61,9 @@ class AuthServiceTest {
     @DisplayName("리프레시할 수 있다")
     void refresh() {
         //given
-        final KakaoUser kakaoUser = KakaoUser.of("회원 아이디", "닉네임");
-        final Tokens tokens = authService.login(kakaoUser);
+        final Member member = new Member(Role.ANONYMOUS, LoginType.KAKAO,
+                "username", null, "nickname", "email", "phoneNumber");
+        final Tokens tokens = authService.login(member);
 
         //when
         final Tokens refresh = authService.refresh(tokens);
@@ -77,7 +81,7 @@ class AuthServiceTest {
         final LoginUser notExistUser = new LoginUser("nothing", Role.ANONYMOUS);
 
         //when, then
-        assertThatThrownBy(() -> authService.changeRole(notExistUser, new RoleRequest(Role.PARENT)))
+        assertThatThrownBy(() -> authService.changeRole(notExistUser, "STUDENT"))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

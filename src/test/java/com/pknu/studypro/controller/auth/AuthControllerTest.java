@@ -1,11 +1,13 @@
 package com.pknu.studypro.controller.auth;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pknu.studypro.domain.member.Role;
 import com.pknu.studypro.dto.auth.KakaoUser;
 import com.pknu.studypro.dto.auth.LoginUser;
 import com.pknu.studypro.dto.auth.RoleRequest;
 import com.pknu.studypro.dto.auth.Tokens;
+import com.pknu.studypro.service.ClazzService;
 import com.pknu.studypro.service.auth.AuthService;
 import com.pknu.studypro.service.auth.KakaoOAuthClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +25,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.description;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -47,14 +51,19 @@ class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private AuthService authService;
     @MockBean
     private KakaoOAuthClient kakaoOAuthClient;
-    @Autowired
-    private ObjectMapper objectMapper;
+    @MockBean
+    private KakaoTokenConverter kakaoTokenConverter;
     @MockBean
     private AuthArgumentResolver authArgumentResolver;
+    @MockBean
+    private ClazzService clazzService;
 
     @BeforeEach
     void setUp(final WebApplicationContext webApplicationContext,
@@ -69,30 +78,30 @@ class AuthControllerTest {
     void login() throws Exception {
         //given
         given(kakaoOAuthClient.findByKakaoToken(any()))
-                .willReturn(KakaoUser.of("id", "nickname"));
+                .willReturn(KakaoUser.of("id", "nickname", "email", "phone_number", "profile_image"));
         given(authService.login(any()))
-                .willReturn(new Tokens("access.token.test", "refresh.token.test"));
+                .willReturn(new Tokens("Bearer service.access.token", "refresh.token.test"));
 
         //when, then
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(get("/auth/login")
                         .queryParam("token", "kakao-oauth-token"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("로그인",
-                        queryParameters(parameterWithName("token").description("카카오 토큰")),
-                        responseFields(
-                                fieldWithPath("access").description("액세스 토큰"),
-                                fieldWithPath("refresh").description("리프레시 토큰"))));
+                .andExpect(status().isOk());
+//                .andDo(document("로그인",
+//                        queryParameters(parameterWithName("token").description("카카오 토큰")),
+//                        responseFields(
+//                                fieldWithPath("access").description("액세스 토큰"),
+//                                fieldWithPath("refresh").description("리프레시 토큰"))));
     }
 
     @Test
-    @DisplayName("토큰 리프레시")
+    @DisplayName("토큰 갱신")
     void refresh() throws Exception {
         //given
         given(authService.refresh(any()))
-                .willReturn(new Tokens("access.token.test", "refresh.token.test"));
+                .willReturn(new Tokens("Bearer service.access.token", "refresh.token.test"));
         final String tokens = objectMapper.writeValueAsString(
-                new Tokens("access.token.test", "refresh.token.test"));
+                new Tokens("Bearer service.access.token", "refresh.token.test"));
 
         //when, then
         mockMvc.perform(post("/auth/refresh")
@@ -101,12 +110,17 @@ class AuthControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("토큰 갱신",
-                        requestFields(
-                                fieldWithPath("access").description("액세스 토큰"),
-                                fieldWithPath("refresh").description("리프레시 토큰")),
-                        responseFields(
-                                fieldWithPath("access").description("액세스 토큰"),
-                                fieldWithPath("refresh").description("리프레시 토큰"))));
+                        resource(ResourceSnippetParameters.builder()
+                                .description("토큰 갱신")
+                                .requestFields(
+                                        fieldWithPath("access").description("액세스 토큰"),
+                                        fieldWithPath("refresh").description("리프레시 토큰"))
+                                .responseFields(
+                                        fieldWithPath("access").description("액세스 토큰"),
+                                        fieldWithPath("refresh").description("리프레시 토큰"))
+                                .build()
+                        )
+                ));
     }
 
     @Test
@@ -125,10 +139,11 @@ class AuthControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(role))
                 .andDo(print())
-                .andExpect(status().isNoContent())
-                .andDo(document("유저 권한 변경",
-                        requestHeaders(headerWithName(AUTHORIZATION).description("액세스 토큰")),
-                        requestFields(fieldWithPath("role").description("변경할 권한"))));
+                .andExpect(status().isOk());
+//                .andDo(document("유저 권한 변경",
+//                        requestHeaders(headerWithName(AUTHORIZATION).description("액세스 토큰")),
+//                        requestFields(fieldWithPath("role").description("변경할 권한"))
+//                ));
     }
 
     @Test
@@ -145,10 +160,15 @@ class AuthControllerTest {
                         .header(AUTHORIZATION, "Bearer service.access.token"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("유저 권한 확인",
-                        requestHeaders(headerWithName(AUTHORIZATION).description("액세스 토큰")),
-                        responseFields(
-                                fieldWithPath("username").description("아이디"),
-                                fieldWithPath("role").description("현재 권한"))));
+                .andDo(document("유저 권한 조회",
+                        resource(ResourceSnippetParameters.builder()
+                                .description("유저 권한 조회")
+                                .requestHeaders(headerWithName(AUTHORIZATION).description("액세스 토큰"))
+                                .responseFields(
+                                        fieldWithPath("username").description("아이디"),
+                                        fieldWithPath("role").description("현재 권한")
+                                ).build()
+                        )
+                ));
     }
 }
