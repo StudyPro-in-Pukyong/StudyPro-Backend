@@ -1,5 +1,6 @@
 package com.pknu.studypro.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pknu.studypro.domain.clazz.ClazzDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,16 +26,19 @@ public class ClazzRequestDto {
 
         private List<ClazzTime> clazzTimes;
 
+        @JsonIgnore
         public boolean isFixedDatePay() {
             return this.getPostPay().date != null;
         }
 
+        @JsonIgnore
         public boolean isRoundPay() {
             return this.getPostPay().round != null;
         }
     }
 
     @Getter
+    @AllArgsConstructor
     public static class PostPay {
         private int amount;
         private Integer date;
@@ -42,6 +46,7 @@ public class ClazzRequestDto {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class Ids{
         private Long teacherId; //선생님 아이디
         private Long parentId; //부모님 아이디
@@ -49,6 +54,7 @@ public class ClazzRequestDto {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class ClazzTime {
         private Long id; // 식별자
         private ClazzDate clazzDate; //수업하는 날짜
