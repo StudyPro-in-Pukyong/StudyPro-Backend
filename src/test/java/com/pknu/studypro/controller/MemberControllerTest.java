@@ -35,8 +35,8 @@ import java.util.List;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -74,6 +74,37 @@ class MemberControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(documentationConfiguration(restDocumentation))
                 .build();
+    }
+
+    @Test
+    @DisplayName("FCM 토큰 저장")
+    void setFcmToken() throws Exception {
+        // given
+        String fcmToken = "fcmToken";
+        Member member = new Member(Role.PARENT, null, "username", null, "nickname", null, null);
+        MemberRequestDto.Post fcmRequestDto = new MemberRequestDto.Post(fcmToken);
+
+        // Mock 서비스 동작 정의
+        given(memberService.setFcmToken(any(LoginUser.class), anyString())).willReturn(member);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/fcmToken")
+                        .header(AUTHORIZATION, "Bearer service.access.token")
+                        .content(objectMapper.writeValueAsString(fcmRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isNoContent())
+                .andDo(document("FCM 토큰 저장",
+                        resource(ResourceSnippetParameters.builder()
+                                .description("FCM 토큰 저장")
+                                .tag("Member API")
+                                .requestHeaders(headerWithName(AUTHORIZATION).description("액세스 토큰"))
+                                .requestFields(
+                                        fieldWithPath("fcmToken").description("발급한 FCM 토큰")
+                                ).build()
+                        )
+                ));
     }
 
     @Test
