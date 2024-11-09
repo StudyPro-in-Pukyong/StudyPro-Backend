@@ -2,16 +2,14 @@ spring:
   config:
     import: optional:file:.env[.properties]
   jpa:
-    hibernate:
-      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+    hibernate:
+      ddl-auto: update
   datasource:
-    url: jdbc:mysql://studypro-database.cquzlsoxbqjs.ap-northeast-2.rds.amazonaws.com:3306/StudyPro_DB
-    username: root
-    password: StudyPro123!
+    url: jdbc:h2:mem:testdb;MODE=MariaDB;DATABASE_TO_LOWER=TRUE
 
   auth:
     key: dfsdsfdfsafseafesfaflsefjlijfilsjfilaesjfilejflajfiljile
