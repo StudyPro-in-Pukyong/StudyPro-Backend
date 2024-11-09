@@ -427,7 +427,7 @@
                     .then(async (existingRegistration) => {
                         if (existingRegistration) {
                             // 이미 service worker 등록된 경우
-                            console.log("기존 Firebase Service Worker가 이미 등록되어 있습니다:", existingRegistration);
+                            // console.log("기존 Firebase Service Worker가 이미 등록되어 있습니다:", existingRegistration);
                         } else {
                             if (Notification.permission === 'granted') { // 알람 권한 확인
                                 // 등록된 Service Worker가 없으면 새로 등록
@@ -468,7 +468,7 @@
 
                 navigator.serviceWorker.register(fierbaseMessagingUrl)
                     .then(async (registration) => {
-                        console.log("새로운 Firebase Service Worker 등록 완료:", registration);
+                        // console.log("새로운 Firebase Service Worker 등록 완료:", registration);
 
                         // FCM 토큰 가져오기 시 사용자 정의 Service Worker 지정
                         const currentToken = await getToken(messaging, {
@@ -477,8 +477,8 @@
                         });
 
                         if (currentToken) {
-                            console.log(`FCM Token: ${currentToken}`);
                             // 토큰값을 서버로 전송하기
+                            // console.log(`FCM Token: ${currentToken}`);
                             sendFCMToken(currentToken);
                             return currentToken; // 토큰 반환
                         } else {
