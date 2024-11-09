@@ -416,5 +416,120 @@
                 });
             });
         </script>
+        <script type="module">
+            // 백그라운드에서 알람 보내기 위한 설정
+            const fierbaseMessagingUrl = '/js/firebase-messaging-sw.js';
+
+            // 백그라운드에서 알람 보내기
+            if ('serviceWorker' in navigator) {
+                // 이미 등록된 Service Worker가 있는지 확인
+                navigator.serviceWorker.getRegistration(fierbaseMessagingUrl)
+                    .then(async (existingRegistration) => {
+                        if (existingRegistration) {
+                            // 이미 service worker 등록된 경우
+                            console.log("기존 Firebase Service Worker가 이미 등록되어 있습니다:", existingRegistration);
+                        } else {
+                            if (Notification.permission === 'granted') { // 알람 권한 확인
+                                // 등록된 Service Worker가 없으면 새로 등록
+                                await setServiceWorker(navigator);
+                            } else { // 권힌 없을 시 권한 요청
+                                requestNotificationPermission();
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Service Worker 등록 상태 확인 실패:", error);
+                    });
+            }
+
+            // service worker 등록
+            async function setServiceWorker(navigator) {
+                // // Firebase 모듈을 가져옵니다.
+                // import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+                // import { getMessaging, onMessage, getToken } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-messaging.js";
+                // 동적으로 Firebase 모듈 가져오기
+                const { initializeApp } = await import("https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js");
+                const { getMessaging, getToken } = await import("https://www.gstatic.com/firebasejs/9.17.1/firebase-messaging.js");
+
+                // Firebase 프로젝트 구성
+                const firebaseConfig = {
+                    apiKey: '[[${apiKey}]]',
+                    authDomain: '[[${authDomain}]]',
+                    projectId: '[[${projectId}]]',
+                    storageBucket: '[[${storageBucket}]]',
+                    messagingSenderId: '[[${messagingSenderId}]]',
+                    appId: '[[${appId}]]',
+                    measurementId: '[[${measurementId}]]'
+                };
+
+                // Firebase 초기화
+                const app = initializeApp(firebaseConfig);
+                const messaging = getMessaging(app);
+
+                navigator.serviceWorker.register(fierbaseMessagingUrl)
+                    .then(async (registration) => {
+                        console.log("새로운 Firebase Service Worker 등록 완료:", registration);
+
+                        // FCM 토큰 가져오기 시 사용자 정의 Service Worker 지정
+                        const currentToken = await getToken(messaging, {
+                            vapidKey: '[[${vapidKey}]]',
+                            serviceWorkerRegistration: registration
+                        });
+
+                        if (currentToken) {
+                            console.log(`FCM Token: ${currentToken}`);
+                            // 토큰값을 서버로 전송하기
+                            sendFCMToken(currentToken);
+                            return currentToken; // 토큰 반환
+                        } else {
+                            console.log('No registration token available.');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Firebase Service Worker 등록 실패:", error);
+                    });
+                return null; // 토큰 반환
+            }
+
+            // 권한 요청 및 브라우저 알림 함수
+            function requestNotificationPermission() {
+                if (Notification.permission === 'default') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'denied') {
+                            alert('알림 권한이 필요합니다. 브라우저 설정에서 알림 권한을 허용해주세요.');
+                        }
+                    });
+                } else if (Notification.permission === 'denied') {
+                    alert('알림 권한이 거부된 상태입니다. 브라우저 설정에서 알림 권한을 허용해주세요.');
+                }
+            }
+
+            // 토큰값을 서버로 전송하기
+            function sendFCMToken(token) {
+                if (!token) {
+                    console.error('FCM 토큰이 없습니다.');
+                    return;
+                }
+
+                const requestData = {
+                    fcmToken : token
+                };
+
+                // 토큰값을 서버로 전송하기
+                fetchWithAuth(`/fcmToken`, {
+                    method: 'POST',
+                    body: JSON.stringify(requestData) // 데이터를 JSON으로 변환하여 전송
+                }).then(response => {
+                    if (response.status >= 400) {
+                        throw new Error(`서버 오류: ${response.status}`);
+                    }
+                }).catch(error => {
+                    console.error('Error fetching student classes:', error);
+                });
+            }
+
+            // 페이지 로드 시 알림 권한 요청
+            document.addEventListener('DOMContentLoaded', requestNotificationPermission);
+        </script>
     </body>
 </html>
