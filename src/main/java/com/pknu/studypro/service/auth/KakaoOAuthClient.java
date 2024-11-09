@@ -18,6 +18,9 @@ public class KakaoOAuthClient {
     @Value("${kakao.client_id}")
     private String clientId;
 
+    @Value("${domain}")
+    private String domain;
+
     @Value("${kakao.redirect_url}")
     private String redirectUri;
 
@@ -51,7 +54,7 @@ public class KakaoOAuthClient {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", clientId);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", domain+redirectUri);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);

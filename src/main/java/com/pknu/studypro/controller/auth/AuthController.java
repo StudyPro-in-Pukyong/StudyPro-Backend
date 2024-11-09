@@ -29,6 +29,9 @@ public class AuthController {
     @Value(("${kakao.client_id}"))
     private String clientId;
 
+    @Value("${domain}")
+    private String domain;
+
     @Value("${kakao.redirect_url}")
     private String redirectUri;
 
@@ -39,7 +42,7 @@ public class AuthController {
     // 기본 로그인 페이지
     @GetMapping("/login")
     public String index(Model model) {
-        String loginUrl = String.format(loginUrlTemplate, clientId, redirectUri);
+        String loginUrl = String.format(loginUrlTemplate, clientId, domain+redirectUri);
         model.addAttribute("url", loginUrl);
         return "login"; // "login.html"을 반환 (템플릿 경로에서 "index" 템플릿을 찾음)
     }
