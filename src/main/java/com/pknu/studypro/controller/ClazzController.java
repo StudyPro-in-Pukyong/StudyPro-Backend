@@ -11,11 +11,12 @@ import com.pknu.studypro.exception.BusinessLogicException;
 import com.pknu.studypro.exception.ExceptionCode;
 import com.pknu.studypro.mapper.ClazzMapper;
 import com.pknu.studypro.service.ClazzService;
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,7 +34,6 @@ import java.util.List;
 public class ClazzController {
     private final ClazzService clazzService;
     private final ClazzMapper clazzMapper;
-    private final Dotenv dotenv = Dotenv.load();
 
     // Create Clazz 화면 전환
     @GetMapping("/createClazz")
@@ -50,14 +51,14 @@ public class ClazzController {
     @GetMapping("/clazz")
     public String clazz(Model model) {
         // firebase config
-        model.addAttribute("apiKey", dotenv.get("STUDYPRO_FIREBASE_API_KEY"));
-        model.addAttribute("authDomain", dotenv.get("STUDYPRO_FIREBASE_AUTH_DOMAIN"));
-        model.addAttribute("projectId", dotenv.get("STUDYPRO_FIREBASE_PROJECT_ID"));
-        model.addAttribute("storageBucket", dotenv.get("STUDYPRO_FIREBASE_STORAGE_BUCKET"));
-        model.addAttribute("messagingSenderId", dotenv.get("STUDYPRO_FIREBASE_MESSAGING_SENDER_ID"));
-        model.addAttribute("appId", dotenv.get("STUDYPRO_FIREBASE_APP_ID"));
-        model.addAttribute("measurementId", dotenv.get("STUDYPRO_FIREBASE_MEASUREMENT_ID"));
-        model.addAttribute("vapidKey", dotenv.get("STUDYPRO_FIREBASE_VAPID_KEY"));
+        model.addAttribute("apiKey", System.getenv("STUDYPRO_FIREBASE_API_KEY"));
+        model.addAttribute("authDomain", System.getenv("STUDYPRO_FIREBASE_AUTH_DOMAIN"));
+        model.addAttribute("projectId", System.getenv("STUDYPRO_FIREBASE_PROJECT_ID"));
+        model.addAttribute("storageBucket", System.getenv("STUDYPRO_FIREBASE_STORAGE_BUCKET"));
+        model.addAttribute("messagingSenderId", System.getenv("STUDYPRO_FIREBASE_MESSAGING_SENDER_ID"));
+        model.addAttribute("appId", System.getenv("STUDYPRO_FIREBASE_APP_ID"));
+        model.addAttribute("measurementId", System.getenv("STUDYPRO_FIREBASE_MEASUREMENT_ID"));
+        model.addAttribute("vapidKey", System.getenv("STUDYPRO_FIREBASE_VAPID_KEY"));
 
         return "clazz"; // clazz.html로 이동
     }
