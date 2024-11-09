@@ -34,7 +34,7 @@ dependencies {
     // DB
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+    implementation 'org.postgresql:postgresql:42.7.2'
 
     // mapper
     implementation 'org.mapstruct:mapstruct:1.5.1.Final'
@@ -56,9 +56,6 @@ dependencies {
     // firebase
     implementation 'com.google.auth:google-auth-library-oauth2-http:1.15.0'
     implementation 'com.google.firebase:firebase-admin:9.1.1'
-
-    // dotenv
-    implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 }
 
 tasks.named('test') {
@@ -74,4 +71,3 @@ openapi3 {
     format = 'yaml'
     outputDirectory = 'src/main/resources/static/swagger'
 }
-
