@@ -27,6 +27,14 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
 
+    @PostMapping("/fcmToken")
+    public ResponseEntity setFcmToken(@Auth final LoginUser loginUser,
+                                      @RequestBody MemberRequestDto.Post fcmRequestDto) {
+        System.out.println("!! token : " + fcmRequestDto.fcmToken());
+        memberService.setFcmToken(loginUser, fcmRequestDto.fcmToken());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @GetMapping("/mypage")
     public String mypage(@Auth final LoginUser loginUser,
 //                         RedirectAttributes redirectAttributes) {
@@ -43,7 +51,7 @@ public class MemberController {
 
     @GetMapping("/members")
     public ResponseEntity findMembers(@RequestParam("nickname") String nickname,
-                                               @RequestParam("role") Role role) {
+                                      @RequestParam("role") Role role) {
         List<Member> members = memberService.verifiedMembers(null, nickname, role);
         List<MemberResponseDto.Response> responses = memberMapper.membersToMemberResponseDtos(members);
 

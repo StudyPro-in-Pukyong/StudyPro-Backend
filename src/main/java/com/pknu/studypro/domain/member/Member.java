@@ -37,6 +37,8 @@ public class Member {
 
     private String phoneNumber;
 
+    private String fcmToken;
+
     public Member(final Role role, final LoginType loginType, final String username,
                   final String password, final String nickname, final String email, final String phoneNumber) {
         this.role = role;
@@ -58,5 +60,9 @@ public class Member {
 
     public void setNickname(final String nickname) {
         this.nickname = nickname;
+    }
+
+    public void setFcmToken(final String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

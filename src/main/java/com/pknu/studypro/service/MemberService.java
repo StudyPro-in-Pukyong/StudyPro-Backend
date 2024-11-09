@@ -36,14 +36,23 @@ public class MemberService {
         return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
+    // Auth 토큰을 통한 member 조회
     public Member verifiedMember(LoginUser loginUser) {
         return findMember.findMemberByToken(loginUser);
     }
 
+    // member nickname 변경
     public Member updateMember(LoginUser loginUser, String nickname) {
         Member member = findMember.findMemberByToken(loginUser);
         member.setNickname(nickname);
 
+        return memberRepository.save(member);
+    }
+
+    // 알람을 받을 기기 FCM 토큰 설정
+    public Member setFcmToken(LoginUser loginUser, String fcmToken) {
+        Member member = findMember.findMemberByToken(loginUser);
+        member.setFcmToken(fcmToken);
         return memberRepository.save(member);
     }
 }
