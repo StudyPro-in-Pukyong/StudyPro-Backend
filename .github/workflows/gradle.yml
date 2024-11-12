@@ -59,9 +59,8 @@ jobs:
 
       # Fly.io 로그인
       - name: Authenticate with Fly.io
-        env:
-          FLY_API_TOKEN: ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
-        run: fly auth token $FLY_API_TOKEN
+        run: fly auth login --access-token ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
+        shell: bash
 
       # Fly.io로 Docker 이미지 푸시
       - name: Push Docker Image to Fly.io
