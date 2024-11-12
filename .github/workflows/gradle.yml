@@ -45,52 +45,38 @@ jobs:
           arguments: clean build openapi3
 
       # Docker 이미지 빌드
-#      - name: Build Docker Image
-#        run: docker-compose build
+      #      - name: Build Docker Image
+      #        run: docker-compose build
 
       # Flyctl 설치
       - name: Install Flyctl
-#        uses: superfly/flyctl-actions/setup-flyctl@master
+        #        uses: superfly/flyctl-actions/setup-flyctl@master
         run: |
           curl -L https://fly.io/install.sh | sh
           echo "FLYCTL_INSTALL=$HOME/.fly" >> $GITHUB_ENV
           echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_ENV
+      # Fly.io 로그인
+      #      - name: Authenticate with Fly.io
+      #        run: |
+      #          export PATH="$HOME/.fly/bin:$PATH"
+      #          fly auth login --access-token ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
 
-#      # Docker 이미지 빌드
-#      - name: Build Docker Image
-#        run: docker build -t studypro:latest .
-#
-#      # Fly.io로 Docker 이미지 푸시
-#      - name: Push Docker Image to Fly.io
-#        run: |
-#          echo "${{ secrets.STUDYPRO_FLY_API_TOKEN }}"
-#          fly deploy --image studypro:latest -c fly.toml
-#        env:
-#          FLY_API_TOKEN: ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
+      # Docker 이미지 빌드
+      - name: Build Docker Image
+        run: docker build -t studypro:latest .
 
-      # Docker 로그인 (Fly.io 레지스트리에 로그인)
-      - name: Log in to Fly.io Docker registry
+      # Fly.io로 Docker 이미지 푸시
+      - name: Push Docker Image to Fly.io
         run: |
-          fly auth docker --access-token ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
-        env:
-          FLY_API_TOKEN: ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
-
-      # Docker 이미지 빌드 및 Fly.io 레지스트리에 푸시
-      - name: Build and Push Docker Image
-        run: |
-          docker build -t registry.fly.io/studypro:latest .
-          docker push registry.fly.io/studypro:latest
-
-      # Fly.io로 배포
-      - name: Deploy to Fly.io
-        run: fly deploy --image registry.fly.io/studypro:latest -c fly.toml
+          echo "${{ secrets.STUDYPRO_FLY_API_TOKEN }}"
+          fly deploy --local-only --config fly.toml
         env:
           FLY_API_TOKEN: ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
 
 
       # Fly.io로 Docker 이미지 푸시 및 배포
-#      - name: Deploy Docker Image to Fly.io
-#        run: fly deploy --remote-only
+      #      - name: Deploy Docker Image to Fly.io
+      #        run: fly deploy --remote-only
 
       # Jar 파일 보기
 #      - name: Send jar file
