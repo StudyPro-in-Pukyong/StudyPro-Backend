@@ -9,21 +9,32 @@ primary_region = 'nrt'
 [processes]
   web = "java -jar /app/app.jar"
   db = "postgres -D /var/lib/postgresql/data"
+  app = "java -jar app.jar"
 
 [env]
   PORT = "8080"
+  JAVA_TOOL_OPTIONS = "-Xmx512m"
 
 [[services]]
   internal_port = 8080
   protocol = "tcp"
 
   [[services.ports]]
-  handlers = ["http"]
-  port = 80
+    handlers = ["http"]
+    port = 80
 
   [[services.ports]]
-  handlers = ["tls", "http"]
-  port = 443
+    handlers = ["tls", "http"]
+    port = 443
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+  [[services.tcp_checks]]
+    grace_period = "5s"
+    interval = "10s"
+    timeout = "2s"
+    restart_limit = 3
 
 [mounts]
   source = "db_data"
@@ -40,6 +51,7 @@ primary_region = 'nrt'
 
 # 자동 생성된 코드
 [build]
+  image = "studypro:latest"
 
 [http_service]
   internal_port = 8080
