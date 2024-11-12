@@ -51,7 +51,8 @@ jobs:
       # Flyctl 설치
       - name: Install Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
-
+      - name: Check Flyctl version
+        run: flyctl version
       # Fly.io 로그인
 #      - name: Authenticate with Fly.io
 #        run: |
