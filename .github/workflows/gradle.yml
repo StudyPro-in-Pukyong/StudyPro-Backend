@@ -50,9 +50,12 @@ jobs:
 
       # Flyctl 설치
       - name: Install Flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: Check Flyctl version
-        run: flyctl version
+#        uses: superfly/flyctl-actions/setup-flyctl@master
+        run: |
+          curl -L https://fly.io/install.sh | sh
+          echo 'export PATH="$HOME/.fly/bin:$PATH"' >> $GITHUB_ENV
+          echo "$HOME/.fly/bin" >> $GITHUB_PATH
+          flyctl version
       # Fly.io 로그인
 #      - name: Authenticate with Fly.io
 #        run: |
