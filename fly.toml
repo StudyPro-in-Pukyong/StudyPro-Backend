@@ -7,61 +7,66 @@ app = 'studypro'
 primary_region = 'nrt'
 
 [processes]
-  web = "java -jar /app/app.jar"
-  db = "postgres -D /var/lib/postgresql/data"
-  app = "java -jar app.jar"
+    app = "java -jar /app/app.jar"
+    db = "postgres -D /var/lib/postgresql/data"
 
 [env]
-  PORT = "8080"
-  JAVA_TOOL_OPTIONS = "-Xmx512m"
+    PORT = "8080"
+    JAVA_TOOL_OPTIONS = "-Xmx512m"
 
 [[services]]
-  internal_port = 8080
-  protocol = "tcp"
+    internal_port = 8080
+    protocol = "tcp"
+    processes = ["app"]
 
-  [[services.ports]]
-    handlers = ["http"]
-    port = 80
+    [[services.ports]]
+        handlers = ["http"]
+        port = 80
 
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
-  [services.concurrency]
-    type = "connections"
-    hard_limit = 25
-    soft_limit = 20
-  [[services.tcp_checks]]
-    grace_period = "5s"
-    interval = "10s"
-    timeout = "2s"
-    restart_limit = 3
+    [[services.ports]]
+        handlers = ["tls"]
+        port = 443
+
+    [services.concurrency]
+        type = "connections"
+        hard_limit = 25
+        soft_limit = 20
+
+    [[services.tcp_checks]]
+        grace_period = "5s"
+        interval = "10s"
+        timeout = "2s"
+        restart_limit = 3
 
 [mounts]
-  source = "db_data"
-  destination = "/var/lib/postgresql/data"
+    source = "db_data"
+    destination = "/var/lib/postgresql/data"
 
 [[services.http_checks]]
-  interval = "15s"
-  grace_period = "10s"
-  method = "GET"
-  path = "/health"
-  protocol = "http"
-  timeout = "2s"
-  tls_skip_verify = false
+    interval = "15s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/health"
+    protocol = "http"
+    timeout = "2s"
+    tls_skip_verify = false
 
-# 자동 생성된 코드
+[mounts]
+    source = "db_data"
+    destination = "/var/lib/postgresql/data"
+
 [build]
-  image = "studypro:latest"
+    image = "studypro:latest"
 
 [http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = 'stop'
-  auto_start_machines = true
-  min_machines_running = 0
-  processes = ['app']
+    internal_port = 8080
+    force_https = true
+    auto_stop_machines = 'stop'
+    auto_start_machines = true
+    min_machines_running = 0
+    processes = ['app']
 
 [[vm]]
-  memory = '512mb'
-  cpu_kind = 'shared'
-  cpus = 1
+    memory = '512mb'
+    cpu_kind = 'shared'
+    cpus = 1
