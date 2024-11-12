@@ -5,7 +5,7 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Fly Deploy
 
 on:
   push:
@@ -16,30 +16,48 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      # GitHub 레포지토리 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Java 설정
       - uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      # 환경 변수 파일 생성 (.env)
+      - name: Create .env file
+        run: |
+          echo "${{ secrets.STUDYPRO_ENV }}" >> .env
+
+      # Firebase JSON 파일 생성
+      - name: Create Firebase credentials file
+        run: |
+          mkdir -p src/main/resources/firebase
+          echo "${{ secrets.STUDYPRO_FIREBASE_CREDENTIALS }}" > src/main/resources/firebase/studypro-firebase-adminsdk.json
+
+      # Gradle 빌드
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2.9.0
         with:
           arguments: clean build openapi3
 
-      - name: Send jar file
-        uses: appleboy/scp-action@master
-        with:
-          username: ubuntu
-          host: ${{ secrets.HOST }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          source: "./build/libs/*.jar,./src/main/resources/static/swagger/*"
-          target: "/home/ubuntu/server"
-
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          username: ubuntu
-          host: ${{ secrets.HOST }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          script_stop: true
-          script: sudo /home/ubuntu/run_server.sh
+      # Jar 파일 보기
+#      - name: Send jar file
+#        uses: appleboy/scp-action@master
+#        with:
+#          username: ubuntu
+#          host: ${{ secrets.HOST }}
+#          key: ${{ secrets.PRIVATE_KEY }}
+#          source: "./build/libs/*.jar,./src/main/resources/static/swagger/*"
+#          target: "/home/ubuntu/server"
+#
+#      - name: Deploy
+#        uses: appleboy/ssh-action@master
+#        with:
+#          username: ubuntu
+#          host: ${{ secrets.HOST }}
+#          key: ${{ secrets.PRIVATE_KEY }}
+#          script_stop: true
+#          script: sudo /home/ubuntu/run_server.sh
