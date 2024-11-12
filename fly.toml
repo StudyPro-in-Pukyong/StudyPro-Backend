@@ -1,0 +1,55 @@
+# fly.toml app configuration file generated for studypro on 2024-11-10T05:18:14+09:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'studypro'
+primary_region = 'nrt'
+
+[processes]
+  web = "java -jar /app/app.jar"
+  db = "postgres -D /var/lib/postgresql/data"
+
+[env]
+  PORT = "8080"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [[services.ports]]
+  handlers = ["http"]
+  port = 80
+
+  [[services.ports]]
+  handlers = ["tls", "http"]
+  port = 443
+
+[mounts]
+  source = "db_data"
+  destination = "/var/lib/postgresql/data"
+
+[[services.http_checks]]
+  interval = "15s"
+  grace_period = "10s"
+  method = "GET"
+  path = "/health"
+  protocol = "http"
+  timeout = "2s"
+  tls_skip_verify = false
+
+# 자동 생성된 코드
+[build]
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
