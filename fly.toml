@@ -51,10 +51,6 @@ primary_region = 'nrt'
     timeout = "2s"
     tls_skip_verify = false
 
-[mounts]
-    source = "db_data"
-    destination = "/var/lib/postgresql/data"
-
 [build]
     image = "studypro:latest"
 
