@@ -53,9 +53,8 @@ jobs:
 #        uses: superfly/flyctl-actions/setup-flyctl@master
         run: |
           curl -L https://fly.io/install.sh | sh
-          echo 'export PATH="$HOME/.fly/bin:$PATH"' >> $GITHUB_ENV
-          echo "$HOME/.fly/bin" >> $GITHUB_PATH
-          flyctl version
+          echo "FLYCTL_INSTALL=$HOME/.fly" >> $GITHUB_ENV
+          echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_ENV
       # Fly.io 로그인
 #      - name: Authenticate with Fly.io
 #        run: |
