@@ -8,8 +8,9 @@ WORKDIR /app
 COPY build/libs/*.jar app.jar
 
 # 4. 환경 변수 파일 복사
-ARG ENV_FILE
-COPY ${ENV_FILE} .env
+COPY .env /app/.env
+#ARG ENV_FILE
+#COPY ${ENV_FILE} .env
 
 # 5. 포트 노출
 EXPOSE 8080

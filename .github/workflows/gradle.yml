@@ -70,8 +70,9 @@ jobs:
       # Docker 이미지 빌드
       - name: Build Docker Image
         run: |
-          docker build --build-arg ENV_FILE=.env -t studypro .
-#        run: docker build -t studypro:latest .
+          docker build -t studypro .
+          docker images
+#          docker build -t studypro:latest .
 
       # 배포 중단 & Fly.io로 Docker 이미지 푸시
       - name: Push Docker Image to Fly.io

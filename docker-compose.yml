@@ -1,44 +1,33 @@
 version: '3.7'
 
 services:
-  db:
-    image: postgres:latest
-    container_name: studypro-db
-    restart: always
-    ports:
-      - 30000:5432
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - studypro-network
-    environment:
-      POSTGRES_USER: ${STUDYPRO_DB_USER}
-      POSTGRES_PASSWORD: ${STUDYPRO_DB_PASSWORD}
-      POSTGRES_DB: ${STUDYPRO_DB_NAME}
-      DEFAULT_CHARACTER_SET: utf8mb4
-      CHARACTER_SET_SERVER: utf8mb4
-      COLLATION_SERVER: utf8mb4_general_ci
-      TZ: Asia/Seoul
+#  db:
+#    image: postgres:latest
+#    container_name: studypro-db
+#    restart: always
+#    ports:
+#      - 30000:5432
+#    volumes:
+#      - db-data:/var/lib/postgresql/data
+#    networks:
+#      - studypro-network
+#    environment:
+#      POSTGRES_USER: ${STUDYPRO_DB_USER}
+#      POSTGRES_PASSWORD: ${STUDYPRO_DB_PASSWORD}
+#      POSTGRES_DB: ${STUDYPRO_DB_NAME}
+#      DEFAULT_CHARACTER_SET: utf8mb4
+#      CHARACTER_SET_SERVER: utf8mb4
+#      COLLATION_SERVER: utf8mb4_general_ci
+#      TZ: Asia/Seoul
 
-  app:
+  studypro:
+    image: studypro
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: studypro-app
+    container_name: studypro
     restart: always
-    depends_on:
-      - db
     ports:
       - "8080:8080"
-    networks:
-      - studypro-network
-    volumes:
-      - ./logs:/app/logs
     env_file:
       - .env
-
-volumes:
-  db-data:
-
-networks:
-  studypro-network:
