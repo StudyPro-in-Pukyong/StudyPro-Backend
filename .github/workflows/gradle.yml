@@ -72,7 +72,7 @@ jobs:
         run: |
           docker build -t studypro:latest .
           docker images
-          docker tag my-app registry.fly.io/studopro:latest
+          docker tag studypro registry.fly.io/studopro:latest
           docker push registry.fly.io/studypro:latest
       #          docker build -t studypro:latest .
         env:
