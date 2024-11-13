@@ -6,9 +6,8 @@
 app = 'studypro'
 primary_region = 'nrt'
 
-[processes]
-    app = "java -jar /app/app.jar"
-    db = "postgres -D /var/lib/postgresql/data"
+[deploy]
+    strategy = "immediate"
 
 [env]
     PORT = "8080"
@@ -38,10 +37,6 @@ primary_region = 'nrt'
         timeout = "2s"
         restart_limit = 3
 
-[mounts]
-    source = "db_data"
-    destination = "/var/lib/postgresql/data"
-
 [[services.http_checks]]
     interval = "15s"
     grace_period = "10s"
@@ -52,7 +47,7 @@ primary_region = 'nrt'
     tls_skip_verify = false
 
 [build]
-    image = "studypro:latest"
+    image = "studypro
 
 [http_service]
     internal_port = 8080

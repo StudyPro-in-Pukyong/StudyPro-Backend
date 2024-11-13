@@ -70,11 +70,7 @@ jobs:
       # Docker 이미지 빌드
       - name: Build Docker Image
         run: |
-          docker build \
-            --build-arg STUDYPRO_DB_USER=$STUDYPRO_DB_USER \
-            --build-arg STUDYPRO_DB_PASSWORD=$STUDYPRO_DB_PASSWORD \
-            --build-arg STUDYPRO_DB_NAME=$STUDYPRO_DB_NAME \
-            -t studypro:latest .
+          docker build --build-arg ENV_FILE=.env -t studypro .
 #        run: docker build -t studypro:latest .
 
       # 배포 중단 & Fly.io로 Docker 이미지 푸시
@@ -91,7 +87,7 @@ jobs:
             fly machines destroy $MACHINE --app studypro
           done
 
-          fly deploy --local-only --config fly.toml
+          fly deploy --local-only --config fly.toml --env-file .env
         env:
           FLY_API_TOKEN: ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
 
