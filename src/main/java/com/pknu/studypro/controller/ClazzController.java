@@ -16,6 +16,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,30 @@ public class ClazzController {
     private final ClazzService clazzService;
     private final ClazzMapper clazzMapper;
 
+    @Value("${firebase.apiKey}")
+    private String apiKey;
+
+    @Value("${firebase.authDomain}")
+    private String authDomain;
+
+    @Value("${firebase.projectId}")
+    private String projectId;
+
+    @Value("${firebase.storageBucket}")
+    private String storageBucket;
+
+    @Value("${firebase.messagingSenderId}")
+    private String messagingSenderId;
+
+    @Value("${firebase.appId}")
+    private String appId;
+
+    @Value("${firebase.measurementId}")
+    private String measurementId;
+
+    @Value("${firebase.vapidKey}")
+    private String vapidKey;
+
     // Create Clazz 화면 전환
     @GetMapping("/createClazz")
     public String createClazz(Model model) {
@@ -51,14 +76,14 @@ public class ClazzController {
     @GetMapping("/clazz")
     public String clazz(Model model) {
         // firebase config
-        model.addAttribute("apiKey", System.getenv("STUDYPRO_FIREBASE_API_KEY"));
-        model.addAttribute("authDomain", System.getenv("STUDYPRO_FIREBASE_AUTH_DOMAIN"));
-        model.addAttribute("projectId", System.getenv("STUDYPRO_FIREBASE_PROJECT_ID"));
-        model.addAttribute("storageBucket", System.getenv("STUDYPRO_FIREBASE_STORAGE_BUCKET"));
-        model.addAttribute("messagingSenderId", System.getenv("STUDYPRO_FIREBASE_MESSAGING_SENDER_ID"));
-        model.addAttribute("appId", System.getenv("STUDYPRO_FIREBASE_APP_ID"));
-        model.addAttribute("measurementId", System.getenv("STUDYPRO_FIREBASE_MEASUREMENT_ID"));
-        model.addAttribute("vapidKey", System.getenv("STUDYPRO_FIREBASE_VAPID_KEY"));
+        model.addAttribute("apiKey", apiKey);
+        model.addAttribute("authDomain", authDomain);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("storageBucket", storageBucket);
+        model.addAttribute("messagingSenderId", messagingSenderId);
+        model.addAttribute("appId", appId);
+        model.addAttribute("measurementId", messagingSenderId);
+        model.addAttribute("vapidKey", vapidKey);
 
         return "clazz"; // clazz.html로 이동
     }
