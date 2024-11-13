@@ -23,3 +23,13 @@ kakao:
   token_url: https://kauth.kakao.com/oauth/token
   info_url: https://kapi.kakao.com/v2/user/me
   login_url: https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s
+
+firebase:
+  apiKey: ${STUDYPRO_FIREBASE_API_KEY}
+  authDomain: ${STUDYPRO_FIREBASE_AUTH_DOMAIN}
+  projectId: ${STUDYPRO_FIREBASE_PROJECT_ID}
+  storageBucket: ${STUDYPRO_FIREBASE_STORAGE_BUCKET}
+  messagingSenderId: ${STUDYPRO_FIREBASE_MESSAGING_SENDER_ID}
+  appId: ${STUDYPRO_FIREBASE_APP_ID}
+  measurementId: ${STUDYPRO_FIREBASE_MEASUREMENT_ID}
+  vapidKey: ${STUDYPRO_FIREBASE_VAPID_KEY}
