@@ -15,6 +15,10 @@ COPY .env /app/.env
 #RUN export $(cat .env | xargs)
 #RUN export $(grep -v '^#' /app/.env | xargs)
 
+# wait-for-it 스크립트 복사
+COPY wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
+
 # Docker 빌드 시 전달받은 환경 변수 설정
 ARG STUDYPRO_DB_USER
 ARG STUDYPRO_DB_PASSWORD
