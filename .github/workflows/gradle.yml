@@ -69,7 +69,13 @@ jobs:
 
       # Docker 이미지 빌드
       - name: Build Docker Image
-        run: docker build -t studypro:latest .
+        run: |
+          docker build \
+            --build-arg STUDYPRO_DB_USER=$STUDYPRO_DB_USER \
+            --build-arg STUDYPRO_DB_PASSWORD=$STUDYPRO_DB_PASSWORD \
+            --build-arg STUDYPRO_DB_NAME=$STUDYPRO_DB_NAME \
+            -t studypro:latest .
+#        run: docker build -t studypro:latest .
 
       # 배포 중단 & Fly.io로 Docker 이미지 푸시
       - name: Push Docker Image to Fly.io
