@@ -70,9 +70,13 @@ jobs:
       # Docker 이미지 빌드
       - name: Build Docker Image
         run: |
-          docker build -t studypro .
+          docker build -t studypro:latest .
           docker images
-#          docker build -t studypro:latest .
+          docker tag my-app registry.fly.io/studopro:latest
+          docker push registry.fly.io/studypro:latest
+      #          docker build -t studypro:latest .
+        env:
+          FLY_API_TOKEN: ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
 
       # 배포 중단 & Fly.io로 Docker 이미지 푸시
       - name: Push Docker Image to Fly.io
@@ -88,7 +92,8 @@ jobs:
             fly machines destroy $MACHINE --app studypro
           done
 
-          fly deploy --local-only --config fly.toml --env-file .env
+          fly deploy --image registry.fly.io/studypro:latest
+#          fly deploy --local-only --config fly.toml --env-file .env
         env:
           FLY_API_TOKEN: ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
 

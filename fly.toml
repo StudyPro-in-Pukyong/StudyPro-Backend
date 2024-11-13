@@ -47,7 +47,7 @@ primary_region = 'nrt'
     tls_skip_verify = false
 
 [build]
-    image = "studypro
+    image = "studypro:latest
 
 [http_service]
     internal_port = 8080
