@@ -76,19 +76,7 @@ jobs:
 
       # 배포 중단 & Fly.io로 Docker 이미지 푸시
       - name: Push Docker Image to Fly.io
-        run: |
-          echo "${{ secrets.STUDYPRO_FLY_API_TOKEN }}"
-
-          # 모든 머신 목록 가져오기
-          MACHINES=$(fly machines list --app studypro --json | jq -r '.[].id')
-          
-          # 각 머신 중지
-          for MACHINE in $MACHINES; do
-            echo "Stopping machine $MACHINE"
-            fly machines destroy $MACHINE --app studypro
-          done
-
-          fly deploy --local-only --config fly.toml
+        run: fly deploy --local-only --config fly.toml
         env:
           FLY_API_TOKEN: ${{ secrets.STUDYPRO_FLY_API_TOKEN }}
 
