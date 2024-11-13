@@ -10,10 +10,16 @@ COPY build/libs/*.jar app.jar
 # 4. PostgreSQL 설치
 RUN apt-get update && apt-get install -y postgresql
 
+# .env 파일 복사
+COPY .env /app/.env
+#RUN export $(cat .env | xargs)
+RUN export $(grep -v '^#' /app/.env | xargs)
+
 # 5. 환경 변수 설정
 ENV POSTGRES_USER=${STUDYPRO_DB_USER}
 ENV POSTGRES_PASSWORD=${STUDYPRO_DB_PASSWORD}
 ENV POSTGRES_DB=${STUDYPRO_DB_NAME}
+RUN echo "!! Database User: $POSTGRES_USER"
 
 # 6. 포트 노출
 EXPOSE 8080
