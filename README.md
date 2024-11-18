@@ -20,12 +20,18 @@ https://studypro.fly.dev/auth/login
 ## 🛠️ Architecture
 아래 다이어그램은 StudyPro의 전체 시스템 아키텍처를 설명합니다.
 
-![Architecture](%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22%22%20style%3D%22shape%3Dimage%3BverticalLabelPosition%3Dbottom%3BlabelBackgroundColor%3D%23ffffff%3BverticalAlign%3Dtop%3Baspect%3Dfixed%3BimageAspect%3D0%3Bimage%3Dhttps%3A%2F%2Fsimplecore.intel.com%2Fintel-capital%2Fwp-content%2Fuploads%2Fsites%2F99%2FFly.io-logo_1536x600.jpg%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22578.0699999999999%22%20y%3D%22200%22%20width%3D%22172.9%22%20height%3D%22113%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E.png)
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/d4b66141-33d7-4465-a46b-6bb95d4d295c" alt="logo" width="800"/>
+</div>
+
+
 
 ## 🗂️ Entity Relationship Diagram (ERD)
 데이터베이스 구조는 아래와 같습니다.
 
-![studypro_erd.png](..%2F..%2F..%2FDownloads%2Fstudypro_erd.png)
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/979acb52-2256-448a-9bd3-90d74494d305" alt="logo" width="800"/>
+</div>
 
 ## 🔧 기술 스택
 
